@@ -70,9 +70,6 @@ export default Reflux.createStore({
     var _payloadBuilder = (err, res) => {
       // TODO: store issues
 
-      // TODO: make sure X-RateLimit-Remaining > pageCount
-
-      // TODO: page through results, call fetchIssues for each page
       if (res.body.length === defaultPerPage) {
         this.onPayload({ page: currentPage+1 })
       }
