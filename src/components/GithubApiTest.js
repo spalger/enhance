@@ -37,7 +37,7 @@ export default component({
 
     return div(
       h1('static showdown 2015!'),
-      button({ onClick : _.bindKey(IssueActions, 'getAll') }, 'Load github issues'),
+      button({ onClick : _.bindKey(IssueActions, 'fetch') }, 'Load github issues'),
       button({ onClick : _.bindKey(CommentActions, 'getByIssue', 1) }, 'Load comments for issue 1'),
       button({ onClick : _.bindKey(CommentActions, 'upvote', 1) }, 'Upvote issue 1'),
       button({ onClick : _.bindKey(CommentActions, 'downvote', 1) }, 'Downvote issue 1'),
