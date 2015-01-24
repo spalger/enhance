@@ -56,7 +56,8 @@ export default component({
       br(),
       textarea({ onKeyUp : this.handleComment }),
       button({ onClick : _.bindKey(CommentActions, 'comment', 1, state.comment) }, 'Comment on issue 1'),
-      button({ onClick : _.bind(PayloadActions, 'sync', { key: 'value' })}, 'Sync payload')
+      button({ onClick : _.bindKey(PayloadActions, 'sync', "{ key: 'value' }")}, 'Sync payload'),
+      button({ onClick : _.bindKey(PayloadActions, 'get')}, 'Get payload')
 
     )
   }

@@ -1,9 +1,10 @@
 import _ from 'lodash'
+import moment from 'moment'
 import Reflux from 'reflux'
 import request from 'superagent'
 import config from 'config'
-import moment from 'moment'
 import log from 'lib/log'
+import Promise from 'bluebird'
 
 import PayloadActions from 'actions/PayloadActions'
 import UserStore from 'stores/UserStore'
@@ -17,33 +18,45 @@ export default Reflux.createStore({
 
   payload : [],
 
-  _create(payload, oldFile) {
+  _create(payload) {
     if (! token) {
       return log.error('Login required');
     }
 
-    var gistObject = { public : true }
-    var filename = moment().format('MM-DD-YYYY-hh-mm-ss_enhance.json')
-    gistObject[filename] = payload
-
-    if (oldFile) {
-      gistObject[oldFile] = null // delete the old file if it exists
-    }
-
     request
       .post([ apiUrl, 'gists'] .join('/'))
-      .send(gistObject)
+      .send(this._basicGistObject(payload, 'create'))
       .set('Authorization', 'token ' + token) // required token
-      .end(function(error, res) {
-        if (error) {
-          log.error('Error creating an issue: ' + error);
-        }
-
-        if (res) {
-          log.success('Please add this payloadId to /src/config.js: ', res.id);
-          console.log(res); // @todo handle response
+      .end((error, res) => {
+        if (res && _.isEqual(res.status, 201)) {
+          var parsed = this._parseResponse(res);
+          if (parsed) {
+            log.success('Please add this payloadId to /src/config.js: ', parsed.id);
+          }
+        } else {
+          log.error('Error creating an issue', error);
         }
       });
+  },
+
+  _parseResponse(res) {
+    try {
+      return JSON.parse(res.text);
+    } catch (e) {
+      log.error('Unable to parse response on update payload');
+    }
+  },
+
+  _basicGistObject(payload, type) {
+    var gistObject = { files : {} }
+    var filename = moment().format('MM-DD-YYYY-hh-mm-ss') + '_enhance.json'
+    gistObject.files[filename] = { content : payload }
+
+    if (_.isEqual(type, 'create')) {
+      gistObject.public = true;
+    }
+
+    return gistObject;
   },
 
   _update(payload) {
@@ -51,10 +64,26 @@ export default Reflux.createStore({
       return log.error('Login required');
     }
 
-    this._getInfo(function(gistInfo) {
-      var fileObject = this._getFileObjectFromGistInfo(gistInfo);
-      this._create(payload, fileObject);
+    var gistObject = this._basicGistObject(payload, 'update')
 
+    this._getInfo()
+    .then((gistInfo) => {
+      var oldFile = this._getFileObjectFromGistInfo(gistInfo);
+      if (oldFile) {
+        gistObject.files[oldFile.filename] = null // delete the old file if it exists
+      }
+
+      request
+        .patch([ apiUrl, 'gists', payloadId] .join('/'))
+        .send(gistObject)
+        .set('Authorization', 'token ' + token) // required token
+        .end(function(error, res) {
+          if (res && _.isEqual(res.status, 200)) {
+            log.success('Updated payload')
+          } else {
+            log.error('Error creating an issue', error);
+          }
+        });
     })
   },
 
@@ -65,11 +94,13 @@ export default Reflux.createStore({
 
   onGet() {
     // get the gist raw url, then load the raw gist data
-    return this._getInfo(function(gistInfo) {
+    return this._getInfo()
+    .then((gistInfo) => {
       var fileObject = this._getFileObjectFromGistInfo(gistInfo);
 
       if (fileObject) {
-        return this._getRaw(fileObject, function(rawGist) {
+        return this._getRaw(fileObject)
+        .then((rawGist) => {
           return rawGist;
         });
       }
@@ -79,48 +110,52 @@ export default Reflux.createStore({
   },
 
   _getFileObjectFromGistInfo(gistInfo) {
-    var fileObject = _.at(gistInfo.files, 0);
-    if(! fileObject.length) {
-      log.error('Unable to get raw gist url for payload');
-    } else {
-      fileObject = fileObject.pop();
+    try {
+      return _.toArray(gistInfo.files).pop()
+    } catch (e) {
+      log.error('Unable to get old payload filename');
     }
-    return fileObject
   },
 
-  _getInfo(callback) {
+  _getInfo() {
     if (! payloadId) {
       log.msg('No payloadId specified in /src/config.js')
       return
     }
 
-    request
-      .get([ apiUrl, 'gists', payloadId] .join('/'))
-      .set('Authorization', 'token ' + token) // @ todo not required
-      .end(function(error, res) {
-        if (error) {
-          log.error('Error getting gist: ' + error);
-        } else if (res) {
-          log.success('Gist metadata fetched successfully');
-          callback(res);
-        }
+    return new Promise((res, rej) => {
+      request
+        .get([ apiUrl, 'gists', payloadId] .join('/'))
+        .set('Authorization', 'token ' + token) // @ todo not required
+        .end((error, response) => {
+          if (error) {
+            log.error('Error getting gist: ' + error);
+          } else if (response) {
+            var parsed = this._parseResponse(response);
 
-        callback();
-      });
+            if (parsed) {
+              log.success('Gist metadata fetched successfully');
+              return res(parsed)
+            }
+          }
+          return rej()
+        });
+    });
   },
 
-  _getRaw(fileObject, callback) {
-    request
-      .get(fileObject.raw_url)
-      .set('Authorization', 'token ' + token) // @ todo not required
-      .end(function(error, res) {
-        if (error) {
-          log.error('Error getting gist: ' + error);
-        } else if (res) {
-          log.success('Raw gist loaded');
-          callback(res)
-        }
-        callback()
-      });
+  _getRaw(fileObject) {
+    return new Promise((res, rej) => {
+      request
+        .get(fileObject.raw_url)
+        .end(function(error, raw) {
+          if (error) {
+            log.error('Error getting gist: ' + error);
+          } else if (raw) {
+            log.success('Raw gist loaded');
+            return res(raw)
+          }
+          return rej()
+        });
+    })
   }
 })

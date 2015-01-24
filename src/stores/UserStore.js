@@ -31,7 +31,7 @@ export default Reflux.createStore({
 
   onLogin: function () {
     this.ref.authWithOAuthPopup("github", onAuth, {
-      scope: 'public_repo'
+      scope: 'public_repo,gist' // @todo the end user doesnt need the gist scope, just contributors
     });
 
     function onAuth(error) {
