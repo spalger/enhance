@@ -1,21 +1,13 @@
 import _ from 'lodash'
 import Reflux from 'reflux'
-import lunr from 'lunr'
 import request from 'superagent'
 import config from 'config'
 
 import IssueActions from 'actions/IssueActions'
 import UserStore from 'stores/UserStore'
+import issueIndex from 'models/issues'
 
 var { apiUrl, author, repo, enhanceLabel } = config.github;
-
-
-// create a lunr search object and when we get github issues, index into this
-var issueIndex = lunr(function () {
-  this.field('title', { boost: 10 })
-  this.field('comments')
-  this.ref('id')
-})
 
 function fetchIssues(options, cb) {
   options = options || {}
@@ -36,6 +28,7 @@ function fetchIssues(options, cb) {
   //.set('Authorization', 'foobar')
   .end(cb);
 }
+
 
 export default Reflux.createStore({
   listenables: IssueActions,
@@ -98,7 +91,7 @@ export default Reflux.createStore({
   },
 
   _indexIssuesIntoLunr(issues) {
-    _.each(issues, function(issue) {
+    _.each(issues, (issue) => {
       console.log('Indexing issue: ', issue);
       issueIndex.add({
         title : issue.title,
@@ -109,11 +102,11 @@ export default Reflux.createStore({
   },
 
   onSearch(keyboardEvent) {
-    var lunrResults = issueIndex.search(keyboardEvent.target.value); //contains id and score
+    var results = issueIndex.search(keyboardEvent.target.value); //contains id and score
     var returnedIssues = [];
     var self = this;
 
-    _.each(lunrResults, function(result) {
+    _.each(results, function(result) {
       _.each(self.issues, function(issue) {
         if (_.isEqual(issue.number, Number(result.ref))) {
           returnedIssues.push(issue);
