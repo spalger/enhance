@@ -1,32 +1,34 @@
+import _ from 'lodash'
 import Reflux from 'reflux'
 import UserActions from 'actions/UserActions'
 import Firebase from 'firebase/lib/firebase-web'
 
-var ref = new Firebase("https://enhance.firebaseio.com");
 
 export default Reflux.createStore({
   listenables: UserActions,
 
   user : {},
-  _eventBound: false,
 
-  getInitialState : function() {
-    if (!this._eventBound) {
-      ref.onAuth((auth) => {
-        if (auth=== null) {
-          console.log('logged out');
-        } else {
-          this.user = auth;
-          this.trigger(this.user);
-          console.log("Authenticated successfully with payload:", this.user); // Leave until launch
-        }
-      })
-      this._eventBound = true
-    }
+  _bindAuth: _.once(function () {
+    this.ref.onAuth((auth) => {
+      if (auth=== null) {
+        console.log('logged out');
+      } else {
+        this.user = auth;
+        this.trigger(this.user);
+        console.log("Authenticated successfully with payload:", this.user); // Leave until launch
+      }
+    })
+  }),
+
+  init: function () {
+    this.ref = new Firebase("https://enhance.firebaseio.com");
+    this._bindAuth();
   },
 
+
   onLogin: function () {
-    ref.authWithOAuthPopup("github", onAuth, {
+    this.ref.authWithOAuthPopup("github", onAuth, {
       scope: 'public_repo'
     });
 
@@ -39,7 +41,7 @@ export default Reflux.createStore({
   },
 
   onLogout : function () {
-    ref.unauth();
+    this.ref.unauth();
   },
 
   getGithubToken : function() {
