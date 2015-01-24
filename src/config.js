@@ -6,6 +6,6 @@ export default {
     enhanceLabel: 'enhancement'
   },
   storage: {
-    index: 'enhance.json'
+    index: 'enhance-store'
   }
 }

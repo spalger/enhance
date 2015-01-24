@@ -1,18 +1,38 @@
 import _ from 'lodash'
-import db from 'lib/initDb'
+import pouchdb from 'pouchdb'
 import lunr from 'lunr'
 
 export default class Model {
   constructor(name) {
+
     // lunr disabled by default
     this.indexer = null
 
     this.name = name
-    this.db = db
+    this db = new pouchdb(name, {
+      adapter: 'http'
+    })
     this.collection = this.db.getCollection(this.name)
     if (!this.collection) {
       this.collection = this.db.addCollection(this.name)
     }
+
+    // use events to pass records to the indexer
+    db.changes({
+      since: 'now',
+    })
+    .on('create', (doc) => {
+      if (!this.indexer) return
+      this._indexAdd(doc)
+    })
+    .on('update', (doc) => {
+      if (!this.indexer) return
+      this._indexUpdate(doc)
+    })
+    .on('delete', (doc) => {
+      if (!this.indexer) return
+      this._indexDelete(doc)
+    })
   }
 
   // initialize lunr indexer
@@ -36,8 +56,7 @@ export default class Model {
       })
     }
 
-    this._indexAdd(doc)
-    return this.collection.insert(doc)
+    return this.db.post(doc)
   }
 
   update(doc) {
@@ -47,8 +66,7 @@ export default class Model {
       })
     }
 
-    this._indexUpdate(doc)
-    return this.collection.update(doc)
+    return this.db.put(doc)
   }
 
   remove(doc) {
@@ -58,12 +76,15 @@ export default class Model {
       })
     }
 
-    this._indexRemove(doc)
-    return this.collection.insert(doc)
+    return this.db.remove(doc)
   }
 
-  find(obj) {
-    return this.collection.find(obj)
+  get(obj) {
+    return this.db.get(obj)
+  }
+
+  query(fn, options, cb) {
+    this.db.query(fn, options)
   }
 
   // wrap lunr indexer
