@@ -2,10 +2,11 @@ import _ from 'lodash'
 import Reflux from 'reflux'
 import request from 'superagent'
 import config from 'config'
+import log from 'lib/log'
 
 import IssueActions from 'actions/IssueActions'
 import UserStore from 'stores/UserStore'
-import issueIndex from 'models/issues'
+import Issues from 'models/issues'
 
 var { apiUrl, author, repo, enhanceLabel } = config.github;
 var defaultPerPage = 100;
@@ -41,15 +42,17 @@ export default Reflux.createStore({
    body */
   onFetch(options) {
     fetchIssues(options, (error, res) => {
+      var issues;
+
       if (error) {
-        console.log('Error getting all repo issues: ' + error);
+        log.error('Error getting all repo issues: ' + error);
       }
 
       if (res && res.body) {
-        this.issues = res.body
+        issues = res.body
       } else if (res && res.text) {
         try {
-          this.issues = JSON.parse(res.text)
+          issues = JSON.parse(res.text)
         } catch (err) {
           throw err
         }
@@ -57,9 +60,8 @@ export default Reflux.createStore({
         throw new Error('Could not parse response')
       }
 
-      this._indexIssuesIntoLunr(this.issues);
-      this.trigger(this.issues);
-      console.log(this.issues);
+      Issues.add(issues);
+      this.trigger(issues);
     });
   },
 
@@ -82,7 +84,7 @@ export default Reflux.createStore({
     var token = UserStore.getGithubToken()
 
     if (! token) {
-      return console.error('Login required');
+      return log.error('Login required');
     }
 
     request
@@ -91,28 +93,17 @@ export default Reflux.createStore({
       .set('Authorization', 'token ' + token) // required token
       .end(function(error, res) {
         if (error) {
-          console.log('Error creating an issue: ' + error);
+          log.error('Error creating an issue: ' + error);
         }
 
         if (res) {
-          console.log(res); // @todo handle response
+          log.success('Issue created');
         }
       });
   },
 
-  _indexIssuesIntoLunr(issues) {
-    _.each(issues, (issue) => {
-      console.log('Indexing issue: ', issue);
-      issueIndex.add({
-        title : issue.title,
-        comments : issue.comments,
-        id : issue.number
-      })
-    })
-  },
-
   onSearch(keyboardEvent) {
-    var results = issueIndex.search(keyboardEvent.target.value); //contains id and score
+    var results = Issues.search(keyboardEvent.target.value); //contains refs and score
     var returnedIssues = [];
     var self = this;
 
@@ -124,6 +115,6 @@ export default Reflux.createStore({
       });
     });
 
-    console.log('search results : ', returnedIssues);
+    log.info('Search results: ', returnedIssues.length);
   }
 })
