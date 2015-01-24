@@ -69,6 +69,12 @@ export default Reflux.createStore({
     });
   },
 
+  onPayload() {
+    fetchIssues((err, res) => {
+      debugger
+    });
+  },
+
   onCreate(title, body) {
     var token = UserStore.getGithubToken()
 
