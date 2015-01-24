@@ -4,21 +4,22 @@ import DBClass from 'models/_baseClass'
 class Issues extends DBClass {
   constructor() {
     super('issues')
-    this.indexRef = 'number'
+
+    this.primaryKey = 'id'
+
     this._setIndexer(function () {
       this.field('title', { boost: 10 })
-      this.field('comments')
-      this.ref('id')
+      this.field('number', { boost: 50 })
+      this.ref('_id')
     })
 
-  }
-
-  _indexAdd(issue) {
-    this.indexer.add({
-      ref : issue.number,
-      title : issue.title,
-      comment : issue.comments
-    })
+    this._indexMap = function (doc) {
+      return {
+        title : doc.title,
+        number : doc.number,
+        ref : doc._id,
+      }
+    }
   }
 }
 

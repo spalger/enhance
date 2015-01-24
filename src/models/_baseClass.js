@@ -4,21 +4,17 @@ import lunr from 'lunr'
 
 export default class Model {
   constructor(name) {
-
     // lunr disabled by default
     this.indexer = null
 
+    this.primaryKey = '_id'
     this.name = name
-    this db = new pouchdb(name, {
-      adapter: 'http'
+    this.db = new pouchdb(name, {
+      adapter: 'idb'
     })
-    this.collection = this.db.getCollection(this.name)
-    if (!this.collection) {
-      this.collection = this.db.addCollection(this.name)
-    }
 
     // use events to pass records to the indexer
-    db.changes({
+    this.db.changes({
       since: 'now',
     })
     .on('create', (doc) => {
@@ -35,20 +31,6 @@ export default class Model {
     })
   }
 
-  // initialize lunr indexer
-  _setIndexer(schema) {
-    this.indexer = lunr(schema)
-  }
-
-  // custom handler required to index to lunr
-  _indexAdd(/* doc */) {}
-  _indexUpdate(/* doc */) {}
-  _indexRemove(/* doc */) {}
-
-  _indexMapper(index) {
-    return this.collection.get(index.ref);
-  }
-
   add(doc) {
     if (_.isArray(doc)) {
       return doc.map((d) => {
@@ -56,7 +38,7 @@ export default class Model {
       })
     }
 
-    return this.db.post(doc)
+    return this.db.put(doc, doc[this.primaryKey])
   }
 
   update(doc) {
@@ -66,7 +48,7 @@ export default class Model {
       })
     }
 
-    return this.db.put(doc)
+    return this.db.put(doc, doc[this.primaryKey])
   }
 
   remove(doc) {
@@ -84,12 +66,37 @@ export default class Model {
   }
 
   query(fn, options, cb) {
-    this.db.query(fn, options)
+    this.db.query(fn, options, cb)
   }
 
   // wrap lunr indexer
   search(query) {
     if (!this.indexer) return []
     return this.indexer.search(query).map(this._indexMapper)
+  }
+
+  // initialize lunr indexer
+  _setIndexer(schema) {
+    this.indexer = lunr(schema)
+  }
+
+  // custom handler required to index to lunr
+  _indexAdd(doc) {
+    if (!this.indexer) return
+    this.indexer.add(this._indexMap(doc))
+  }
+
+  _indexUpdate(doc) {
+    if (!this.indexer) return
+    this.indexer.update(this._indexMap(doc))
+  }
+
+  _indexRemove(doc) {
+    if (!this.indexer) return
+    this.indexer.remove(this._indexMap(doc))
+  }
+
+  _indexMapper(index) {
+    return this.db.get(index.ref);
   }
 }
