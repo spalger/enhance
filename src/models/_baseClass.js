@@ -45,12 +45,12 @@ export default class Model {
 
     return this.get(this._id(doc))
     .then((d) => {
-      if (!_.isEqual(doc, _.omit(d, ['_id', '_rev']))) {
+      if (doc.updated_at !== d.updated_at) {
         return this.update(doc, d._rev)
       }
       return d
     })
-    .catch(function (err) {
+    .catch((err) => {
       if (err.status === 404) {
         return this.db.put(doc, this._id(doc))
       }
