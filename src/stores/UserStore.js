@@ -17,7 +17,7 @@ export default Reflux.createStore({
       } else {
         this.user = auth;
         this.trigger(this.user);
-        log.success('logged in with github');
+        log.success('Welcome ' + this.user.github.displayName || this.user.github.username);
         log.info('github payload', this.user);
       }
     })
@@ -43,6 +43,7 @@ export default Reflux.createStore({
   },
 
   onLogout : function () {
+    log.success('You have been logged out');
     this.ref.unauth();
   },
 
