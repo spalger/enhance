@@ -11,7 +11,6 @@ import UserStore from 'stores/UserStore'
 
 var { apiUrl } = config.github;
 var { payloadId } = config;
-var token = UserStore.getGithubToken()
 
 export default Reflux.createStore({
   listenables: PayloadActions,
@@ -19,6 +18,7 @@ export default Reflux.createStore({
   payload : [],
 
   _create(payload) {
+    var token = UserStore.getGithubToken()
     if (! token) {
       return log.error('Login required');
     }
@@ -60,6 +60,7 @@ export default Reflux.createStore({
   },
 
   _update(payload) {
+    var token = UserStore.getGithubToken()
     if (! token) {
       return log.error('Login required');
     }
@@ -118,6 +119,7 @@ export default Reflux.createStore({
   },
 
   _getInfo() {
+    var token = UserStore.getGithubToken()
     if (! payloadId) {
       log.msg('No payloadId specified in /src/config.js')
       return
