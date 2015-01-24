@@ -1,6 +1,9 @@
-import AppPage from 'AppPage'
+import router from 'router'
 import domready from 'domready'
+import config from 'config'
 
 domready(() => {
-  AppPage.render(document.getElementById('app-container'))
+  router.history.start({
+    root: config.rootPath
+  })
 })

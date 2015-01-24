@@ -1,8 +1,11 @@
 import Reflux from 'reflux'
-import CommentActions from 'actions/CommentActions'
 import request from 'superagent'
-import config from 'config/index'
+import config from 'config'
 
+import CommentActions from 'actions/CommentActions'
+import UserStore from 'stores/UserStore'
+
+var { apiUrl, author, repo, enhanceLabel } = config.github;
 const UPVOTE = ':+1:'
 const DOWNVOTE = ':-1:'
 
@@ -10,12 +13,12 @@ export default Reflux.createStore({
   listenables: CommentActions,
 
   _create(issueNumber, comment) {
-    var { baseUrl, author, repo } = config;
+    var token = UserStore.getGithubToken()
 
     request
-      .post([ baseUrl, 'repos', author, repo, 'issues', issueNumber, 'comments' ] .join('/'))
+      .post([ apiUrl, 'repos', author, repo, 'issues', issueNumber, 'comments' ] .join('/'))
       .send({ body : comment })
-      .set('Authorization', 'foobar') // required token
+      .set('Authorization', 'token ' + token) // required token
       .end(function(error, res) {
         if (error) {
           console.log('Error creating a comment: ' + error);
@@ -30,8 +33,6 @@ export default Reflux.createStore({
   /* sample return object keys: url, html_url, issue_url, id, user, created_at, updated_at, body */
   /* @todo since is the MouseEvent currently */
   onGetByIssue(issueNumber, since) {
-    var { baseUrl, author, repo, enhanceLabel } = config;
-
     var payload = {
       labels : [ enhanceLabel ],
       sort : 'updated',
@@ -43,7 +44,7 @@ export default Reflux.createStore({
     }
 
     request
-      .get([ baseUrl, 'repos', author, repo, 'issues', issueNumber, 'comments' ] .join('/'))
+      .get([ apiUrl, 'repos', author, repo, 'issues', issueNumber, 'comments' ] .join('/'))
       //.send({ sort : 'updated', direction : 'desc', since : '2015-01-01 })
       //.set('Authorization', 'foobar')
       .end(function(error, res) {

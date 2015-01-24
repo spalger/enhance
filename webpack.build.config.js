@@ -22,6 +22,11 @@ module.exports = function (paths, dev) {
           loader: '6to5-loader?experimental&comments=false&loose=classes'
         },
 
+        {
+          test: /\.html$/,
+          loader: 'raw-loader'
+        },
+
         // less styles
         {
           test: /\.less$/,
