@@ -18,7 +18,7 @@ module.exports = function (paths, dev) {
         // es6 modules
         {
           test: /\.js$/,
-          exclude: /node_modules|bower_components/,
+          exclude: /node_modules\/(?!deku-scrub)|bower_components/,
           loader: '6to5-loader?experimental&comments=false&loose=classes'
         },
 
