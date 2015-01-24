@@ -8,17 +8,21 @@ export default Reflux.createStore({
   listenables: UserActions,
 
   user : {},
+  _eventBound: false,
 
   getInitialState : function() {
-    ref.onAuth((auth) => {
-      if (auth=== null) {
-        console.log('logged out');
-      } else {
-        this.user = auth;
-        this.trigger(this.user);
-        console.log("Authenticated successfully with payload:", this.user); // Leave until launch
-      }
-    })
+    if (!this._eventBound) {
+      ref.onAuth((auth) => {
+        if (auth=== null) {
+          console.log('logged out');
+        } else {
+          this.user = auth;
+          this.trigger(this.user);
+          console.log("Authenticated successfully with payload:", this.user); // Leave until launch
+        }
+      })
+      this._eventBound = true
+    }
   },
 
   onLogin: function () {
