@@ -11,7 +11,6 @@ import UserActions from 'actions/UserActions'
 import UserStore from 'stores/UserStore'
 
 export default component({
-  tagName: 'app-page',
 
   initialState() {
     return {
