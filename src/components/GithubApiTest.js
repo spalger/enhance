@@ -31,13 +31,17 @@ export default component({
     this.setState({ comment : event.target.value })
   },
 
+  _fetchIssues() {
+    IssueActions.fetch()
+  },
+
   render(props, state) {
     console.log(state.comment);
     var {div, h1, button, br, textarea} = this.dom
 
     return div(
       h1('static showdown 2015!'),
-      button({ onClick : _.bindKey(IssueActions, 'fetch') }, 'Load github issues'),
+      button({ onClick : this._fetchIssues }, 'Load github issues'),
       button({ onClick : _.bindKey(CommentActions, 'getByIssue', 1) }, 'Load comments for issue 1'),
       button({ onClick : _.bindKey(CommentActions, 'upvote', 1) }, 'Upvote issue 1'),
       button({ onClick : _.bindKey(CommentActions, 'downvote', 1) }, 'Downvote issue 1'),
