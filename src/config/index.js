@@ -1,6 +1,6 @@
 export default {
   baseUrl : 'https://api.github.com',
-  author : 'spoike',
-  repo : 'refluxjs',
+  author : 'jwdotjs',
+  repo : 'documentio',
   enhanceLabel : 'enhance'
 }

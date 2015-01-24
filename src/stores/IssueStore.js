@@ -3,6 +3,8 @@ import IssueActions from 'actions/IssueActions'
 import request from 'superagent'
 import config from 'config/index'
 
+import UserStore from 'stores/UserStore'
+
 export default Reflux.createStore({
   listenables: IssueActions,
 
@@ -44,11 +46,16 @@ export default Reflux.createStore({
 
   onCreate(title, body) {
     var { baseUrl, author, repo } = config;
+    var token = UserStore.getGithubToken()
+
+    if (! token) {
+      return console.error('Login required');
+    }
 
     request
       .post([ baseUrl, 'repos', author, repo, 'issues' ] .join('/'))
       .send({ title: title, body : body })
-      .set('Authorization', 'foobar') // required token
+      .set('Authorization', 'token ' + token) // required token
       .end(function(error, res) {
         if (error) {
           console.log('Error creating an issue: ' + error);

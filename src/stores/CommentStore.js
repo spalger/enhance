@@ -3,6 +3,8 @@ import CommentActions from 'actions/CommentActions'
 import request from 'superagent'
 import config from 'config/index'
 
+import UserStore from 'stores/UserStore'
+
 const UPVOTE = ':+1:'
 const DOWNVOTE = ':-1:'
 
@@ -11,11 +13,12 @@ export default Reflux.createStore({
 
   _create(issueNumber, comment) {
     var { baseUrl, author, repo } = config;
+    var token = UserStore.getGithubToken()
 
     request
       .post([ baseUrl, 'repos', author, repo, 'issues', issueNumber, 'comments' ] .join('/'))
       .send({ body : comment })
-      .set('Authorization', 'foobar') // required token
+      .set('Authorization', 'token ' + token) // required token
       .end(function(error, res) {
         if (error) {
           console.log('Error creating a comment: ' + error);
