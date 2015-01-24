@@ -1,21 +1,35 @@
 import _ from 'lodash'
 import Reflux from 'reflux'
-import lunr from 'lunr'
 import request from 'superagent'
 import config from 'config'
 
 import IssueActions from 'actions/IssueActions'
 import UserStore from 'stores/UserStore'
+import issueIndex from 'models/issues'
 
 var { apiUrl, author, repo, enhanceLabel } = config.github;
+var defaultPerPage = 100;
 
+function fetchIssues(options, cb) {
+  options = options || {}
+  if (typeof options === 'function') {
+    cb = options
+    options = {}
+  }
 
-// create a lunr search object and when we get github issues, index into this
-var issueIndex = lunr(function () {
-  this.field('title', { boost: 10 })
-  this.field('comments')
-  this.ref('id')
-})
+  var payload = _.defaults(options, {
+    labels : [ enhanceLabel ],
+    per_page: defaultPerPage,
+    sort : 'updated',
+    direction : 'desc',
+  })
+
+  request
+  .get([ apiUrl, 'repos', author, repo, 'issues' ].join('/'))
+  .query(payload)
+  //.set('Authorization', 'foobar')
+  .end(cb);
+}
 
 export default Reflux.createStore({
   listenables: IssueActions,
@@ -25,38 +39,43 @@ export default Reflux.createStore({
   /* returned object keys: url, labels_url, comments_url, events_url, html_url, id, number, title,
    user, labels (array), state, locked, comments (int), created_at, updated_at, pull_request (obj)
    body */
-  onGetAll(since) {
-    var payload = {
-      labels : [ enhanceLabel ],
-      sort : 'updated',
-      direction : 'desc',
-    }
-    var self = this;
+  onFetch(options) {
+    fetchIssues(options, (error, res) => {
+      if (error) {
+        console.log('Error getting all repo issues: ' + error);
+      }
 
-    if (since) {
-      payload.since = since
-    }
-
-    request
-      .get([ apiUrl, 'repos', author, repo, 'issues' ] .join('/'))
-      .send(payload)
-      //.set('Authorization', 'foobar')
-      .end(function(error, res) {
-        if (error) {
-          console.log('Error getting all repo issues: ' + error);
+      if (res && res.body) {
+        this.issues = res.body
+      } else if (res && res.text) {
+        try {
+          this.issues = JSON.parse(res.text)
+        } catch (err) {
+          throw err
         }
+      } else {
+        throw new Error('Could not parse response')
+      }
 
-        if (res && res.text) {
-          try {
-            self.issues = JSON.parse(res.text);
-            self._indexIssuesIntoLunr(self.issues);
-            self.trigger(self.issues);
-            console.log(self.issues);
-          } catch (err) {
-            console.log('Error parsing JSON while getting all repo issues');
-          }
-        }
-      });
+      this._indexIssuesIntoLunr(this.issues);
+      this.trigger(this.issues);
+      console.log(this.issues);
+    });
+  },
+
+  onPayload(options) {
+    options = options || {}
+    var currentPage = options.page || 1
+
+    var _payloadBuilder = (err, res) => {
+      // TODO: store issues
+
+      if (res.body.length === defaultPerPage) {
+        this.onPayload({ page: currentPage+1 })
+      }
+    }
+
+    fetchIssues(options, _payloadBuilder);
   },
 
   onCreate(title, body) {
@@ -82,7 +101,7 @@ export default Reflux.createStore({
   },
 
   _indexIssuesIntoLunr(issues) {
-    _.each(issues, function(issue) {
+    _.each(issues, (issue) => {
       console.log('Indexing issue: ', issue);
       issueIndex.add({
         title : issue.title,
@@ -93,11 +112,11 @@ export default Reflux.createStore({
   },
 
   onSearch(keyboardEvent) {
-    var lunrResults = issueIndex.search(keyboardEvent.target.value); //contains id and score
+    var results = issueIndex.search(keyboardEvent.target.value); //contains id and score
     var returnedIssues = [];
     var self = this;
 
-    _.each(lunrResults, function(result) {
+    _.each(results, function(result) {
       _.each(self.issues, function(issue) {
         if (_.isEqual(issue.number, Number(result.ref))) {
           returnedIssues.push(issue);

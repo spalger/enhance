@@ -5,4 +5,14 @@ export default flux
 
 function flux(Component) {
   _.assign(Component.prototype, ListenerMethods);
+
+  Component.prototype.bindTo = function (Store, prop) {
+    var assign = (val) => {
+      this.setState({
+        [prop]: val
+      })
+    }
+
+    this.listenTo(Store, assign, assign);
+  }
 }
