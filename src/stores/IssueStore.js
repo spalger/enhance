@@ -8,6 +8,7 @@ import UserStore from 'stores/UserStore'
 import issueIndex from 'models/issues'
 
 var { apiUrl, author, repo, enhanceLabel } = config.github;
+var defaultPerPage = 100;
 
 function fetchIssues(options, cb) {
   options = options || {}
@@ -18,13 +19,14 @@ function fetchIssues(options, cb) {
 
   var payload = _.defaults(options, {
     labels : [ enhanceLabel ],
+    per_page: defaultPerPage,
     sort : 'updated',
     direction : 'desc',
   })
 
   request
   .get([ apiUrl, 'repos', author, repo, 'issues' ].join('/'))
-  .send(payload)
+  .query(payload)
   //.set('Authorization', 'foobar')
   .end(cb);
 }
