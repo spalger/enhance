@@ -23,21 +23,16 @@ export default class View {
     };
 
     proto.renderAsComponent = function (Component) {
-      var shadow = this.createShadowRoot();
-
       var attrsDesc = _.toArray(this.attributes);
       var attrs = _.transform(attrsDesc, function (attrs, attr) {
         attrs[attr.name] = attr.value;
       }, {});
 
-      this.dekuTree = Component.render(shadow, attrs);
+      this.dekuTree = Component.render(this, attrs);
     }
 
     proto.renderAsHtml = function (html) {
-      var shadow = this.createShadowRoot()
-      var tmp = document.createElement('template')
-      tmp.innerHTML = html
-      shadow.appendChild(tmp.content.firstChild)
+      this.innerHTML = html;
     }
 
     document.registerElement(tagName, { prototype: proto })
