@@ -23,12 +23,11 @@ function fetchIssues(options, cb) {
   })
 
   request
-  .get([ apiUrl, 'repos', author, repo, 'issues' ] .join('/'))
+  .get([ apiUrl, 'repos', author, repo, 'issues' ].join('/'))
   .send(payload)
   //.set('Authorization', 'foobar')
   .end(cb);
 }
-
 
 export default Reflux.createStore({
   listenables: IssueActions,
@@ -64,7 +63,22 @@ export default Reflux.createStore({
 
   onPayload() {
     fetchIssues((err, res) => {
-      debugger
+      var pageCount = 1;
+
+      // link header means more than one page
+      if (res.headers.link) {
+        // fetch the largest page number, that's the total page count
+        var r = /page=(\d+)/g;
+        var matches = res.headers.link.match(r)
+        pageCount = matches.reduce(function (prev, str) {
+          var page = parseInt(str.split('=')[1])
+          if (page > prev) return page
+        }, 0)
+      }
+
+      // TODO: make sure X-RateLimit-Remaining > pageCount
+      // TODO: store issues
+      // TODO: call fetchIssues pageCount - 1 times, storing each time
     });
   },
 
