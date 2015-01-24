@@ -60,9 +60,7 @@ export default Reflux.createStore({
         throw new Error('Could not parse response')
       }
 
-      issues.forEach(function (issue) {
-        Issues.add(issue)
-      })
+      Issues.add(issues);
       this.trigger(issues);
     });
   },
