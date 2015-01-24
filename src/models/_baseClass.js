@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import db from 'lib/initDb'
+import pouchdb from 'pouchdb'
 import lunr from 'lunr'
 
 export default class Model {
@@ -7,26 +7,55 @@ export default class Model {
     // lunr disabled by default
     this.indexer = null
 
+    this.primaryKey = '_id'
     this.name = name
-    this.db = db
-    this.collection = this.db.getCollection(this.name)
-    if (!this.collection) {
-      this.collection = this.db.addCollection(this.name)
+    this.db = new pouchdb(name, {
+      adapter: 'idb'
+    })
+
+    // use events to pass records to the indexer
+    this.db.changes({
+      since: 'now',
+    })
+    .on('create', (doc) => {
+      if (!this.indexer) return
+      this._indexAdd(doc)
+    })
+    .on('update', (doc) => {
+      if (!this.indexer) return
+      this._indexUpdate(doc)
+    })
+    .on('delete', (doc) => {
+      if (!this.indexer) return
+      this._indexDelete(doc)
+    })
+  }
+
+  _id(doc) {
+    if (doc._id) return doc._id
+    return String(doc[this.primaryKey])
+  }
+
+  upsert(doc) {
+    if (_.isArray(doc)) {
+      return doc.map((d) => {
+        return this.upsert(d)
+      })
     }
-  }
 
-  // initialize lunr indexer
-  _setIndexer(schema) {
-    this.indexer = lunr(schema)
-  }
-
-  // custom handler required to index to lunr
-  _indexAdd(/* doc */) {}
-  _indexUpdate(/* doc */) {}
-  _indexRemove(/* doc */) {}
-
-  _indexMapper(index) {
-    return this.collection.get(index.ref);
+    return this.get(this._id(doc))
+    .then((d) => {
+      if (!_.isEqual(doc, _.omit(d, ['_id', '_rev']))) {
+        return this.update(doc, d._rev)
+      }
+      return d
+    })
+    .catch(function (err) {
+      if (err.status === 404) {
+        return this.db.put(doc, this._id(doc))
+      }
+      throw err
+    })
   }
 
   add(doc) {
@@ -36,19 +65,17 @@ export default class Model {
       })
     }
 
-    this._indexAdd(doc)
-    return this.collection.insert(doc)
+    return this.db.put(doc, this._id(doc))
   }
 
-  update(doc) {
+  update(doc, rev) {
     if (_.isArray(doc)) {
       return doc.map((d) => {
         return this.update(d)
       })
     }
 
-    this._indexUpdate(doc)
-    return this.collection.update(doc)
+    return this.db.put(doc, this._id(doc), rev)
   }
 
   remove(doc) {
@@ -58,17 +85,45 @@ export default class Model {
       })
     }
 
-    this._indexRemove(doc)
-    return this.collection.insert(doc)
+    return this.db.remove(doc)
   }
 
-  find(obj) {
-    return this.collection.find(obj)
+  get(obj) {
+    return this.db.get(obj)
+  }
+
+  query(fn, options, cb) {
+    this.db.query(fn, options, cb)
   }
 
   // wrap lunr indexer
   search(query) {
     if (!this.indexer) return []
     return this.indexer.search(query).map(this._indexMapper)
+  }
+
+  // initialize lunr indexer
+  _setIndexer(schema) {
+    this.indexer = lunr(schema)
+  }
+
+  // custom handler required to index to lunr
+  _indexAdd(doc) {
+    if (!this.indexer) return
+    this.indexer.add(this._indexMap(doc))
+  }
+
+  _indexUpdate(doc) {
+    if (!this.indexer) return
+    this.indexer.update(this._indexMap(doc))
+  }
+
+  _indexRemove(doc) {
+    if (!this.indexer) return
+    this.indexer.remove(this._indexMap(doc))
+  }
+
+  _indexMapper(index) {
+    return this.db.get(index.ref);
   }
 }
