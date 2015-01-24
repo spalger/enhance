@@ -3,13 +3,33 @@ import CommentActions from 'actions/CommentActions'
 import request from 'superagent'
 import config from 'config/index'
 
+const UPVOTE = ':+1:'
+const DOWNVOTE = ':-1:'
+
 export default Reflux.createStore({
   listenables: CommentActions,
+
+  _create(issueNumber, comment) {
+    var { baseUrl, author, repo } = config;
+
+    request
+      .post([ baseUrl, 'repos', author, repo, 'issues', issueNumber, 'comments' ] .join('/'))
+      .send({ body : comment })
+      .set('Authorization', 'foobar') // required token
+      .end(function(error, res) {
+        if (error) {
+          console.log('Error creating a comment: ' + error);
+        }
+
+        if (res) {
+          console.log(res); // @todo handle response
+        }
+      });
+  },
 
   /* sample return object keys: url, html_url, issue_url, id, user, created_at, updated_at, body */
   /* @todo since is the MouseEvent currently */
   onGetByIssue(issueNumber, since) {
-    console.log(issueNumber, since);
     var { baseUrl, author, repo, enhanceLabel } = config;
 
     var payload = {
@@ -40,5 +60,17 @@ export default Reflux.createStore({
           }
         }
       });
+  },
+
+  onUpvote(issueNumber) {
+    this._create(issueNumber, UPVOTE);
+  },
+
+  onDownvote(issueNumber) {
+    this._create(issueNumber, DOWNVOTE);
+  },
+
+  onComment(issueNumber, userComment) {
+    this._create(issueNumber, userComment);
   }
 })

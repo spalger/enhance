@@ -73,7 +73,7 @@ request
 // POST /repos/:owner/:repo/issues
 request
   .post([ baseUrl, 'repos', author, repo, 'issues' ] .join('/'))
-  //.send({ title: 'New issue title', body : 'Issue description', labels: [ 'enhance' ] })
+  //.send({ title: 'New issue title', body : 'Issue description' })
   //.set('Authorization', 'foobar')
   .end(function(error, res) {
     if (error) {
