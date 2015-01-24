@@ -16,16 +16,21 @@ export default class View {
       throw new Error('content must be a string or an object with a render method');
     }
 
+    proto.detachedCallback = function () {
+      if (this.dekuTree) {
+        this.dekuTree.remove();
+      }
+    };
+
     proto.renderAsComponent = function (Component) {
       var shadow = this.createShadowRoot();
-      this.dekuTree = true;
 
       var attrsDesc = _.toArray(this.attributes);
       var attrs = _.transform(attrsDesc, function (attrs, attr) {
         attrs[attr.name] = attr.value;
       }, {});
 
-      this.scene = Component.render(shadow, attrs);
+      this.dekuTree = Component.render(shadow, attrs);
     }
 
     proto.renderAsHtml = function (html) {
