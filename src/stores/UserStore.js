@@ -52,7 +52,7 @@ export default Reflux.createStore({
   },
 
   onRequestLogin: function () {
-    var scope = 'public_repo'
+    var scope = 'public_repo,gist'
     function checkForFail(err) {
       if (err) UserActions.loginFailure(err)
     }

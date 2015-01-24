@@ -2,6 +2,7 @@ import _ from 'lodash'
 import Reflux from 'reflux'
 import request from 'superagent'
 import config from 'config'
+import log from 'lib/log'
 
 import IssueActions from 'actions/IssueActions'
 import UserStore from 'stores/UserStore'
@@ -44,7 +45,7 @@ export default Reflux.createStore({
       var issues;
 
       if (error) {
-        console.log('Error getting all repo issues: ' + error);
+        log.error('Error getting all repo issues: ' + error);
       }
 
       if (res && res.body) {
@@ -59,9 +60,7 @@ export default Reflux.createStore({
         throw new Error('Could not parse response')
       }
 
-      issues.forEach(function (issue) {
-        Issues.add(issue)
-      })
+      Issues.add(issues);
       this.trigger(issues);
     });
   },
@@ -85,7 +84,7 @@ export default Reflux.createStore({
     var token = UserStore.getGithubToken()
 
     if (! token) {
-      return console.error('Login required');
+      return log.error('Login required');
     }
 
     request
@@ -94,17 +93,17 @@ export default Reflux.createStore({
       .set('Authorization', 'token ' + token) // required token
       .end(function(error, res) {
         if (error) {
-          console.log('Error creating an issue: ' + error);
+          log.error('Error creating an issue: ' + error);
         }
 
         if (res) {
-          console.log(res); // @todo handle response
+          log.success('Issue created');
         }
       });
   },
 
   onSearch(keyboardEvent) {
-    var results = Issues.search(keyboardEvent.target.value); //contains id and score
+    var results = Issues.search(keyboardEvent.target.value); //contains refs and score
     var returnedIssues = [];
     var self = this;
 
@@ -116,6 +115,6 @@ export default Reflux.createStore({
       });
     });
 
-    console.log('search results : ', returnedIssues);
+    log.info('Search results: ', returnedIssues.length);
   }
 })

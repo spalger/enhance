@@ -39,6 +39,7 @@
     "loglevel": "~1.2.0",
     "lunr": "^0.5.7",
     "messenger": "git://github.com/HubSpot/messenger",
+    "moment": "^2.9.0",
     "path-to-regexp": "~1.0.3",
     "portfinder": "^0.3.0",
     "raw-loader": "^0.5.1",

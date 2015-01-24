@@ -1,4 +1,4 @@
-import DBClass from 'lib/DBClass'
+import DBClass from 'models/_baseClass'
 
 // create a lunr search object and when we get github issues, index into this
 class Issues extends DBClass {
