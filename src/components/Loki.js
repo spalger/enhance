@@ -6,8 +6,7 @@ export default component({
   render(props, state) {
     var {div} = this.dom
 
-    console.log(loki)
-    debugger
+    debugger // loki.db()
 
     return div('testing loki, look at console');
   }
