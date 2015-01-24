@@ -2,5 +2,5 @@ import AppPage from 'AppPage'
 import domready from 'domready'
 
 domready(() => {
-  AppPage.render(document.body)
+  AppPage.render(document.getElementById('app-container'))
 })
