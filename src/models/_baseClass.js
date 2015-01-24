@@ -9,7 +9,10 @@ export default class Model {
 
     this.name = name
     this.db = db
-    this.collection = this.db.addCollection(this.name)
+    this.collection = this.db.getCollection(this.name)
+    if (!this.collection) {
+      this.collection = this.db.addCollection(this.name)
+    }
   }
 
   // initialize lunr indexer
