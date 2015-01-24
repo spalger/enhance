@@ -17,7 +17,7 @@
     "test",
     "tests"
   ],
-  "dependencies": {
+  "devDependencies": {
     "firebase": "~2.1.1"
   }
 }
