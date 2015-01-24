@@ -10,6 +10,9 @@ import 'stores/CommentStore'
 import UserActions from 'actions/UserActions'
 import UserStore from 'stores/UserStore'
 
+import PayloadActions from 'actions/PayloadActions'
+import 'stores/PayloadStore'
+
 export default component({
 
   initialState() {
@@ -52,7 +55,8 @@ export default component({
       br(),
       br(),
       textarea({ onKeyUp : this.handleComment }),
-      button({ onClick : _.bindKey(CommentActions, 'comment', 1, state.comment) }, 'Comment on issue 1')
+      button({ onClick : _.bindKey(CommentActions, 'comment', 1, state.comment) }, 'Comment on issue 1'),
+      button({ onClick : _.bind(PayloadActions, 'sync', { key: 'value' })}, 'Sync payload')
 
     )
   }

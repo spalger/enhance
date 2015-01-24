@@ -7,5 +7,6 @@ export default {
   },
   storage: {
     index: 'enhance.json'
-  }
+  },
+  payloadId : null
 }
