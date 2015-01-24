@@ -38,11 +38,3 @@ function asString(msgs) {
     return msg + (i > 0 ? ' ' : '') + format(m)
   }, '')
 }
-
-setTimeout(function () {
-  msg('message message', {obj: true})
-  info('info message', {obj: true})
-  success('success message', {obj: true})
-  warning('warning message', {obj: true})
-  error('error message', {obj: true})
-}, 1000)
