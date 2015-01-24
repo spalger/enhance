@@ -1,6 +1,7 @@
 import Reflux from 'reflux'
 import UserActions from 'actions/UserActions'
 import Firebase from 'firebase/lib/firebase-web'
+import log from 'lib/log'
 
 var ref = new Firebase("https://enhance.firebaseio.com");
 
@@ -18,7 +19,8 @@ export default Reflux.createStore({
         } else {
           this.user = auth;
           this.trigger(this.user);
-          console.log("Authenticated successfully with payload:", this.user); // Leave until launch
+          log.success('logged in with github');
+          log.info('github payload', this.user);
         }
       })
       this._eventBound = true
@@ -32,7 +34,7 @@ export default Reflux.createStore({
 
     function onAuth(error) {
       if (error) {
-        console.log("Login Failed!", error);
+        log.error("Login Failed!", error);
       }
     }
 

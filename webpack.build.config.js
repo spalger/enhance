@@ -31,6 +31,12 @@ module.exports = function (paths, dev) {
         {
           test: /\.less$/,
           loader: 'style-loader!css-loader!less-loader'
+        },
+
+        // css styles
+        {
+          test: /\.css$/,
+          loader: 'style-loader!css-loader'
         }
       ]
     },
