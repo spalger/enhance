@@ -12,8 +12,9 @@ var Router = AmpRouter.extend({
       this.route(path, 'route', render(template))
     }
 
-    route('', require('pages/home.html'));
-    route('issue/:id', require('pages/issue.html'));
+    route('', require('pages/home.html'))
+    route('payload', require('pages/payload.html'))
+    route('issue/:id', require('pages/issue.html'))
   }
 })
 
