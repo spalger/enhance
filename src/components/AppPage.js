@@ -7,10 +7,23 @@ import IssueStore from 'stores/IssueStore' // jshint ignore:line
 import CommentActions from 'actions/CommentActions'
 import CommentStore from 'stores/CommentStore' // jshint ignore:line
 
+import UserActions from 'actions/UserActions'
+import UserStore from 'stores/UserStore' // jshint ignore:line
+
 export default component({
   tagName: 'app-page',
+
+  afterMount() {
+    this.listenTo(UserStore, _.bindKey(this, 'updateUser'), _.bindKey(this, 'updateUser'));
+  },
+
+  updateUser(user) {
+    this.setState({ user });
+  },
+
   render() {
-    var {div, h1, button} = this.dom
+    var {div, h1, button, br} = this.dom
+
     return div(
       h1('static showdown 2015!'),
       button({ onClick : _.bindKey(IssueActions, 'getAll') }, 'Load github issues'),
@@ -21,7 +34,10 @@ export default component({
       button(
         { onClick : _.bindKey(IssueActions, 'create', 'Title', 'Body') },
         'Create issue'
-      )
+      ),
+      br(),
+      button({ onClick : _.bindKey(UserActions, 'login') }, 'Login with Github'),
+      button({ onClick : _.bindKey(UserActions, 'logout') }, 'Logout')
     )
   }
 })

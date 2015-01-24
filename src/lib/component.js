@@ -4,6 +4,7 @@ import multipleHandlers from 'deku-scrub/plugins/multipleHandlers'
 import constructable from 'deku-scrub/plugins/constructable'
 import withRefs from 'deku-scrub/plugins/withRefs'
 import dom from 'deku-scrub/plugins/dom'
+import flux from 'lib/flux'
 
 export default component
 
@@ -18,6 +19,8 @@ function component(spec) {
 
   // provide access to sub-elements
   DekuComponent.use(withRefs)
+
+  DekuComponent.use(flux)
 
   // helpers for dom elements
   DekuComponent.use(dom)
