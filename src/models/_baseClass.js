@@ -31,6 +31,11 @@ export default class Model {
     })
   }
 
+  _id(doc) {
+    if (doc._id) return doc._id
+    return String(doc[this.primaryKey])
+  }
+
   add(doc) {
     if (_.isArray(doc)) {
       return doc.map((d) => {
@@ -38,7 +43,7 @@ export default class Model {
       })
     }
 
-    return this.db.put(doc, String(doc[this.primaryKey]))
+    return this.db.put(doc, this._id(doc))
   }
 
   update(doc) {
@@ -48,7 +53,7 @@ export default class Model {
       })
     }
 
-    return this.db.put(doc, doc[this.primaryKey])
+    return this.db.put(doc, this._id(doc))
   }
 
   remove(doc) {
