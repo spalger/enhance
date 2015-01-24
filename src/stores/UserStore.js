@@ -65,7 +65,7 @@ export default Reflux.createStore({
   },
 
   onLoginSuccess: function () {
-    log.success('login successful')
+    log.success('Welcome ' + this.user.github.displayName || this.user.github.username);
   },
 
   onLoginFailure: function (err) {
@@ -73,7 +73,7 @@ export default Reflux.createStore({
   },
 
   onLogoutSuccess: function () {
-    log.success('logout successful')
+    log.success('You have been logged out');
   },
 
   onAlreadyLoggedIn: function (user) {
