@@ -38,7 +38,7 @@ export default class Model {
       })
     }
 
-    return this.db.put(doc, doc[this.primaryKey])
+    return this.db.put(doc, String(doc[this.primaryKey]))
   }
 
   update(doc) {
