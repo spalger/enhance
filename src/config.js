@@ -4,6 +4,5 @@ export default {
     author: 'jwdotjs',
     repo: 'documentio',
     enhanceLabel: 'enhance'
-  },
-  rootPath: '/'
+  }
 }
