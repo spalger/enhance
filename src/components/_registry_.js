@@ -1,5 +1,5 @@
-import View from 'lib/View'
+import CustomElement from 'lib/CustomElement'
 
-export const GithubApiTest = new View('github-api-test', require('GithubApiTest'));
-export const IssueList = new View('enhance-issue-list', require('IssueList'));
-export const PayloadCreate = new View('payload-create', require('PayloadCreate'));
+export const GithubApiTest = new CustomElement('github-api-test', require('GithubApiTest'));
+export const IssueList = new CustomElement('enhance-issue-list', require('IssueList'));
+export const PayloadCreate = new CustomElement('payload-create', require('PayloadCreate'));
