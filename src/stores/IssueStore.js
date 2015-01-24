@@ -1,12 +1,14 @@
 import _ from 'lodash'
 import Reflux from 'reflux'
-import IssueActions from 'actions/IssueActions'
+import lunr from 'lunr'
 import request from 'superagent'
 import config from 'config'
 
+import IssueActions from 'actions/IssueActions'
 import UserStore from 'stores/UserStore'
 
-import lunr from 'lunr'
+var { apiUrl, author, repo, enhanceLabel } = config.github;
+
 
 // create a lunr search object and when we get github issues, index into this
 var issueIndex = lunr(function () {
@@ -24,7 +26,6 @@ export default Reflux.createStore({
    user, labels (array), state, locked, comments (int), created_at, updated_at, pull_request (obj)
    body */
   onGetAll(since) {
-    var { baseUrl, author, repo, enhanceLabel } = config;
     var payload = {
       labels : [ enhanceLabel ],
       sort : 'updated',
@@ -37,7 +38,7 @@ export default Reflux.createStore({
     }
 
     request
-      .get([ baseUrl, 'repos', author, repo, 'issues' ] .join('/'))
+      .get([ apiUrl, 'repos', author, repo, 'issues' ] .join('/'))
       .send(payload)
       //.set('Authorization', 'foobar')
       .end(function(error, res) {
@@ -59,7 +60,6 @@ export default Reflux.createStore({
   },
 
   onCreate(title, body) {
-    var { baseUrl, author, repo } = config;
     var token = UserStore.getGithubToken()
 
     if (! token) {
@@ -67,7 +67,7 @@ export default Reflux.createStore({
     }
 
     request
-      .post([ baseUrl, 'repos', author, repo, 'issues' ] .join('/'))
+      .post([ apiUrl, 'repos', author, repo, 'issues' ] .join('/'))
       .send({ title: title, body : body })
       .set('Authorization', 'token ' + token) // required token
       .end(function(error, res) {
