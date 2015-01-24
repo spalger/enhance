@@ -17,6 +17,26 @@ var issueIndex = lunr(function () {
   this.ref('id')
 })
 
+function fetchIssues(options, cb) {
+  options = options || {}
+  if (typeof options === 'function') {
+    cb = options
+    options = {}
+  }
+
+  var payload = _.defaults(options, {
+    labels : [ enhanceLabel ],
+    sort : 'updated',
+    direction : 'desc',
+  })
+
+  request
+  .get([ apiUrl, 'repos', author, repo, 'issues' ] .join('/'))
+  .send(payload)
+  //.set('Authorization', 'foobar')
+  .end(cb);
+}
+
 export default Reflux.createStore({
   listenables: IssueActions,
 
@@ -25,38 +45,28 @@ export default Reflux.createStore({
   /* returned object keys: url, labels_url, comments_url, events_url, html_url, id, number, title,
    user, labels (array), state, locked, comments (int), created_at, updated_at, pull_request (obj)
    body */
-  onGetAll(since) {
-    var payload = {
-      labels : [ enhanceLabel ],
-      sort : 'updated',
-      direction : 'desc',
-    }
-    var self = this;
+  onFetch(options) {
+    fetchIssues(options, (error, res) => {
+      if (error) {
+        console.log('Error getting all repo issues: ' + error);
+      }
 
-    if (since) {
-      payload.since = since
-    }
-
-    request
-      .get([ apiUrl, 'repos', author, repo, 'issues' ] .join('/'))
-      .send(payload)
-      //.set('Authorization', 'foobar')
-      .end(function(error, res) {
-        if (error) {
-          console.log('Error getting all repo issues: ' + error);
+      if (res && res.body) {
+        this.issues = res.body
+      } else if (res && res.text) {
+        try {
+          this.issues = JSON.parse(res.text)
+        } catch (err) {
+          throw err
         }
+      } else {
+        throw new Error('Could not parse response')
+      }
 
-        if (res && res.text) {
-          try {
-            self.issues = JSON.parse(res.text);
-            self._indexIssuesIntoLunr(self.issues);
-            self.trigger(self.issues);
-            console.log(self.issues);
-          } catch (err) {
-            console.log('Error parsing JSON while getting all repo issues');
-          }
-        }
-      });
+      this._indexIssuesIntoLunr(this.issues);
+      this.trigger(this.issues);
+      console.log(this.issues);
+    });
   },
 
   onCreate(title, body) {
