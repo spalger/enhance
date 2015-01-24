@@ -35,6 +35,6 @@ function logger(lvl) {
 
 function asString(msgs) {
   return msgs.reduce(function (msg, m, i) {
-    return msg + (i > 0 ? ' ' : '') + format(m)
+    return msg + (i > 0 ? ' ' : '') + format(m || '')
   }, '')
 }
