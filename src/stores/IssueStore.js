@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import Reflux from 'reflux'
 import IssueActions from 'actions/IssueActions'
 import request from 'superagent'
@@ -5,20 +6,31 @@ import config from 'config/index'
 
 import UserStore from 'stores/UserStore'
 
+import lunr from 'lunr'
+
+// create a lunr search object and when we get github issues, index into this
+var issueIndex = lunr(function () {
+  this.field('title', { boost: 10 })
+  this.field('comments')
+  this.ref('id')
+})
+
 export default Reflux.createStore({
   listenables: IssueActions,
+
+  issues : [],
 
   /* returned object keys: url, labels_url, comments_url, events_url, html_url, id, number, title,
    user, labels (array), state, locked, comments (int), created_at, updated_at, pull_request (obj)
    body */
   onGetAll(since) {
     var { baseUrl, author, repo, enhanceLabel } = config;
-
     var payload = {
       labels : [ enhanceLabel ],
       sort : 'updated',
       direction : 'desc',
     }
+    var self = this;
 
     if (since) {
       payload.since = since
@@ -35,8 +47,10 @@ export default Reflux.createStore({
 
         if (res && res.text) {
           try {
-            var issues = JSON.parse(res.text);
-            console.log(issues);
+            self.issues = JSON.parse(res.text);
+            self._indexIssuesIntoLunr(self.issues);
+            self.trigger(self.issues);
+            console.log(self.issues);
           } catch (err) {
             console.log('Error parsing JSON while getting all repo issues');
           }
@@ -65,5 +79,32 @@ export default Reflux.createStore({
           console.log(res); // @todo handle response
         }
       });
+  },
+
+  _indexIssuesIntoLunr(issues) {
+    _.each(issues, function(issue) {
+      console.log('Indexing issue: ', issue);
+      issueIndex.add({
+        title : issue.title,
+        comments : issue.comments,
+        id : issue.number
+      })
+    })
+  },
+
+  onSearch(keyboardEvent) {
+    var lunrResults = issueIndex.search(keyboardEvent.target.value); //contains id and score
+    var returnedIssues = [];
+    var self = this;
+
+    _.each(lunrResults, function(result) {
+      _.each(self.issues, function(issue) {
+        if (_.isEqual(issue.number, Number(result.ref))) {
+          returnedIssues.push(issue);
+        }
+      });
+    });
+
+    console.log('search results : ', returnedIssues);
   }
 })

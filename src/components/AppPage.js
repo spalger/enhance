@@ -34,7 +34,7 @@ export default component({
 
   render(props, state) {
     console.log(state.comment);
-    var {div, h1, button, br, textarea} = this.dom
+    var {div, h1, button, br, textarea, input} = this.dom
 
     return div(
       h1('static showdown 2015!'),
@@ -52,7 +52,9 @@ export default component({
       br(),
       br(),
       textarea({ onKeyUp : this.handleComment }),
-      button({ onClick : _.bindKey(CommentActions, 'comment', 1, state.comment) }, 'Comment on issue 1')
+      button({ onClick : _.bindKey(CommentActions, 'comment', 1, state.comment) }, 'Comment on issue 1'),
+      br(),
+      input({ onKeyUp : _.bindKey(IssueActions, 'search'), placeholder : 'Search' })
 
     )
   }
