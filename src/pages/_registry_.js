@@ -3,6 +3,7 @@ import router from 'lib/router'
 router.on('/', require('pages/home.html'))
 router.on('/issue/:id', require('pages/issue.html'))
 router.on('/payload', require('pages/payload.html'))
+router.on('/loki', require('pages/loki.html'))
 
 router.on('/route/debug', require('pages/routeDebug.html'))
 router.on('/zero-or-one/:v?', require('pages/routeDebug.html'))
