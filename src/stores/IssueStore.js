@@ -5,7 +5,7 @@ import config from 'config'
 
 import IssueActions from 'actions/IssueActions'
 import UserStore from 'stores/UserStore'
-import issueIndex from 'models/issues'
+import Issues from 'models/issues'
 
 var { apiUrl, author, repo, enhanceLabel } = config.github;
 var defaultPerPage = 100;
@@ -41,15 +41,17 @@ export default Reflux.createStore({
    body */
   onFetch(options) {
     fetchIssues(options, (error, res) => {
+      var issues;
+
       if (error) {
         console.log('Error getting all repo issues: ' + error);
       }
 
       if (res && res.body) {
-        this.issues = res.body
+        issues = res.body
       } else if (res && res.text) {
         try {
-          this.issues = JSON.parse(res.text)
+          issues = JSON.parse(res.text)
         } catch (err) {
           throw err
         }
@@ -57,9 +59,10 @@ export default Reflux.createStore({
         throw new Error('Could not parse response')
       }
 
-      this._indexIssuesIntoLunr(this.issues);
-      this.trigger(this.issues);
-      console.log(this.issues);
+      issues.forEach(function (issue) {
+        Issues.add(issue)
+      })
+      this.trigger(issues);
     });
   },
 
@@ -100,19 +103,8 @@ export default Reflux.createStore({
       });
   },
 
-  _indexIssuesIntoLunr(issues) {
-    _.each(issues, (issue) => {
-      console.log('Indexing issue: ', issue);
-      issueIndex.add({
-        title : issue.title,
-        comments : issue.comments,
-        id : issue.number
-      })
-    })
-  },
-
   onSearch(keyboardEvent) {
-    var results = issueIndex.search(keyboardEvent.target.value); //contains id and score
+    var results = Issues.search(keyboardEvent.target.value); //contains id and score
     var returnedIssues = [];
     var self = this;
 

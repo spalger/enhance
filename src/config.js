@@ -4,5 +4,8 @@ export default {
     author: 'jwdotjs',
     repo: 'documentio',
     enhanceLabel: 'enhance'
+  },
+  storage: {
+    index: 'enhance.json'
   }
 }
