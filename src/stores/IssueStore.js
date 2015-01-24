@@ -63,25 +63,22 @@ export default Reflux.createStore({
     });
   },
 
-  onPayload() {
-    fetchIssues((err, res) => {
-      var pageCount = 1;
+  onPayload(options) {
+    options = options || {}
+    var currentPage = options.page || 1
 
-      // link header means more than one page
-      if (res.headers.link) {
-        // fetch the largest page number, that's the total page count
-        var r = /page=(\d+)/g;
-        var matches = res.headers.link.match(r)
-        pageCount = matches.reduce(function (prev, str) {
-          var page = parseInt(str.split('=')[1])
-          if (page > prev) return page
-        }, 0)
-      }
+    var _payloadBuilder = (err, res) => {
+      // TODO: store issues
 
       // TODO: make sure X-RateLimit-Remaining > pageCount
-      // TODO: store issues
-      // TODO: call fetchIssues pageCount - 1 times, storing each time
-    });
+
+      // TODO: page through results, call fetchIssues for each page
+      if (res.body.length === defaultPerPage) {
+        this.onPayload({ page: currentPage+1 })
+      }
+    }
+
+    fetchIssues(options, _payloadBuilder);
   },
 
   onCreate(title, body) {
