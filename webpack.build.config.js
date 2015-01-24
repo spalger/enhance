@@ -31,6 +31,11 @@ module.exports = function (paths, dev) {
         {
           test: /\.less$/,
           loader: 'style-loader!css-loader!less-loader'
+        },
+
+        {
+          test: /lokiIndexedAdapter\.js$/,
+          loader: 'exports-loader?lokiIndexedAdapter'
         }
       ]
     },

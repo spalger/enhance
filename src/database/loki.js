@@ -1,9 +1,18 @@
 import loki from 'lokijs'
 import issuesSearch from 'models/issues'
+import lokiIndexedAdapter from 'lokijs/src/lokiIndexedAdapter'
+/* globals indexedDB */
 
-var db = new loki('enhance.json', {
-  persistenceMethod : 'localStorage'
-})
+var lokiOptions = {
+  persistenceMethod : indexedDB ? 'adapter' : 'localStorage'
+}
+
+if(indexedDB) {
+  var idbAdapter = new lokiIndexedAdapter('enhance');
+  lokiOptions.adapter = idbAdapter
+}
+
+var db = new loki('enhance.json', lokiOptions)
 
 var issuesTable = db.addCollection('issues')
 var commentsTable = db.addCollection('comments')
