@@ -2,7 +2,7 @@ import _ from 'lodash'
 import Reflux from 'reflux'
 import IssueActions from 'actions/IssueActions'
 import request from 'superagent'
-import config from 'config/index'
+import config from 'config'
 
 import UserStore from 'stores/UserStore'
 
