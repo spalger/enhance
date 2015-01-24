@@ -9,8 +9,6 @@ export default Reflux.createStore({
   onGetAll(since) {
     var { baseUrl, author, repo, enhanceLabel } = config;
 
-    console.log(config);
-
     var payload = {
       labels : [ enhanceLabel ],
       sort : 'updated',
