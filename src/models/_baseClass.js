@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import db from 'lib/initDb'
 import lunr from 'lunr'
 
@@ -26,16 +27,34 @@ export default class Model {
   }
 
   add(doc) {
+    if (_.isArray(doc)) {
+      return doc.map((d) => {
+        return this.add(d)
+      })
+    }
+
     this._indexAdd(doc)
     return this.collection.insert(doc)
   }
 
   update(doc) {
+    if (_.isArray(doc)) {
+      return doc.map((d) => {
+        return this.update(d)
+      })
+    }
+
     this._indexUpdate(doc)
     return this.collection.update(doc)
   }
 
   remove(doc) {
+    if (_.isArray(doc)) {
+      return doc.map((d) => {
+        return this.remove(d)
+      })
+    }
+
     this._indexRemove(doc)
     return this.collection.insert(doc)
   }
