@@ -16,5 +16,11 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "lokijs": "*",
+    "lunr.js": "~0.5.7",
+    "firebase": "~2.1.1",
+    "reflux": "~0.2.3"
+  }
 }
