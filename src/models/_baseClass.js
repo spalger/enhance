@@ -36,6 +36,28 @@ export default class Model {
     return String(doc[this.primaryKey])
   }
 
+  upsert(doc) {
+    if (_.isArray(doc)) {
+      return doc.map((d) => {
+        return this.upsert(d)
+      })
+    }
+
+    return this.get(this._id(doc))
+    .then((d) => {
+      if (!_.isEqual(doc, _.omit(d, ['_id', '_rev']))) {
+        return this.update(doc, d._rev)
+      }
+      return d
+    })
+    .catch(function (err) {
+      if (err.status === 404) {
+        return this.db.put(doc, this._id(doc))
+      }
+      throw err
+    })
+  }
+
   add(doc) {
     if (_.isArray(doc)) {
       return doc.map((d) => {
@@ -46,14 +68,14 @@ export default class Model {
     return this.db.put(doc, this._id(doc))
   }
 
-  update(doc) {
+  update(doc, rev) {
     if (_.isArray(doc)) {
       return doc.map((d) => {
         return this.update(d)
       })
     }
 
-    return this.db.put(doc, this._id(doc))
+    return this.db.put(doc, this._id(doc), rev)
   }
 
   remove(doc) {
