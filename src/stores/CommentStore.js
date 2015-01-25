@@ -2,6 +2,7 @@ import Reflux from 'reflux'
 import config from 'config'
 import log from 'lib/log'
 import github from 'lib/github'
+import _ from 'lodash'
 
 import log from 'lib/log'
 import CommentActions from 'actions/CommentActions'
@@ -15,13 +16,26 @@ const DOWNVOTE = ':-1:'
 export default Reflux.createStore({
   listenables: CommentActions,
 
+   comments : [],
+
   _create(issueNumber, comment) {
     return github
     .method('post')
     .path(['repos', author, repo, 'issues', issueNumber, 'comments'])
     .body({ body: comment })
     .send()
-    .then(log.msg)
+    .then(() => {
+      if(_.isEqual(comment, UPVOTE)) {
+        log.success('Your upvote was added to the issue')
+        CommentActions.upvoteSuccess(issueNumber)
+      } else if(_.isEqual(comment, DOWNVOTE)) {
+        log.success('Your downvote was added to the issue')
+        CommentActions.downvoteSuccess(issueNumber)
+      } else {
+        log.success('Your comment was added to the issue')
+        CommentActions.commentAddSuccess(issueNumber)
+      }
+    })
     .catch((err) => {
       log.error('Error creating comment:', err)
     })
@@ -45,7 +59,10 @@ export default Reflux.createStore({
     .path(['repos', author, repo, 'issues', issueNumber, 'comments'])
     .query(payload)
     .send()
-    .then(log.msg)
+    .then((comments) => {
+      this.comments = comments.body
+      this.trigger(this.comments)
+    })
     .catch((err) => {
       log.error('Error getting comments by issue:', err)
     })

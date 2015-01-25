@@ -37,13 +37,7 @@ module.exports = function (paths, dev) {
         {
           test: /\.css$/,
           loader: 'style-loader!css-loader'
-        },
-
-        // loki adapter
-        {
-          test: /\/lokiIndexedAdapter\.js$/,
-          loader: 'exports-loader?lokiIndexedAdapter'
-        },
+        }
       ],
       noParse: [
         join(paths.ROOT, 'bower_components', 'pouchdb', 'dist', 'pouchdb.js')
@@ -58,8 +52,7 @@ module.exports = function (paths, dev) {
       modulesDirectories: ['bower_components', 'node_modules'],
       root: [ join(paths.SRC, 'components'), join(paths.SRC, 'templates'), paths.SRC ],
       alias: {
-        reflux: join(paths.ROOT, 'node_modules', 'reflux', 'src', 'index.js'),
-        fs: join(paths.SRC, 'lib', 'loki-fs-shim.js')
+        reflux: join(paths.ROOT, 'node_modules', 'reflux', 'src', 'index.js')
       }
     },
 

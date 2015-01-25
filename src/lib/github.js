@@ -3,6 +3,7 @@ import request from 'superagent'
 
 import UserActions from 'actions/UserActions'
 import UserStore from 'stores/UserStore'
+import {ListenerMethods} from 'reflux'
 import log from 'lib/log'
 import Promise from 'bluebird'
 
@@ -32,6 +33,13 @@ function setter(prop, mod) {
   }
 }
 
+function updateUserScope(resp) {
+  var scopes = resp.headers['x-oauth-scopes'];
+  if (!scopes) return
+  UserStore.updateScopes(scopes);
+}
+
+_.assign(PartialReq.prototype, ListenerMethods);
 PartialReq.prototype.query = setter('query')
 PartialReq.prototype.url = setter('url')
 PartialReq.prototype.body = setter('body')
@@ -75,6 +83,7 @@ PartialReq.prototype.send = function () {
       var req = this._getReq()
 
       req.end((err, resp) => {
+        updateUserScope(resp)
         if (err) return reject(err)
 
         switch (resp && resp.status) {

@@ -14,7 +14,7 @@ var defaultPerPage = 100;
 function fetchIssues(options) {
   return github
   .path(['repos', author, repo, 'issues'])
-  .query(_.defaults(options, {
+  .query(_.defaults(options || {}, {
     labels: [ enhanceLabel ],
     per_page: defaultPerPage,
     sort: 'updated',
@@ -22,8 +22,8 @@ function fetchIssues(options) {
   }))
   .send()
   .then(function (issues) {
-    issueModel.upsert(issues);
-    return issues;
+    issueModel.upsert(issues.body);
+    return issues.body;
   });
 }
 
@@ -32,6 +32,8 @@ export default Reflux.createStore({
 
   issues: [],
 
+  issue : {}, // single issue loaded on detail page
+
   /* returned object keys: url, labels_url, comments_url, events_url, html_url, id, number, title,
    user, labels (array), state, locked, comments (int), created_at, updated_at, pull_request (obj)
    body */
@@ -39,10 +41,21 @@ export default Reflux.createStore({
     fetchIssues(options)
     .then((res) => {
       // update db with any changed results
-      this.trigger(res.body);
+      this.trigger(res);
     })
     .catch((err) => {
       log.error('Error getting all repo issues:', err);
+    });
+  },
+
+  onFetchById(issueId) {
+    // @todo should this pull from issueModel versus making a request?
+    return github
+    .path(['repos', author, repo, 'issues', issueId])
+    .send()
+    .then((issue) => {
+      this.issue = issue.body;
+      this.trigger(this.issue);
     });
   },
 

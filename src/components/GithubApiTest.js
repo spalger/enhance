@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import _ from 'lib/utils'
 import component from 'lib/component'
 import log from 'lib/log'
 
@@ -49,20 +49,20 @@ export default component({
     return div(
       h1('static showdown 2015!'),
       button({ onClick: this._fetchIssues }, 'Load github issues'),
-      button({ onClick: _.bindKey(CommentActions, 'getByIssue', 1) }, 'Load comments for issue 1'),
-      button({ onClick: _.bindKey(CommentActions, 'upvote', 1) }, 'Upvote issue 1'),
-      button({ onClick: _.bindKey(CommentActions, 'downvote', 1) }, 'Downvote issue 1'),
-      button({ onClick: _.bindKey(IssueActions, 'create', 'Title', 'Body') }, 'Create issue'),
+      button({ onClick: _.exec(CommentActions, 'getByIssue', 1) }, 'Load comments for issue 1'),
+      button({ onClick: _.exec(CommentActions, 'upvote', 1) }, 'Upvote issue 1'),
+      button({ onClick: _.exec(CommentActions, 'downvote', 1) }, 'Downvote issue 1'),
+      button({ onClick: _.exec(IssueActions, 'create', 'Title', 'Body') }, 'Create issue'),
       br(),
       button({ onClick: UserActions.requestLogin }, 'Login with Github'),
       button({ onClick: UserActions.requestLogout }, 'Logout'),
       br(),
       br(),
       textarea({ onKeyUp: this.handleComment }),
-      button({ onClick: _.bindKey(CommentActions, 'comment', 1, state.comment) }, 'Comment on issue 1'),
+      button({ onClick: _.exec(CommentActions, 'comment', 1, state.comment) }, 'Comment on issue 1'),
 
-      button({ onClick: _.bindKey(PayloadActions, 'sync', '{ "key": "value" }')}, 'Sync payload'),
-      button({ onClick: _.bindKey(PayloadActions, 'get') }, 'Get payload')
+      button({ onClick: _.exec(PayloadActions, 'sync', '{ "key": "value" }')}, 'Sync payload'),
+      button({ onClick: _.exec(PayloadActions, 'get') }, 'Get payload')
 
     )
   }

@@ -1,16 +1,15 @@
+import Reflux from 'reflux'
 import _ from 'lib/utils'
 import log from 'lib/log'
-import Reflux from 'reflux'
 import Firebase from 'firebase/lib/firebase-web'
 import UserActions from 'actions/UserActions'
-
 
 export default Reflux.createStore({
   user: null,
   listenables: UserActions,
 
   init: function () {
-    this.ref = new Firebase('https://enhance.firebaseio.com')
+    this.ref = new Firebase('https://enhance.firebaseio.com/')
     this.ref.onAuth(UserActions.authUpdate, UserActions)
   },
 
@@ -18,16 +17,11 @@ export default Reflux.createStore({
     if (!fbUserData) {
       this.user = false;
     } else {
-      this.user = Object.create(fbUserData, {
-        profile: {
-          get() {
-            return this.github.cachedUserProfile;
-          }
-        }
-      });
+      if (!this.user) this.user = {}
+      _.assign(this.user || {}, { profile: fbUserData.github.cachedUserProfile }, fbUserData)
     }
 
-    this.trigger(this.user);
+    this.trigger(this.user)
   },
 
   /**
@@ -39,6 +33,13 @@ export default Reflux.createStore({
    */
   onAuthUpdate: function (auth) {
     var prev = this.user
+
+    try{
+      this.ref.child('users').child(auth.uid).child('auth').set(auth);
+    } catch (e) {
+      log.msg('Error: Unable to find refs');
+    }
+
     this._setUser(auth)
 
     if (prev === null) {
@@ -52,7 +53,15 @@ export default Reflux.createStore({
   },
 
   onRequestLogin: function () {
-    var scope = 'public_repo'
+    this._requestAuth('public_repo')
+  },
+
+  onRequestScopes: function (scopes) {
+    scopes = [this.user.scopes, scopes.join(',')].join(',')
+    this._requestAuth(scopes)
+  },
+
+  _requestAuth: function (scope) {
     function checkForFail(err) {
       if (err) UserActions.loginFailure(err)
     }
@@ -78,11 +87,13 @@ export default Reflux.createStore({
 
   onAlreadyLoggedIn: function (user) {
     log.info('user is logged in', user)
+    UserActions.ready()
     this._setUser(user)
   },
 
   onNotAlreadyLoggedIn: function () {
     log.info('user it not logged in')
+    UserActions.ready()
     this._setUser(false)
   },
 
@@ -92,5 +103,11 @@ export default Reflux.createStore({
 
   isLoggedIn: function () {
     return !!this.getGithubToken()
+  },
+
+  updateScopes: function (scopes) {
+    this.ref.child('users').child(this.user.uid).child('scopes').set(scopes)
+    _.assign(this.user, { scopes })
+    log.msg('update scopes', scopes)
   }
 })

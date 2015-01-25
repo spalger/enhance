@@ -11,5 +11,6 @@ export default Reflux.createActions([
   'loginSuccess',
   'logoutSuccess',
   'loginFailure',
-  'get'
+  'get',
+  'ready'
 ])

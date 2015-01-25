@@ -12,7 +12,9 @@ class CustomElement extends HTMLElement {
   }
 
   attachedCallback() {
-    this.renderContent(this.initialContent);
+    if (this.initialContent) {
+      this.renderContent(this.initialContent);
+    }
   }
 
   renderContent(content) {

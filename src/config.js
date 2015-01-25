@@ -1,14 +1,14 @@
 export default {
   github: {
     apiUrl: 'https://api.github.com',
-    author: 'elasticsearch',
-    repo: 'kibana',
+    author: 'jwdotjs',
+    repo: 'documentio',
     enhanceLabel: 'enhancement'
   },
   storage: {
     index: 'enhance-store'
   },
   payload: {
-    id: null
+    id: ''
   }
 }

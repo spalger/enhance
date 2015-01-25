@@ -10,24 +10,27 @@ import RequestStore from 'stores/RequestStore'
 import log from 'lib/log'
 import {ListenerMethods} from 'reflux'
 import router from 'lib/router'
+import modals from 'lib/modals'
+import await from 'lib/await'
 
 class EnhanceApp extends CustomElement {
   createdCallback() {
-    domready(router.start)
-  }
-
-  attachedCallback() {
     this.listenTo(RequestStore, _.bindKey(this, 'renderRequest'))
-    this.listenTo(UserActions.requestScopes, _.bindKey(this, 'onRequestScopes'))
+    this.listenTo(UserActions.ready, _.bindKey(this, 'onUserStoreReady'))
     this.listenTo(UserActions.requireLogin, _.bindKey(this, 'onRequireLogin'))
+    this.listenTo(UserActions.requestScopes, _.bindKey(this, 'onRequestScopes'))
   }
 
   renderRequest(req) {
     this.renderContent(req.route.template)
   }
 
+  onUserStoreReady() {
+    domready(router.start)
+  }
+
   onRequireLogin() {
-    log.error('You have to be logged in to do that.')
+    modals.login.show()
   }
 
   onRequestScopes(need) {
