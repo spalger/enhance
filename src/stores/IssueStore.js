@@ -19,6 +19,10 @@ export default Reflux.createStore({
   issue : {}, // single issue loaded on detail page
   defaultPerPage: 100,
 
+  _reloadPage() {
+    window.location.reload()
+  },
+
   /* returned object keys: url, labels_url, comments_url, events_url, html_url, id, number, title,
    user, labels (array), state, locked, comments (int), created_at, updated_at, pull_request (obj)
    body */
@@ -31,6 +35,7 @@ export default Reflux.createStore({
     .catch((err) => {
       if(err.resp && err.resp.status && err.resp.status === 403) {
         log.error('Error getting issues, you have reached the Github rate limit. Please login to continue');
+        this.listenTo(UserActions.loginSuccess, this._reloadPage);
         UserActions.requireLogin();
       } else {
         log.error('Error getting issues', err);
@@ -49,6 +54,7 @@ export default Reflux.createStore({
     .catch((err) => {
       if(err.resp && err.resp.status && err.resp.status === 403) {
         log.error('Error getting issue, you have reached the Github rate limit. Please login to continue')
+        this.listenTo(UserActions.loginSuccess, this._reloadPage);
         UserActions.requireLogin()
       } else {
         log.error('Unable to fetch issue');
@@ -72,10 +78,19 @@ export default Reflux.createStore({
           return fetch()
         }
       })
+      .catch((err) => {
+        if(err.resp && err.resp.status && err.resp.status === 403) {
+          log.error('Error getting issue, you have reached the Github rate limit. Please login to continue')
+          self.listenTo(UserActions.loginSuccess, self._reloadPage);
+          UserActions.requireLogin()
+        } else {
+          log.error('Unable to fetch issue');
+        }
+      })
     }
 
     return fetch()
-    .then(function () {
+    .then(() => {
       this.trigger(allIssues)
       return allIssues
     })
