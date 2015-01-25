@@ -5164,7 +5164,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
     display: none;
   }
 }
-.navbar-nav > li > a {
+.navbar-nav > li > a, .navbar-nav > li > user-badge > a { /* updated */
   padding-top: 10px;
   padding-bottom: 10px;
   line-height: 15px;
@@ -5199,7 +5199,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   .navbar-nav > li {
     float: left;
   }
-  .navbar-nav > li > a {
+  .navbar-nav > li > a, .navbar-nav > li > user-badge > a { /* updated */
     padding-top: 16px;
     padding-bottom: 16px;
   }

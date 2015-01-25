@@ -13,7 +13,7 @@ class EnhanceApp extends CustomElement {
   attachedCallback() {
     domready(router.start)
 
-    UserActions.listenTo()
+    this.listenTo()
   }
 }
 
