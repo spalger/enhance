@@ -232,16 +232,16 @@ export default component({
     if (! issue) {
       return div({class: 'container'},
         div({class: 'row'},
-          div({ class: 'col-xs-12 col-sm-12-col-lg-10 col-lg-offset-1'},
+          div({ class: 'col-xs-12 col-sm-12 col-lg-10 col-lg-offset-1'},
             deku.dom(LoadingContent)
           )
         )
       )
     }
 
-    return div({class: 'container'},
+    return div({class: 'container detail-view'},
       div({class: 'row'},
-        div({class: 'col-xs-12 col-sm-12-col-lg-10 col-lg-offset-1'},
+        div({class: 'col-xs-12 col-sm-12 col-lg-10 col-lg-offset-1'},
           div({class: 'issue-header-wrapper'},
             this.renderArrows(this.dom, state),
             div({class:'vote-box'},
@@ -270,8 +270,7 @@ export default component({
               ),
               h3({class: 'italic text-gl'}, '#' + issue.number)
             )
-          )
-        ),
+          ),
         this._renderFacepile(this.dom, 'upvotes', state),
         this._renderFacepile(this.dom, 'downvotes', state),
         div({class: 'description-wrapper'},
@@ -292,5 +291,6 @@ export default component({
         )
       )
     )
+  )
   }
 })
