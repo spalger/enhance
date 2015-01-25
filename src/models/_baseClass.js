@@ -1,13 +1,15 @@
 import _ from 'lodash'
 import pouchdb from 'pouchdb'
 import lunr from 'lunr'
+import Promise from 'bluebird'
+import log from 'lib/log'
 
 export default class Model {
   constructor(name) {
     // lunr disabled by default
     this.indexer = null
 
-    this.primaryKey = '_id'
+    this.primaryKey = 'id'
     this.name = name
     this.db = new pouchdb(name, {
       adapter: 'idb'
@@ -15,18 +17,15 @@ export default class Model {
 
     // use events to pass records to the indexer
     this.db.changes({
-      since: 'now',
+      live: true
     })
     .on('create', (doc) => {
-      if (!this.indexer) return
       this._indexAdd(doc)
     })
     .on('update', (doc) => {
-      if (!this.indexer) return
       this._indexUpdate(doc)
     })
     .on('delete', (doc) => {
-      if (!this.indexer) return
       this._indexDelete(doc)
     })
   }
@@ -36,7 +35,7 @@ export default class Model {
     return String(doc[this.primaryKey])
   }
 
-  upsert(doc) {
+  upsert(doc, cb) {
     if (_.isArray(doc)) {
       return doc.map((d) => {
         return this.upsert(d)
@@ -46,46 +45,46 @@ export default class Model {
     return this.get(this._id(doc))
     .then((d) => {
       if (doc.updated_at !== d.updated_at) {
-        return this.update(doc, d._rev)
+        return this.update(doc, d._rev, cb)
       }
       return d
     })
     .catch((err) => {
       if (err.status === 404) {
-        return this.db.put(doc, this._id(doc))
+        return this.db.put(doc, this._id(doc), cb)
       }
       throw err
     })
   }
 
-  add(doc) {
+  add(doc, cb) {
     if (_.isArray(doc)) {
       return doc.map((d) => {
         return this.add(d)
       })
     }
 
-    return this.db.put(doc, this._id(doc))
+    return this.db.put(doc, this._id(doc), cb)
   }
 
-  update(doc, rev) {
+  update(doc, rev, cb) {
     if (_.isArray(doc)) {
       return doc.map((d) => {
         return this.update(d)
       })
     }
 
-    return this.db.put(doc, this._id(doc), rev)
+    return this.db.put(doc, this._id(doc), rev, cb)
   }
 
-  remove(doc) {
+  remove(doc, cb) {
     if (_.isArray(doc)) {
       return doc.map((d) => {
         return this.remove(d)
       })
     }
 
-    return this.db.remove(doc)
+    return this.db.remove(doc, cb)
   }
 
   get(obj) {
@@ -97,9 +96,13 @@ export default class Model {
   }
 
   // wrap lunr indexer
-  search(query) {
+  search(query, cb) {
     if (!this.indexer) return []
-    return this.indexer.search(query).map(this._indexMapper)
+    var p = Promise.map(this.indexer.search(query), (match) => {
+      return this.get(match.ref)
+    })
+
+    return p.nodeify(cb)
   }
 
   // initialize lunr indexer
@@ -110,17 +113,26 @@ export default class Model {
   // custom handler required to index to lunr
   _indexAdd(doc) {
     if (!this.indexer) return
-    this.indexer.add(this._indexMap(doc))
+    this.get(doc.id).then((doc) => {
+      log.msg('added to index')
+      this.indexer.add(this._indexMap(doc))
+    })
   }
 
   _indexUpdate(doc) {
     if (!this.indexer) return
-    this.indexer.update(this._indexMap(doc))
+    this.get(doc.id).then((doc) => {
+      log.msg('updated in index')
+      this.indexer.update(this._indexMap(doc))
+    })
   }
 
   _indexRemove(doc) {
     if (!this.indexer) return
-    this.indexer.remove(this._indexMap(doc))
+    this.get(doc.id).then((doc) => {
+      log.msg('removed from')
+      this.indexer.remove(this._indexMap(doc))
+    })
   }
 
   _indexMapper(index) {
