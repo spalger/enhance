@@ -16,7 +16,7 @@ export default Reflux.createStore({
 
   payload: [],
 
-  onSync(payload) {
+  onPersist(payload) {
     // create payload for first time if no id in config
     return payloadId ? this._update(payload) : this._create(payload)
   },
@@ -29,18 +29,8 @@ export default Reflux.createStore({
       this.trigger(payload);
     })
     .catch((err) => {
-      log.error('Failed to fetch payload data')
+      log.error('Failed to fetch payload data', err)
     })
-  },
-
-  _basicGistObject(payload) {
-    return {
-      files: {
-        [FILENAME]: {
-          content: payload
-        }
-      }
-    }
   },
 
   _create(payload) {
@@ -66,12 +56,12 @@ export default Reflux.createStore({
     });
   },
 
-  _update(fileContents) {
+  _update(payload) {
     if (!UserStore.isLoggedIn()) {
       return UserActions.requireLogin();
     }
 
-    var gistBody = this._basicGistObject(fileContents);
+    var gistBody = this._basicGistObject(payload);
     return github
     .path(['gists', payloadId])
     .method('patch')
@@ -83,6 +73,16 @@ export default Reflux.createStore({
     .catch((err) => {
       log.error('Error updating gist', err);
     });
+  },
+
+  _basicGistObject(payload) {
+    return {
+      files: {
+        [FILENAME]: {
+          content: payload
+        }
+      }
+    }
   },
 
   _getGistPayload() {

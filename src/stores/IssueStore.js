@@ -59,7 +59,7 @@ export default Reflux.createStore({
     });
   },
 
-  onPayload(options) {
+  onFetchAll(options) {
     options = options || {}
     var currentPage = options.page || 1
 
