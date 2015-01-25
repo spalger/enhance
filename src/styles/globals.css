@@ -7107,8 +7107,8 @@ issue-list {
   padding-top: 20px;
 }
 issue-list .panel > .list-group .list-group-item.issue-list-item {
-  border-top: 1px !important;
-  border: 1px solid #dddddd;
+  border-left: 1px solid #dddddd;
+  border-right: 1px solid #dddddd;
   padding-top: 2px;
   padding-bottom: 5px;
   margin-bottom: 20px;
@@ -7443,19 +7443,4 @@ img.media-object {
   font-size: 30px;
   padding: 20px;
   margin: 20px;
-}
-
-.show-comment-box {
-  display: block !important;
-}
-.browsing {
-  font-size: 12px;
-  padding-left: 15px;
-}
-.search-container {
-  margin-bottom: 10px;
-}
-.search-container input {
-  padding: 5px;
-  width: 200px;
 }
