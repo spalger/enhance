@@ -8,5 +8,6 @@ export default Reflux.createActions([
   'notAlreadyLoggedIn',
   'loginSuccess',
   'logoutSuccess',
-  'loginFailure'
+  'loginFailure',
+  'get'
 ])

@@ -5,6 +5,8 @@ import config from 'config'
 import CommentActions from 'actions/CommentActions'
 import UserStore from 'stores/UserStore'
 
+import github from 'lib/github'
+
 var { apiUrl, author, repo, enhanceLabel } = config.github;
 const UPVOTE = ':+1:'
 const DOWNVOTE = ':-1:'
@@ -43,24 +45,36 @@ export default Reflux.createStore({
       payload.since = since
     }
 
-    request
-      .get([ apiUrl, 'repos', author, repo, 'issues', issueNumber, 'comments' ] .join('/'))
-      //.send({ sort : 'updated', direction : 'desc', since : '2015-01-01 })
-      //.set('Authorization', 'foobar')
-      .end(function(error, res) {
-        if (error) {
-          console.log('Error getting all repo comments: ' + error);
-        }
+    var token = UserStore.getGithubToken()
 
-        if (res && res.text) {
-          try {
-            var comments = JSON.parse(res.text);
-            console.log(comments);
-          } catch (err) {
-            console.log('Error parsing JSON while getting all repo comments');
-          }
-        }
-      });
+    github
+      .method('get')
+      .path([ 'repos', author, repo, 'issues', issueNumber, 'comments' ])
+      .token(token)
+      .send()
+      .then(function(res) {
+        var comments = github.parseResponse(res.text);
+        console.log(comments);
+      })
+
+    // request
+    //   .get()
+    //   //.send({ sort : 'updated', direction : 'desc', since : '2015-01-01 })
+    //   //.set('Authorization', 'foobar')
+    //   .end(function(error, res) {
+    //     if (error) {
+    //       console.log('Error getting all repo comments: ' + error);
+    //     }
+
+    //     if (res && res.text) {
+    //       try {
+    //         var comments = JSON.parse(res.text);
+    //         console.log(comments);
+    //       } catch (err) {
+    //         console.log('Error parsing JSON while getting all repo comments');
+    //       }
+    //     }
+    //   });
   },
 
   onUpvote(issueNumber) {
