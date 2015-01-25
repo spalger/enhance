@@ -5,5 +5,6 @@ export default Reflux.createActions([
   'payload',
   'create',
   'search',
-  'fetchById'
+  'fetchById',
+  'fetchByIdFailed'
 ])
