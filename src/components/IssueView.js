@@ -103,6 +103,10 @@ export default component({
     var typeOfUser = type === 'upvotes' ? '+1`ers' : '-1`ers';
     var votes = state[type];
 
+    if (! votes.length) {
+      return div('')
+    }
+
     return div({class: 'participants-wrapper'},
       h5({class: 'bold italic text-' + className}, typeOfUser),
       div({class: 'facepile-container'},
