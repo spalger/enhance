@@ -33,7 +33,13 @@ export default Reflux.createStore({
    */
   onAuthUpdate: function (auth) {
     var prev = this.user
-    this.ref.child('users').child(auth.uid).child('auth').set(auth);
+
+    try{
+      this.ref.child('users').child(auth.uid).child('auth').set(auth);
+    } catch (e) {
+      log.msg('Error: Unable to find refs');
+    }
+
     this._setUser(auth)
 
     if (prev === null) {
