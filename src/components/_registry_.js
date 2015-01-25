@@ -17,4 +17,4 @@ CustomElement.register('site-devnav', require('siteNavDev.html'));
 
 // custom extensions extend current html elements
 require('LoginLink').register('a', 'login-link')
-require('PayloadCreate').register('a', 'payload-create')
+// require('PayloadCreate').register('a', 'payload-create')
