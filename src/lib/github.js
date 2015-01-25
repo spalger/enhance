@@ -100,7 +100,7 @@ PartialReq.prototype.send = function () {
             return reject(new NeedsLogin(req, resp))
           }
 
-          return reject(new NeedsPermission(req, resp))
+          // return reject(new NeedsPermission(req, resp))
         default:
           if (!resp || resp.status >= 300 || resp.status < 200) {
             return reject(new InvalidResponse(req, resp))
