@@ -8,7 +8,7 @@ import IssueActions from 'actions/IssueActions'
 import UserStore from 'stores/UserStore'
 import issueModel from 'models/issueModel'
 
-var { author, repo, enhanceLabel } = config.github;
+var { org, repo, enhanceLabel } = config.github;
 
 export default Reflux.createStore({
   listenables: IssueActions,
@@ -28,18 +28,22 @@ export default Reflux.createStore({
       this.trigger(res);
     })
     .catch((err) => {
-      log.error('Error getting all repo issues:', err);
+      log.error('Error getting all repo issues', err);
     });
   },
 
   onFetchById(issueId) {
     // @todo should this pull from issueModel versus making a request?
     return github
-    .path(['repos', author, repo, 'issues', issueId])
+    .path(['repos', org, repo, 'issues', issueId])
     .then((issue) => {
       this.issue = issue.body;
       this.trigger(this.issue);
-    });
+    })
+    .catch(() => {
+      log.error('Unable to fetch issue');
+      IssueActions.fetchByIdFailed(issueId);
+    })
   },
 
   onFetchAll(options) {
@@ -61,7 +65,7 @@ export default Reflux.createStore({
     }
 
     return github
-    .path(['repos', author, repo, 'issues'])
+    .path(['repos', org, repo, 'issues'])
     .method('post')
     .body({ title: title, body: body })
     .send();
@@ -85,7 +89,7 @@ export default Reflux.createStore({
 
   fetchIssues(options) {
     return github
-    .path(['repos', author, repo, 'issues'])
+    .path(['repos', org, repo, 'issues'])
     .query(_.defaults(options || {}, {
       labels: [ enhanceLabel ],
       per_page: this.defaultPerPage,

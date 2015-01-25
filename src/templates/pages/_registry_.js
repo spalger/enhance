@@ -1,5 +1,5 @@
 import router from 'lib/router'
-
+import UserActions from 'actions/UserActions'
 import requireLogin from 'lib/middleware/requireLogin'
 
 // app routes
@@ -9,6 +9,11 @@ router.on('/setup', requireLogin, require('pages/setup.html'))
 router.on('/setup/step2', requireLogin, require('pages/setupPayload.html'))
 router.on('/create-issue', require('pages/create-issue.html'))
 router.on('/issue-created/:id', require('pages/issue-created.html'))
+router.on('/logout', () => {
+  UserActions.requestLogout()
+  router.goto('/');
+
+})
 
 
 // dev links

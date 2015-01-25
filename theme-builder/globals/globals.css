@@ -6964,6 +6964,14 @@ a.text-gdr {
 .background-danger {
   background-color: #df3e3e;
 }
+html,
+body {
+  height: 100%;
+}
+body {
+  display: flex;
+  flex-direction: column;
+}
 a {
   cursor: pointer;
 }
@@ -7009,6 +7017,19 @@ a {
 }
 .float-fix {
   overflow: hidden;
+}
+site-nav,
+site-footer {
+  flex: 0 0 auto;
+}
+enhance-app {
+  flex: 1 1 auto;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+enhance-app > * {
+  flex: 1 0 auto;
 }
 .panel.login-panel {
   margin-top: 100px;
@@ -7081,11 +7102,19 @@ footer .footer-nav a.footer-link.active {
   background-image: linear-gradient(#ebebeb, #ffffff);
   border-right: 1px solid #d6d6d6;
 }
-.issue-list-item {
+issue-list {
+  display: block;
+  padding-top: 20px;
+}
+issue-list .panel > .list-group .list-group-item.issue-list-item {
+  border-top: 1px !important;
   border: 1px solid #dddddd;
   padding-top: 2px;
   padding-bottom: 5px;
   margin-bottom: 20px;
+}
+issue-list .panel {
+  border-width: 0px;
 }
 .voting-links {
   /*float: left;
@@ -7397,4 +7426,9 @@ img.media-object {
   .description-wrapper .lead {
     font-size: 16px;
   }
+}
+.loading-content {
+  font-size: 30px;
+  padding: 20px;
+  margin: 20px;
 }

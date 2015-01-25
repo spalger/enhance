@@ -5,5 +5,6 @@ export default Reflux.createActions([
   'fetchAll',
   'create',
   'search',
-  'fetchById'
+  'fetchById',
+  'fetchByIdFailed'
 ])

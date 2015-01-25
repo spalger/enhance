@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "gulp server",
     "build": "rm -Rf build && gulp build && cp -r src/index.html src/styles src/fonts build",
-    "deploy": "npm run build && divshot deploy"
+    "deploy": "npm run build && divshot deploy",
+    "build-css": "cd ./theme-builder/; gulp global-styles && cp globals/globals.css ../src/styles/"
   },
   "repository": {
     "type": "git",

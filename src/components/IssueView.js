@@ -6,6 +6,10 @@ import IssueStore from 'stores/IssueStore'
 import CommentStore from 'stores/CommentStore'
 import UserStore from 'stores/UserStore'
 import RequestStore from 'stores/RequestStore'
+import router from 'lib/router'
+
+import deku from 'deku'
+import LoadingContent from 'LoadingContent'
 
 import IssueActions from 'actions/IssueActions'
 import CommentActions from 'actions/CommentActions'
@@ -31,6 +35,7 @@ export default component({
     this.listenTo(CommentActions.commentAddSuccess, this.rerenderView)
     this.listenTo(CommentActions.upvoteSuccess, this.rerenderView)
     this.listenTo(CommentActions.downvoteSuccess, this.rerenderView)
+    this.listenTo(IssueActions.fetchByIdFailed, router.goto.bind(null, '/'))
     this.listenTo(RequestStore, _.noop, this.routeUpdated)
     this.bindTo(IssueStore, 'issue')
     this.listenTo(CommentStore, this.updateComments)
@@ -185,27 +190,60 @@ export default component({
     )
   },
 
+  renderArrows(dom, state) {
+    var { div, a, i } = dom
+    var { user, upvotes, downvotes } = state
+
+    var upvoteClass;
+    var downvoteClass
+
+    if (user) {
+      // if user logged in, look for his vote
+      _.each(upvotes, (upvote) => {
+        if(_.isEqual(upvote.user.login, user.github.username)) {
+          upvoteClass = 'text-success';
+        }
+      });
+
+      if (!upvoteClass) {
+        _.each(downvotes, (downvote) => {
+          if(_.isEqual(downvote.user.login, user.github.username)) {
+            downvoteClass = 'text-danger';
+          }
+        })
+      }
+    }
+
+    return div({class: 'arrow-box'},
+      a({class: 'big-vote text-g'},
+        i({class: 'fa fa-caret-up ' + upvoteClass, onClick: this.upvote.bind(null, state)})
+      ),
+      a({class: 'big-vote down text-g'},
+        i({class: 'fa fa-caret-down ' + downvoteClass, onClick: this.downvote.bind(null, state)})
+      )
+    )
+  },
+
   render(props, state) {
     var {div, ul, li, span, h1, h3, a, i, small, p} = this.dom
     var { issue, comments, user, upvotes, downvotes } = state
 
     // deps
     if (! issue) {
-      return div('Loading...');
+      return div({class: 'container'},
+        div({class: 'row'},
+          div({ class: 'col-xs-12 col-sm-12-col-lg-10 col-lg-offset-1'},
+            deku.dom(LoadingContent)
+          )
+        )
+      )
     }
 
     return div({class: 'container'},
       div({class: 'row'},
         div({class: 'col-xs-12 col-sm-12-col-lg-10 col-lg-offset-1'},
           div({class: 'issue-header-wrapper'},
-            div({class: 'arrow-box'},
-              a({class: 'big-vote text-g'},
-                i({class: 'fa fa-caret-up', onClick: this.upvote.bind(null, state)})
-              ),
-              a({class: 'big-vote down text-g'},
-                i({class: 'fa fa-caret-down', onClick: this.downvote.bind(null, state)})
-              )
-            ),
+            this.renderArrows(this.dom, state),
             div({class:'vote-box'},
               div({class: 'net-vote bold text-success'}, upvotes.length - downvotes.length),
               div({class: 'vote-summary-wrapper'},

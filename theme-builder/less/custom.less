@@ -20,6 +20,15 @@
 
 //Generic Styles
 
+html, body {
+	height: 100%;
+}
+
+body {
+	display: flex;
+	flex-direction: column;
+}
+
 a{
 	cursor: pointer;
 }
@@ -78,6 +87,22 @@ a{
 
 .float-fix{
 	overflow: hidden;
+}
+
+site-nav,
+site-footer {
+	flex: 0 0 auto;
+}
+
+enhance-app {
+	flex: 1 1 auto;
+	overflow: auto;
+	display: flex;
+	flex-direction: column;
+
+	> * {
+		flex: 1 0 auto;
+	}
 }
 
 //Login Panel
@@ -177,13 +202,25 @@ footer .footer-nav a.footer-link.active{
 }
 
 // Issues List
+@issue-list-spacing: 20px;
 
-.issue-list-item{
-	border: 1px solid @list-group-border;
-	padding-top: 2px;
-	padding-bottom: 5px;
-	margin-bottom: 20px;
+issue-list {
+	display: block;
+	padding-top: @issue-list-spacing;
+
+	.panel > .list-group .list-group-item.issue-list-item {
+		border-top: 1px !important;
+		border: 1px solid @list-group-border;
+		padding-top: 2px;
+		padding-bottom: 5px;
+		margin-bottom: @issue-list-spacing;
+	}
+
+	.panel {
+		border-width: 0px;
+	}
 }
+
 
 .voting-links{
 	/*float: left;
@@ -571,4 +608,8 @@ img.media-object{
 	}
 }
 
-
+.loading-content {
+	font-size: 30px;
+	padding: 20px;
+	margin: 20px;
+}

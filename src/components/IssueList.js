@@ -1,6 +1,8 @@
 import component from 'lib/component'
 import moment from 'moment'
 import _ from 'lodash'
+import LoadingContent from 'LoadingContent'
+import deku from 'deku'
 
 import RequestStore from 'stores/RequestStore'
 import IssueStore from 'stores/IssueStore'
@@ -27,12 +29,9 @@ export default component({
 
   getIssues(dom, state) {
     var {div, ul, li, a, img, i, p, span, h3} = dom
-    console.log('new state: ', state);
 
     if (! state.issues) {
-      return div(
-        'Loading...'
-      )
+      return deku.dom(LoadingContent)
     } else if(! state.issues.length) {
       return (
         'No open enhancements'
