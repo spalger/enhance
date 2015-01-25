@@ -3,6 +3,7 @@ import config from 'config'
 import log from 'lib/log'
 import github from 'lib/github'
 
+import log from 'lib/log'
 import CommentActions from 'actions/CommentActions'
 import github from 'lib/github'
 

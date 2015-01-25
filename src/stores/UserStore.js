@@ -88,5 +88,9 @@ export default Reflux.createStore({
 
   getGithubToken: function() {
     return _.get(this, 'user.github.accessToken')
+  },
+
+  isLoggedIn: function () {
+    return !!this.getGithubToken()
   }
 })

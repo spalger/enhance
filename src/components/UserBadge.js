@@ -10,13 +10,15 @@ export default component({
   render(props, state) {
     var {user} = state
     var {requestLogin, requestLogout} = UserActions
-    var {button, span, img} = this.dom
+    var {button, div, img} = this.dom
 
     if (!user) {
-      return button({ onClick: requestLogin }, 'Login with Github')
+      return div(
+        button({ onClick: requestLogin }, 'Login with Github')
+      )
     } else {
-      return span(
-        img({ src: user.profile.avatar_url }),
+      return div(
+        img({ src: user.profile.avatar_url, style: { 'width': '20px' } }),
         user.profile.name,
         button({ onClick: requestLogout }, 'Logout')
       );
