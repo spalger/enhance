@@ -7432,3 +7432,6 @@ img.media-object {
   padding: 20px;
   margin: 20px;
 }
+.show-comment-box {
+  display: block !important;
+}
