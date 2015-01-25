@@ -51,7 +51,7 @@ export default component({
             )
           ),
           li({ onClick : this.handlers.setupActive, class: getClass('Setup')},
-            a({class: 'bold', href: '#'},
+            a({class: 'bold', href: '#/setup'},
               i({class: 'fa fa-cog'}),
               span({class: 'hidden-xs'}, 'Setup')
             )
