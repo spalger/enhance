@@ -8,7 +8,7 @@ import log from 'lib/log'
 import CommentActions from 'actions/CommentActions'
 import github from 'lib/github'
 
-var { author, repo, enhanceLabel } = config.github;
+var { org, repo, enhanceLabel } = config.github;
 
 const UPVOTE = ':+1:'
 const DOWNVOTE = ':-1:'
@@ -21,7 +21,7 @@ export default Reflux.createStore({
   _create(issueNumber, comment) {
     return github
     .method('post')
-    .path(['repos', author, repo, 'issues', issueNumber, 'comments'])
+    .path(['repos', org, repo, 'issues', issueNumber, 'comments'])
     .body({ body: comment })
     .send()
     .then(() => {
@@ -56,7 +56,7 @@ export default Reflux.createStore({
 
     return github
     .method('get')
-    .path(['repos', author, repo, 'issues', issueNumber, 'comments'])
+    .path(['repos', org, repo, 'issues', issueNumber, 'comments'])
     .query(payload)
     .send()
     .then((comments) => {

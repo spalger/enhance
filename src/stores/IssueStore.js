@@ -8,12 +8,12 @@ import IssueActions from 'actions/IssueActions'
 import UserStore from 'stores/UserStore'
 import issueModel from 'models/issueModel'
 
-var { author, repo, enhanceLabel } = config.github;
+var { org, repo, enhanceLabel } = config.github;
 var defaultPerPage = 100;
 
 function fetchIssues(options) {
   return github
-  .path(['repos', author, repo, 'issues'])
+  .path(['repos', org, repo, 'issues'])
   .query(_.defaults(options || {}, {
     labels: [ enhanceLabel ],
     per_page: defaultPerPage,
@@ -51,7 +51,7 @@ export default Reflux.createStore({
   onFetchById(issueId) {
     // @todo should this pull from issueModel versus making a request?
     return github
-    .path(['repos', author, repo, 'issues', issueId])
+    .path(['repos', org, repo, 'issues', issueId])
     .send()
     .then((issue) => {
       this.issue = issue.body;
@@ -81,7 +81,7 @@ export default Reflux.createStore({
     }
 
     return github
-    .path(['repos', author, repo, 'issues'])
+    .path(['repos', org, repo, 'issues'])
     .method('post')
     .body({ title: title, body: body })
     .send();

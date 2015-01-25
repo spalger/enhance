@@ -202,13 +202,25 @@ footer .footer-nav a.footer-link.active{
 }
 
 // Issues List
+@issue-list-spacing: 20px;
 
-.issue-list-item{
-	border: 1px solid @list-group-border;
-	padding-top: 2px;
-	padding-bottom: 5px;
-	margin-bottom: 20px;
+issue-list {
+	display: block;
+	padding-top: @issue-list-spacing;
+
+	.panel > .list-group .list-group-item.issue-list-item {
+		border-top: 1px !important;
+		border: 1px solid @list-group-border;
+		padding-top: 2px;
+		padding-bottom: 5px;
+		margin-bottom: @issue-list-spacing;
+	}
+
+	.panel {
+		border-width: 0px;
+	}
 }
+
 
 .voting-links{
 	/*float: left;

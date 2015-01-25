@@ -6,7 +6,7 @@ export default component({
 
     console.log('>>');
 
-    return div({ class: 'loading-content'},
+    return div({ class: 'loading-content' },
       i({ class: 'fa fa-spinner fa-spin'}),
       ' Loading Content...'
     )

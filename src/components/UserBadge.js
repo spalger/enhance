@@ -3,7 +3,7 @@ import UserActions from 'actions/UserActions'
 import UserStore from 'stores/UserStore'
 
 export default component({
-  afterMount() {
+  beforeMount() {
     this.bindTo(UserStore, 'user')
   },
 
@@ -18,9 +18,9 @@ export default component({
         span({class: 'hidden-xs'}, ' Login')
       )
     } else {
-      return a( { href: '#'},
+      return a({ href: user.profile.html_url },
         span({ class: 'header-profile-image'},
-          img({ src : user.profile.avatar_url })
+          img({ src: user.profile.avatar_url })
         ),
         span({ class: 'header-user-name bold'}, ' ' + user.profile.name)
       );
