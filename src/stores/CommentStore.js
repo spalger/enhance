@@ -21,6 +21,9 @@ export default Reflux.createStore({
       .then((response) => {
         log.msg(response.body);
       })
+      .catch((err) => {
+        log.error('Error creating comment: ' + err)
+      })
   },
 
   /* sample return object keys: url, html_url, issue_url, id, user, created_at, updated_at, body */
@@ -42,6 +45,9 @@ export default Reflux.createStore({
       .send()
       .then((comments) => {
         log.msg(comments);
+      })
+      .catch((err) => {
+        log.error('Error getting comments by issue: ' + err)
       })
   },
 
