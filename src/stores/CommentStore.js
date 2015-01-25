@@ -18,8 +18,8 @@ export default Reflux.createStore({
   _create(issueNumber, comment) {
     return github
     .method('post')
-    .path([ 'repos', author, repo, 'issues', issueNumber, 'comments' ])
-    .body({ body : comment })
+    .path(['repos', author, repo, 'issues', issueNumber, 'comments'])
+    .body({ body: comment })
     .send()
     .then(log.msg)
     .catch((err) => {
@@ -31,9 +31,9 @@ export default Reflux.createStore({
   /* @todo since is the MouseEvent currently */
   onGetByIssue(issueNumber, since) {
     var payload = {
-      labels : [ enhanceLabel ],
-      sort : 'updated',
-      direction : 'desc',
+      labels: [ enhanceLabel ],
+      sort: 'updated',
+      direction: 'desc',
     }
 
     if (since) {
@@ -42,7 +42,7 @@ export default Reflux.createStore({
 
     return github
     .method('get')
-    .path([ 'repos', author, repo, 'issues', issueNumber, 'comments' ])
+    .path(['repos', author, repo, 'issues', issueNumber, 'comments'])
     .query(payload)
     .send()
     .then(log.msg)

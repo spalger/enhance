@@ -16,10 +16,10 @@ class IssueModel extends DBClass {
 
     this._indexMap = function (doc) {
       return {
-        number : doc.number,
-        title : doc.title,
+        number: doc.number,
+        title: doc.title,
         body: doc.body,
-        id : doc._id,
+        id: doc._id,
       }
     }
   }

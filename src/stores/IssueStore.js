@@ -15,10 +15,10 @@ function fetchIssues(options) {
   return github
   .path(['repos', author, repo, 'issues'])
   .query(_.defaults(options, {
-    labels : [ enhanceLabel ],
+    labels: [ enhanceLabel ],
     per_page: defaultPerPage,
-    sort : 'updated',
-    direction : 'desc',
+    sort: 'updated',
+    direction: 'desc',
   }))
   .send()
   .then(function (issues) {
@@ -30,7 +30,7 @@ function fetchIssues(options) {
 export default Reflux.createStore({
   listenables: IssueActions,
 
-  issues : [],
+  issues: [],
 
   /* returned object keys: url, labels_url, comments_url, events_url, html_url, id, number, title,
    user, labels (array), state, locked, comments (int), created_at, updated_at, pull_request (obj)
@@ -66,7 +66,7 @@ export default Reflux.createStore({
     return github
     .path(['repos', author, repo, 'issues'])
     .method('post')
-    .body({ title: title, body : body })
+    .body({ title: title, body: body })
     .send();
   },
 

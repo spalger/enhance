@@ -14,7 +14,7 @@ var FILENAME = 'enhance.payload.json';
 export default Reflux.createStore({
   listenables: PayloadActions,
 
-  payload : [],
+  payload: [],
 
   onSync(payload) {
     // create payload for first time if no id in config
