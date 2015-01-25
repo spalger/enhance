@@ -87,8 +87,8 @@ export default class Model {
     return this.db.remove(doc, cb)
   }
 
-  get(obj) {
-    return this.db.get(obj)
+  get(obj, cb) {
+    return this.db.get(obj, cb)
   }
 
   query(fn, options, cb) {
