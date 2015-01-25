@@ -37,7 +37,7 @@ export default Reflux.createStore({
       }
     })
     .catch((err) => {
-      log.error('Error creating comment:', err)
+      log.error('Error creating comment', err)
     })
   },
 
@@ -64,7 +64,7 @@ export default Reflux.createStore({
       this.trigger(this.comments)
     })
     .catch((err) => {
-      log.error('Error getting comments by issue:', err)
+      log.error('Error getting comments by issue', err)
     })
   },
 

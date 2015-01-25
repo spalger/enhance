@@ -6,6 +6,7 @@ import IssueStore from 'stores/IssueStore'
 import CommentStore from 'stores/CommentStore'
 import UserStore from 'stores/UserStore'
 import RequestStore from 'stores/RequestStore'
+import router from 'lib/router'
 
 import IssueActions from 'actions/IssueActions'
 import CommentActions from 'actions/CommentActions'
@@ -31,6 +32,7 @@ export default component({
     this.listenTo(CommentActions.commentAddSuccess, this.rerenderView)
     this.listenTo(CommentActions.upvoteSuccess, this.rerenderView)
     this.listenTo(CommentActions.downvoteSuccess, this.rerenderView)
+    this.listenTo(IssueActions.fetchByIdFailed, router.goto.bind(null, '/'))
     this.listenTo(RequestStore, _.noop, this.routeUpdated)
     this.bindTo(IssueStore, 'issue')
     this.listenTo(CommentStore, this.updateComments)
