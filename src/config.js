@@ -4,7 +4,7 @@ export default {
     apiUrl: 'https://api.github.com',
     org: 'staticshowdown',
     repo: 'ss15-enhance',
-    enhanceLabel: 'enhancement'
+    enhanceLabel: 'priority'
   },
   storage: {
     index: 'enhance-store'
