@@ -6569,7 +6569,7 @@ a.text-gdr {
   position: relative;
   background-color: #ffffff;
   border: 1px solid #999999;
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  border: 1px solid #e6e6e6;
   border-radius: 3px;
   -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
   box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
@@ -6581,15 +6581,15 @@ a.text-gdr {
   top: 0;
   right: 0;
   left: 0;
-  background-color: #000000;
+  background-color: #904593;
 }
 .modal-backdrop.fade {
   opacity: 0;
   filter: alpha(opacity=0);
 }
 .modal-backdrop.in {
-  opacity: 0.5;
-  filter: alpha(opacity=50);
+  opacity: 0.95;
+  filter: alpha(opacity=95);
 }
 .modal-header {
   padding: 15px;
@@ -6996,6 +6996,9 @@ a.text-gdr {
 .float-right {
   float: right;
 }
+.float-fix {
+  overflow: hidden;
+}
 .panel.login-panel {
   margin-top: 100px;
 }
@@ -7024,6 +7027,9 @@ a.text-gdr {
 }
 .setup-panel .btn.full-width {
   margin-top: 30px;
+}
+.navbar {
+  margin-bottom: 0px;
 }
 .header-profile-image img {
   width: 13px;
@@ -7299,6 +7305,40 @@ img.media-object {
   text-decoration: none;
   color: #EFEFEF;
   background-image: linear-gradient(#626262, #484848);
+}
+.form-control.modal-ta {
+  max-width: 100%;
+  height: 90px;
+}
+.modal-content {
+  border: 1px solid #e2e2e2;
+}
+.modal-body {
+  background-image: linear-gradient(#e9e9e9, #dddddd);
+}
+.modal-body .form-control {
+  border-radius: 3px;
+  border: 1px solid #dadada;
+}
+.modal-title {
+  margin-bottom: 10px;
+}
+.add-issue-container {
+  background-image: linear-gradient(#515151, #3c3c3c);
+  border-bottom: 1px solid #1e1e1e;
+  border-top: 1px solid #4c4c4c;
+  border-left: 1px solid #4c4c4c;
+  border-right: 1px solid #3c3c3c;
+  padding-top: 10px;
+  padding-bottom: 20px;
+}
+.add-issue-container label {
+  color: #eeeeee;
+  margin-top: 10px;
+  font-weight: 300;
+}
+.add-issue-container .media-heading {
+  font-size: 16px;
 }
 @media (max-width: 768px) {
   .participants-wrapper {
