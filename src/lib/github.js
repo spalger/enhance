@@ -97,6 +97,8 @@ PartialReq.prototype.send = function () {
   }
 
   var split = (str) => {
+    if (str.length === 0) return []
+
     return str.split(',').map((scope) => {
       return scope.trim()
     })
@@ -108,6 +110,12 @@ PartialReq.prototype.send = function () {
       var resp = err.resp
       var has = split(resp.headers['x-oauth-scopes'])
       var needs = split(resp.headers['x-accepted-oauth-scopes'])
+
+      // gist hack - 404, but no permissions needed
+      // 404 here must mean you can never do what you are trying to do
+      if (needs.length === 0 && resp.status === NOT_FOUND) {
+        throw err
+      }
 
       UserActions.requestPermission(has, needs)
 
