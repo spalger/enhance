@@ -1,6 +1,6 @@
 import component from 'lib/component'
 import PayloadActions from 'actions/PayloadActions'
-// import PayloadStore from 'stores/PayloadStore'
+import PayloadStore from 'stores/PayloadStore'
 
 export default component({
   afterMount() {
@@ -9,8 +9,8 @@ export default component({
   },
 
   generate() {
-    console.log('click')
-    // PayloadActions.generate();
+    console.log('time to generate')
+    PayloadActions.generate()
   },
 
   render() {

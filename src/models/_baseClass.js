@@ -37,7 +37,7 @@ export default class Model {
 
   upsert(doc, cb) {
     if (_.isArray(doc)) {
-      return doc.map((d) => {
+      return Promise.map(doc, (d) => {
         return this.upsert(d)
       })
     }
@@ -59,7 +59,7 @@ export default class Model {
 
   add(doc, cb) {
     if (_.isArray(doc)) {
-      return doc.map((d) => {
+      return Promise.map(doc, (d) => {
         return this.add(d)
       })
     }
@@ -69,7 +69,7 @@ export default class Model {
 
   update(doc, rev, cb) {
     if (_.isArray(doc)) {
-      return doc.map((d) => {
+      return Promise.map(doc, (d) => {
         return this.update(d)
       })
     }
@@ -79,7 +79,7 @@ export default class Model {
 
   remove(doc, cb) {
     if (_.isArray(doc)) {
-      return doc.map((d) => {
+      return Promise.map(doc, (d) => {
         return this.remove(d)
       })
     }
@@ -114,7 +114,6 @@ export default class Model {
   _indexAdd(doc) {
     if (!this.indexer) return
     this.get(doc.id).then((doc) => {
-      log.msg('added to index')
       this.indexer.add(this._indexMap(doc))
     })
   }

@@ -10,6 +10,8 @@ import PayloadActions from 'actions/PayloadActions'
 import UserActions from 'actions/UserActions'
 import UserStore from 'stores/UserStore'
 
+import IssueStore from 'stores/IssueStore'
+
 var payloadId = config.payload.id;
 var FILENAME = 'enhance.payload.json';
 
@@ -18,9 +20,18 @@ export default Reflux.createStore({
 
   payload: [],
 
-  onGenerate(payload) {
+  onGenerate() {
+    // use IssueStore to fetch all issues
+    var payload = IssueStore.onFetchAll()
+    .then(function (count) {
+      log.msg(count, 'issues fetched')
+    })
+    PayloadActions.generate.promise(payload)
+  },
+
+  onSave(payload) {
     // create payload for first time if no id in config
-    PayloadActions.persist.promise(payloadId ? this._update(payload) : this._create(payload))
+    PayloadActions.save.promise(payloadId ? this._update(payload) : this._create(payload))
   },
 
   // get the gist raw url, then load the raw gist data
