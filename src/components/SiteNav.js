@@ -52,7 +52,7 @@ export default component({
       ),
       li({ onClick: this.handlers.aboutActive, class: getClass('About')},
         a({class: 'bold', href: '#/about'},
-          i({class: 'fa fa-cog'}),
+          i({class: 'fa fa-info'}),
           span({class: 'hidden-xs'}, ' About')
         )
       ),
