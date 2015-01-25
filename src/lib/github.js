@@ -5,12 +5,15 @@ import UserActions from 'actions/UserActions'
 import UserStore from 'stores/UserStore'
 import {ListenerMethods} from 'reflux'
 import log from 'lib/log'
+import await from 'lib/await'
 import Promise from 'bluebird'
 
 import config from 'config'
 
 var UNAUTHORIZED = 401
 var NOT_FOUND = 404
+
+const INITIAL_AUTH = await(UserActions.authUpdate);
 
 function PartialReq(prev, next) {
   this.params = _.merge({
@@ -45,6 +48,7 @@ PartialReq.prototype.url = setter('url')
 PartialReq.prototype.body = setter('body')
 PartialReq.prototype.scopes = setter('scopes')
 PartialReq.prototype.auth = setter('auth')
+PartialReq.prototype.once = setter('once', _.constant(true))
 
 PartialReq.prototype.method = setter('method', function (val) {
   return String(val).toUpperCase()
@@ -78,6 +82,10 @@ PartialReq.prototype.then = function (thenback, errback) {
 }
 
 PartialReq.prototype.send = function () {
+  if (this.params.once && this._lastExec) {
+    return this._lastExec;
+  }
+
   var attempt = () => {
     return new Promise((resolve, reject) => {
       var req = this._getReq()
@@ -149,9 +157,12 @@ PartialReq.prototype.send = function () {
     throw err
   }
 
-  return attempt()
+  this._lastExec = INITIAL_AUTH
+  .then(attempt)
   .catch(NeedsPermission, requestPermission)
   .catch(NeedsLogin, requireLogin)
+
+  return this._lastExec;
 }
 
 class FailedResp extends Error {
@@ -166,4 +177,8 @@ class NeedsLogin extends FailedResp {}
 class NeedsPermission extends FailedResp {}
 class InvalidResponse extends FailedResp {}
 
-export default new PartialReq()
+const github = new PartialReq()
+
+github.emoji = github.path('/emojis').once()
+
+export default github

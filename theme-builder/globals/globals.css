@@ -7083,8 +7083,10 @@ footer .footer-nav a.footer-link.active {
   border-right: 1px solid #d6d6d6;
 }
 .issue-list-item {
+  border: 1px solid #dddddd;
   padding-top: 2px;
   padding-bottom: 5px;
+  margin-bottom: 20px;
 }
 .voting-links {
   /*float: left;
@@ -7093,7 +7095,7 @@ footer .footer-nav a.footer-link.active {
   /*display: block;*/
   line-height: 0;
   margin: 0;
-  padding: 0;
+  fpadding: 0;
   color: #333333;
 }
 .voting-link:hover,
@@ -7119,11 +7121,23 @@ footer .footer-nav a.footer-link.active {
   text-decoration: none;
 }
 .enhancement-description {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 300;
   font-color: #777777;
   font-style: italic;
   line-height: 1.4;
+  max-height: 69px;
+  overflow: hidden;
+  position: relative;
+}
+.enhancement-description:before {
+  position: absolute;
+  top: 52px;
+  left: 0px;
+  right: 0px;
+  height: 18px;
+  background: linear-gradient(transparent, #f2f2f2);
+  content: "";
 }
 .issue-info-list {
   margin-top: 10px;
