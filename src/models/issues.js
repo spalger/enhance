@@ -8,16 +8,18 @@ class Issues extends DBClass {
     this.primaryKey = 'id'
 
     this._setIndexer(function () {
-      this.field('title', { boost: 10 })
       this.field('number', { boost: 50 })
-      this.ref('_id')
+      this.field('title', { boost: 20 })
+      this.field('body')
+      this.ref('id')
     })
 
     this._indexMap = function (doc) {
       return {
-        title : doc.title,
         number : doc.number,
-        ref : doc._id,
+        title : doc.title,
+        body: doc.body,
+        id : doc._id,
       }
     }
   }
