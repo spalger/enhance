@@ -6,7 +6,8 @@ const TAG_RE = /\:([a-z0-9_\-\+]+)\:/g;
 const LINK_TAG = "<style> @import 'styles/markdown.css'; </style>"
 export default component({
   afterMount(el, props) {
-    github.emoji.then(function (urls) {
+    github.emoji.then(function (resp) {
+      var urls = resp.body
       var html = marked.parse(props.markdown);
       var withEmotion = html.replace(TAG_RE, function (match, name) {
         var url = urls[name];
