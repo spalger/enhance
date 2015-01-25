@@ -23,7 +23,7 @@ export default Reflux.createStore({
    user, labels (array), state, locked, comments (int), created_at, updated_at, pull_request (obj)
    body */
   onFetch(options) {
-    this.fetchIssues(options)
+    this._fetchIssues(options)
     .then((res) => {
       // update db with any changed results
       this.trigger(res);
@@ -57,17 +57,28 @@ export default Reflux.createStore({
     })
   },
 
+  // recursive method to fetch all issues using IssueStore
   onFetchAll(options) {
-    options = options || {}
-    var currentPage = options.page || 1
+    var self = this;
+    var allIssues = [];
+    options = _.defaults(options || {}, { page: 1 })
 
-    return this.fetchIssues(options)
-    .then((issues) => {
-      if (issues.length === this.defaultPerPage) {
-        return this.onFetchAll({ page: ++currentPage })
-      }
-      return issues.length + ((currentPage - 1) * this.defaultPerPage)
-    });
+    function fetch() {
+      return self._fetchIssues(options)
+      .then((issues) => {
+        allIssues = allIssues.concat(issues)
+        if (issues.length === self.defaultPerPage) {
+          ++options.page
+          return fetch()
+        }
+      })
+    }
+
+    return fetch()
+    .then(function () {
+      this.trigger(allIssues)
+      return allIssues
+    })
   },
 
   onCreate(title, body) {
@@ -98,7 +109,7 @@ export default Reflux.createStore({
     log.info('Search results: ', returnedIssues.length);
   },
 
-  fetchIssues(options) {
+  _fetchIssues(options) {
     return github
     .path(['repos', org, repo, 'issues'])
     .query(_.defaults(options || {}, {

@@ -21,11 +21,10 @@ export default Reflux.createStore({
   payload: [],
 
   onGenerate() {
-    // use IssueStore to fetch all issues
     var payload = IssueStore.onFetchAll()
-    .then(function (count) {
-      log.msg(count, 'issues fetched')
-    })
+    // .then((issues) => {
+    //   // append comments using the ballot sync
+    // })
     PayloadActions.generate.promise(payload)
   },
 
