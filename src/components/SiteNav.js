@@ -23,7 +23,6 @@ export default component({
   },
 
   makeActive(active) {
-    console.log(active); // @todo grab from routes versus click handlers
     this.setState({ active })
   },
 

@@ -8,8 +8,6 @@ import RequestStore from 'stores/RequestStore'
 import IssueStore from 'stores/IssueStore'
 import IssueActions from 'actions/IssueActions'
 
-import log from 'lib/log'
-
 export default component({
   initialState() {
     return {
@@ -23,8 +21,6 @@ export default component({
     this.bindTo(IssueStore, 'issues')
 
     IssueActions.fetchAll()
-
-    log.msg('@TODO load issues -- IssueList.js')
   },
 
   getIssues(dom, state) {

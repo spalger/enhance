@@ -44,7 +44,6 @@ export default Reflux.createStore({
   },
 
   onFetchById(issueId) {
-    // @todo should this pull from issueModel versus making a request?
     return github
     .path(['repos', org, repo, 'issues', issueId])
     .then((issue) => {
