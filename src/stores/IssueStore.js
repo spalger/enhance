@@ -44,7 +44,7 @@ export default Reflux.createStore({
       this.trigger(res);
     })
     .catch((err) => {
-      log.error('Error getting all repo issues:', err);
+      log.error('Error getting all repo issues', err);
     });
   },
 
@@ -56,7 +56,11 @@ export default Reflux.createStore({
     .then((issue) => {
       this.issue = issue.body;
       this.trigger(this.issue);
-    });
+    })
+    .catch(() => {
+      log.error('Unable to fetch issue');
+      IssueActions.fetchByIdFailed(issueId);
+    })
   },
 
   onPayload(options) {

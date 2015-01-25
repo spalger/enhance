@@ -9,12 +9,12 @@ class Router {
     _.bindAll(this)
     this.routes = []
     window.addEventListener('hashchange', () => {
-      this.goto(location.hash)
+      this._dispatch(location.hash)
     })
   }
 
   start() {
-    return this.goto(location.hash)
+    return this._dispatch(location.hash)
   }
 
   // on(path, template)
@@ -45,13 +45,16 @@ class Router {
   }
 
   goto(hash) {
-    return this._dispatch({
-      matched: false,
-      path: hash.substr(1)
-    })
+    window.location.hash = hash;
+    return this._dispatch(hash)
   }
 
-  _dispatch(req) {
+  _dispatch(hash) {
+    var req = {
+      matched: false,
+      path: hash.substr(1)
+    };
+
     var q = this.routes.slice(0)
 
     this.req = req;
