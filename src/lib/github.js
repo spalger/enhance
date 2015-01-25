@@ -105,10 +105,10 @@ PartialReq.prototype.send = function () {
   var requestPermission = (err) => {
     var subs
     return new Promise((resolve, reject) => {
-
       var resp = err.resp
-      var has = split(resp.headers['O-Auth-Scopes'])
-      var needs = split(resp.headers['X-Accepted-OAuth-Scopes'])
+      var has = split(resp.headers['x-oauth-scopes'])
+      var needs = split(resp.headers['x-accepted-oauth-scopes'])
+
       UserActions.requestPermission(has, needs)
 
       subs = [
@@ -127,10 +127,14 @@ PartialReq.prototype.send = function () {
     })
   }
 
+  var requireLogin = (err) => {
+    UserActions.requireLogin()
+    throw err
+  }
+
   return attempt()
   .catch(NeedsPermission, requestPermission)
-  .catch(NeedsLogin, UserActions.requireLogin)
-  .catch(InvalidResponse, log.error)
+  .catch(NeedsLogin, requireLogin)
 }
 
 class FailedResp extends Error {
