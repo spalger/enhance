@@ -11,5 +11,7 @@ CustomElement.register('site-nav', require('SiteNav'));
 CustomElement.register('site-footer', require('Footer'));
 CustomElement.register('logout-button', require('LogoutButton'));
 CustomElement.register('create-issue', require('CreateIssue'));
+CustomElement.register('thank-you', require('ThankYou'));
 
+// dev elements
 CustomElement.register('site-devnav', require('siteNavDev.html'));
