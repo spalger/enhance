@@ -18,19 +18,24 @@ class EnhanceApp extends CustomElement {
 
   attachedCallback() {
     this.listenTo(RequestStore, _.bindKey(this, 'renderRequest'))
-    this.listenTo(UserActions.requestScopes, _.bindKey(this, 'requestScopes'))
+    this.listenTo(UserActions.requestScopes, _.bindKey(this, 'onRequestScopes'))
+    this.listenTo(UserActions.requireLogin, _.bindKey(this, 'onRequireLogin'))
   }
 
   renderRequest(req) {
-    this.renderContent(req.route.template);
+    this.renderContent(req.route.template)
   }
 
-  requestScopes(need) {
-    log.info('asking for scopes', need);
+  onRequireLogin() {
+    log.error('You have to be logged in to do that.')
+  }
+
+  onRequestScopes(need) {
+    log.info('asking for scopes', need)
   }
 }
 
-_.assign(EnhanceApp.prototype, ListenerMethods);
+_.assign(EnhanceApp.prototype, ListenerMethods)
 
 document.registerElement('enhance-app', {
   prototype: EnhanceApp.prototype
