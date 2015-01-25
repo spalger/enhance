@@ -16,7 +16,7 @@ export default Reflux.createStore({
 
   payload: [],
 
-  onPersist(payload) {
+  onGenerate(payload) {
     // create payload for first time if no id in config
     PayloadActions.persist.promise(payloadId ? this._update(payload) : this._create(payload))
   },

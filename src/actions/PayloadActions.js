@@ -1,7 +1,7 @@
 import Reflux from 'reflux'
 
 var actions = Reflux.createActions({
-  'persist': { asyncResult: true },
+  'generate': { asyncResult: true },
   'get': { asyncResult: true }
 })
 
