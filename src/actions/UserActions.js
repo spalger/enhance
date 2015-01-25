@@ -4,6 +4,7 @@ export default Reflux.createActions([
   'requireLogin',
   'requestLogin',
   'requestLogout',
+  'requestScopes',
   'authUpdate',
   'alreadyLoggedIn',
   'notAlreadyLoggedIn',

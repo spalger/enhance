@@ -33,7 +33,7 @@ function setter(prop, mod) {
 }
 
 PartialReq.prototype.query = setter('query')
-PartialReq.prototype.url = setter('url');
+PartialReq.prototype.url = setter('url')
 PartialReq.prototype.body = setter('body')
 PartialReq.prototype.scopes = setter('scopes')
 PartialReq.prototype.auth = setter('auth')
@@ -66,7 +66,7 @@ PartialReq.prototype._getReq = function () {
 }
 
 PartialReq.prototype.then = function (thenback, errback) {
-  return this.send().then(thenback, errback);
+  return this.send().then(thenback, errback)
 }
 
 PartialReq.prototype.send = function () {
@@ -97,19 +97,19 @@ PartialReq.prototype.send = function () {
   }
 
   var split = (str) => {
-    if (str.length === 0) return []
-
-    return str.split(',').map((scope) => {
+    return String(str || '').split(',').map((scope) => {
       return scope.trim()
-    })
+    }).filter(Boolean)
   }
 
   var requestPermission = (err) => {
     var subs
     return new Promise((resolve, reject) => {
       var resp = err.resp
+
       var has = split(resp.headers['x-oauth-scopes'])
-      var needs = split(resp.headers['x-accepted-oauth-scopes'])
+      var wants = _.union(split(this.params.scopes), split(resp.headers['x-accepted-oauth-scopes']))
+      var needs = _.difference(wants, has)
 
       // gist hack - 404, but no permissions needed
       // 404 here must mean you can never do what you are trying to do
@@ -117,7 +117,7 @@ PartialReq.prototype.send = function () {
         throw err
       }
 
-      UserActions.requestPermission(has, needs)
+      UserActions.requestScopes(needs);
 
       subs = [
         this.listenTo(UserActions.loginFailure, () => {

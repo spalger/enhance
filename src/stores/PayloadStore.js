@@ -55,8 +55,9 @@ export default Reflux.createStore({
     );
 
     return github
-    .path([ 'gists'])
+    .path(['gists'])
     .method('post')
+    .scopes('gist')
     .body(gistBody)
     .then((res) => {
       log.success('Please add this payloadId to /src/config.js: ', res.body.id)
@@ -75,6 +76,7 @@ export default Reflux.createStore({
     return github
     .path(['gists', payloadId])
     .method('patch')
+    .scopes('gist')
     .body(gistBody)
     .then(() => {
       log.success('Updated payload');
