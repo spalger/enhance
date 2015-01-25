@@ -15,6 +15,8 @@ const DOWNVOTE = ':-1:'
 export default Reflux.createStore({
   listenables: CommentActions,
 
+   comments : [],
+
   _create(issueNumber, comment) {
     return github
     .method('post')
@@ -45,7 +47,10 @@ export default Reflux.createStore({
     .path(['repos', author, repo, 'issues', issueNumber, 'comments'])
     .query(payload)
     .send()
-    .then(log.msg)
+    .then((comments) => {
+      this.comments = comments.body
+      this.trigger(this.comments)
+    })
     .catch((err) => {
       log.error('Error getting comments by issue:', err)
     })

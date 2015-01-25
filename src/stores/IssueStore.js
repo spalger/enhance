@@ -32,6 +32,8 @@ export default Reflux.createStore({
 
   issues: [],
 
+  issue : {}, // single issue loaded on detail page
+
   /* returned object keys: url, labels_url, comments_url, events_url, html_url, id, number, title,
    user, labels (array), state, locked, comments (int), created_at, updated_at, pull_request (obj)
    body */
@@ -43,6 +45,17 @@ export default Reflux.createStore({
     })
     .catch((err) => {
       log.error('Error getting all repo issues:', err);
+    });
+  },
+
+  onFetchById(issueId) {
+    // @todo should this pull from issueModel versus making a request?
+    return github
+    .path(['repos', author, repo, 'issues', issueId])
+    .send()
+    .then((issue) => {
+      this.issue = issue.body;
+      this.trigger(this.issue);
     });
   },
 

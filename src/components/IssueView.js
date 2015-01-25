@@ -1,31 +1,85 @@
 import component from 'lib/component'
+import _ from 'lodash'
 
-// import IssueStore from 'stores/IssueStore'
-// import CommentStore from 'stores/CommentStore'
+import IssueStore from 'stores/IssueStore'
+import CommentStore from 'stores/CommentStore'
+import UserStore from 'stores/UserStore'
 import RequestStore from 'stores/RequestStore'
+
+import IssueActions from 'actions/IssueActions'
+import CommentActions from 'actions/CommentActions'
 
 import log from 'lib/log'
 
 export default component({
   initialState() {
     return {
-      route: null
+      route: null,
+      issue: null,
+      comments: null,
+      user: UserStore.user
     };
   },
 
   afterMount() {
-    this.bindTo(RequestStore, 'route')
-    // this.bindTo(IssueStore, 'issue')
-    // this.bindTo(CommentStore, 'comments')
-
+    this.listenTo(RequestStore, this.routeUpdated, this.routeUpdated)
+    this.bindTo(IssueStore, 'issue')
+    this.bindTo(CommentStore, 'comments')
     log.msg('@TODO load issues -- IssueList.js')
   },
 
-  render(props, state) {
-    // deps
-    if (!state.route) return;
+  routeUpdated(route) {
+    IssueActions.fetchById(route.params.id)
+    CommentActions.getByIssue(route.params.id)
+  },
 
+  _renderFacepile() {
+
+  },
+
+  _renderUserComment() {
+
+  },
+
+  renderComments(dom, comments) {
+    var {div, a, img, h4, p} = dom
+
+    if (! comments) {
+      return div('Loading...')
+    } else if (! comments.length) {
+      return div('')
+    }
+
+    return _.map(comments, function(comment) {
+      return div({class: 'media'},
+        div({class: 'media-left'},
+          a(
+            img({class: 'media-object', src: 'https://avatars3.githubusercontent.com/u/' + comment.user.id + '?v=3&amp;s=64'})
+          )
+        ),
+        div({class: 'media-body'},
+          h4({class: 'media-heading'},
+            a({class: 'username bold text-g'},
+              comment.user.login
+            )
+          ),
+          p({class: 'comment-text'}, comment.body)
+        )
+      )
+    })
+  },
+
+  render(props, state) {
     var {div, ul, li, span, h1, h3, h4, h5, a, img, i, small, textarea, button, p} = this.dom
+    var { issue, comments, user } = state
+
+    // deps
+    if (! issue) {
+      return div('Loading...');
+    }
+
+    console.log(issue);
+    console.log(comments);
 
     return div({class: 'container'},
       div({class: 'row'},
@@ -58,12 +112,12 @@ export default component({
             ),
             div({class: 'issue-detail-box'},
               h1({class: 'detailed-issue-title bold italic'},
-                a({class: 'text-success'},
+                a({class: 'text-success', href: issue.url},
                   i({class: 'fa fa-github'})
                 ),
-                ' Detailed Issue Title'
+                ' ' + issue.title
               ),
-              h3({class: 'italic text-gl'}, '#1234')
+              h3({class: 'italic text-gl'}, '#' + issue.number)
             )
           ),
           div({class: 'participant-wrapper'},
@@ -105,7 +159,7 @@ export default component({
           )
         ),
         div({class: 'description-wrapper'},
-          p({class: 'lead text-gl'}, 'Placeholder text')
+          p({class: 'lead text-gl'}, issue.body)
         ),
         div({class: 'comment-wrapper'},
           div({class: 'comment-toolbar'},
@@ -120,12 +174,12 @@ export default component({
           div({class: 'comment-media media'},
             div({class: 'media-left'},
               a(
-                img({class: 'media-object', src: 'https://avatars3.githubusercontent.com/u/885279?v=3&amp;s=64'})
+                img({class: 'media-object', src: 'https://avatars3.githubusercontent.com/u/' + user.github.id + '?v=3&amp;s=64'})
               )
             ),
             div({class: 'media-body'},
               h4({class: 'media-heading'},
-                a({class: 'username bold text-glr'}, '@username')
+                a({class: 'username bold text-glr'}, user.profile.name)
               ),
               textarea({class: 'form-control'}),
               button({class: 'btn btn-sm btn-success pull-right add-comment-button'},
@@ -133,21 +187,7 @@ export default component({
               )
             )
           ),
-          div({class: 'media'},
-            div({class: 'media-left'},
-              a(
-                img({class: 'media-object', src: 'https://avatars3.githubusercontent.com/u/885279?v=3&amp;s=64'})
-              )
-            ),
-            div({class: 'media-body'},
-              h4({class: 'media-heading'},
-                a({class: 'username bold text-g'},
-                  '@username'
-                )
-              ),
-              p({class: 'comment-text'}, 'Stuff and things')
-            )
-          ),
+          this.renderComments(this.dom, comments),
           div({class: 'user-vote-action-wrapper'},
             span({class: 'user-image-wrapper'},
               a(
