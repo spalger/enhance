@@ -9,16 +9,17 @@ export default component({
 
   render(props, state) {
     var {user} = state
-    var {requestLogin, requestLogout} = UserActions
-    var {button, span, img} = this.dom
+    var {requestLogin} = UserActions //requestLogout not used currently
+    var {a, button, span, img} = this.dom
 
     if (!user) {
       return button({ onClick: requestLogin }, 'Login with Github')
     } else {
-      return span(
-        img({ src: user.profile.avatar_url, style: { 'width': '20px' } }),
-        user.profile.name,
-        button({ onClick: requestLogout }, 'Logout')
+      return a( { href: '#'},
+        span({ class: 'header-profile-image'},
+          img({ src : user.profile.avatar_url })
+        ),
+        span({ class: 'header-user-name bold'}, user.profile.name)
       );
     }
   }

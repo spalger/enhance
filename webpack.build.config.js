@@ -43,7 +43,7 @@ module.exports = function (paths, dev) {
         {
           test: /\/lokiIndexedAdapter\.js$/,
           loader: 'exports-loader?lokiIndexedAdapter'
-        }
+        },
       ],
       noParse: [
         join(paths.ROOT, 'bower_components', 'pouchdb', 'dist', 'pouchdb.js')

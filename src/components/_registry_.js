@@ -7,4 +7,5 @@ export const PrintRequest = new CustomElement('print-request', require('PrintReq
 export const LoggingTest = new CustomElement('logging-test', require('LoggingTest'));
 export const UserBadge = new CustomElement('user-badge', require('UserBadge'));
 
+export const SiteDevNav = new CustomElement('site-devnav', require('templates/siteNavDev.html'));
 export const SiteNav = new CustomElement('site-nav', require('templates/siteNav.html'));
