@@ -6,6 +6,7 @@ import github from 'lib/github'
 import log from 'lib/log'
 import IssueActions from 'actions/IssueActions'
 import UserStore from 'stores/UserStore'
+import UserActions from 'actions/UserActions'
 import issueModel from 'models/issueModel'
 
 var { org, repo, enhanceLabel } = config.github;
@@ -28,7 +29,12 @@ export default Reflux.createStore({
       this.trigger(res);
     })
     .catch((err) => {
-      log.error('Error getting all repo issues', err);
+      if(err.resp && err.resp.status && err.resp.status === 403) {
+        log.error('Error getting issues, you have reached the Github rate limit. Please login to continue');
+        UserActions.requireLogin();
+      } else {
+        log.error('Error getting issues', err);
+      }
     });
   },
 
@@ -40,9 +46,14 @@ export default Reflux.createStore({
       this.issue = issue.body;
       this.trigger(this.issue);
     })
-    .catch(() => {
-      log.error('Unable to fetch issue');
-      IssueActions.fetchByIdFailed(issueId);
+    .catch((err) => {
+      if(err.resp && err.resp.status && err.resp.status === 403) {
+        log.error('Error getting issue, you have reached the Github rate limit. Please login to continue')
+        UserActions.requireLogin()
+      } else {
+        log.error('Unable to fetch issue');
+        IssueActions.fetchByIdFailed(issueId);
+      }
     })
   },
 

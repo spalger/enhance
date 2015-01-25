@@ -18,7 +18,7 @@ export default component({
   },
 
   initialState() {
-    return { active : 'Vote' }
+    return { active : null }
   },
 
   makeActive(active) {
