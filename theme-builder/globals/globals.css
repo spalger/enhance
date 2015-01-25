@@ -5338,6 +5338,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   background-color: #f5f5f5;
   background-image: linear-gradient(#fafafa, #e8e8e8);
   background-repeat: repeat-x;
+  border-color: #dddddd;
 }
 .navbar-default .navbar-brand {
   color: #333333;
@@ -5873,6 +5874,51 @@ a.badge:focus {
 }
 .alert-danger .alert-link {
   color: #843534;
+}
+.media {
+  margin-top: 15px;
+}
+.media:first-child {
+  margin-top: 0;
+}
+.media,
+.media-body {
+  zoom: 1;
+  overflow: hidden;
+}
+.media-body {
+  width: 10000px;
+}
+.media-object {
+  display: block;
+}
+.media-right,
+.media > .pull-right {
+  padding-left: 10px;
+}
+.media-left,
+.media > .pull-left {
+  padding-right: 10px;
+}
+.media-left,
+.media-right,
+.media-body {
+  display: table-cell;
+  vertical-align: top;
+}
+.media-middle {
+  vertical-align: middle;
+}
+.media-bottom {
+  vertical-align: bottom;
+}
+.media-heading {
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+.media-list {
+  padding-left: 0;
+  list-style: none;
 }
 .list-group {
   margin-bottom: 20px;
@@ -6464,6 +6510,21 @@ button.close {
 .text-gdr {
   color: #222222;
 }
+a.text-glr:hover {
+  color: #ffffff;
+}
+a.text-gl:hover {
+  color: #aaaaaa;
+}
+a.text-g:hover {
+  color: #888888;
+}
+a.text-gd:hover {
+  color: #666666;
+}
+a.text-gdr {
+  color: #555555;
+}
 .clearfix:before,
 .clearfix:after,
 .dl-horizontal dd:before,
@@ -6843,6 +6904,42 @@ button.close {
   width: 13px;
   height: 13px;
 }
+footer {
+  margin-top: 50px;
+  background-image: linear-gradient(#ffffff, #ebebeb);
+  border-bottom: 1px solid #d6d6d6;
+  border-top: 1px solid #e6e6e6;
+  border-left: 1px solid #e6e6e6;
+  border-right: 1px solid #d6d6d6;
+  border-radius: 0px;
+}
+footer ul.footer-nav {
+  list-style-type: none;
+  margin: 0px;
+  padding: 0px;
+}
+footer .footer-nav li {
+  float: left;
+}
+footer .footer-nav li .linkless {
+  padding: 10px 15px;
+  display: inline-block;
+}
+footer .footer-nav a.footer-link {
+  display: inline-block;
+  color: #222222;
+  padding: 10px 15px;
+  border-left: 1px solid #ffffff;
+  border-right: 1px solid #dbdbdb;
+}
+footer .footer-nav a.footer-link:hover,
+footer .footer-nav a.footer-link:active,
+footer .footer-nav a.footer-link.active {
+  text-decoration: none;
+  color: #555555;
+  background-image: linear-gradient(#ebebeb, #ffffff);
+  border-right: 1px solid #d6d6d6;
+}
 .issue-list-item {
   padding-top: 2px;
   padding-bottom: 5px;
@@ -6941,19 +7038,18 @@ button.close {
   text-align: center;
   margin-top: 10px;
 }
-.vote-box.totals {
-  background-color: #eeeeee;
-  border: 1px solid #777777;
-  padding: 10px;
+.arrow-box {
+  width: 70px;
+  float: left;
+  text-align: center;
 }
-.vote-box a {
+.arrow-box a {
   display: block;
   margin: 0;
   padding: 0;
-  line-height: .6;
-  height: 30px;
+  line-height: .5;
 }
-.vote-box .big-vote {
+.arrow-box .big-vote {
   font-size: 50px;
 }
 .vote-box .net-vote {
@@ -6965,6 +7061,8 @@ button.close {
   float: left;
   margin-left: 20px;
   margin-top: 20px;
+  padding-left: 20px;
+  border-left: 3px solid #eeeeee;
 }
 .detailed-issue-title {
   font-size: 30px;
@@ -6976,15 +7074,133 @@ button.close {
   clear: both;
   margin-top: 15px;
   padding-top: 15px;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
   border-top: 1px solid #eeeeee;
+  border-bottom: 1px solid #eeeeee;
+}
+.participants-wrapper {
+  margin-top: 20px;
 }
 .profile-image {
-  width: 30px;
-  height: 30px;
+  width: 20px;
+  height: 20px;
+}
+img.media-object {
+  width: 64px;
+  height: 64px;
+  margin-right: 10px;
+  background-color: #FFFFFF;
+  border: 1px solid #bbbbbb;
+}
+.media-heading a:hover {
+  text-decoration: none;
+}
+.comment-text {
+  color: #777777;
+  font-size: 14px;
+  line-height: 1.45;
+}
+.comment-wrapper .media {
+  margin: 0;
+  padding: 10px;
+  background-image: linear-gradient(#f8f8f8, #f2f2f2);
+  border-bottom: 1px solid #e7e7e7;
+  border-top: 1px solid #f6f6f6;
+  border-left: 1px solid #f6f6f6;
+  border-right: 1px solid #e7e7e7;
+  clear: both;
+}
+.comment-wrapper .media.comment-media {
+  margin: 0;
+  padding: 10px;
+  background-image: linear-gradient(#666666, #404040);
+  border-bottom: 1px solid #2b2b2b;
+  border-top: 1px solid #3b3b3b;
+  border-left: 1px solid #3b3b3b;
+  border-right: 1px solid #2b2b2b;
+  clear: both;
+}
+.comment-wrapper {
+  border: 1px solid #e2e2e2;
+  border-radius: 2px;
+}
+.comment-wrapper .user-vote-action-wrapper {
+  margin: 0;
+  padding: 10px;
+  background-image: linear-gradient(#fafafa, #f0f0f0);
+  border-bottom: 1px solid #e7e7e7;
+  border-right: 1px solid #e7e7e7;
+  border-top: 1px solid #f6f6f6;
+  border-left: 1px solid #f6f6f6;
+  clear: both;
+}
+.comment-wrapper .user-vote-action-wrapper img {
+  border: 1px solid #bbbbbb;
+}
+.comment-wrapper .user-vote-action-wrapper .action {
+  color: #777777;
+  margin-left: 20px;
+}
+.comment-wrapper .comment-toolbar {
+  background-color: #111111;
+  background-image: linear-gradient(#555555, #3c3c3c);
+  overflow: hidden;
+}
+.add-comment-button {
+  margin-top: 15px;
+}
+.comment-wrapper .tool-list {
+  list-style-type: none;
+  overflow: hidden;
+  margin: 0;
+}
+.comment-wrapper .tool-list li {
+  float: right;
+  margin: none;
+}
+.comment-wrapper .tool-list li a {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  display: block;
+  color: #FFFFFF;
+  border-left: 1px solid #444444;
+}
+.comment-wrapper .tool-list li a:hover,
+.comment-wrapper .tool-list li a:active,
+.comment-wrapper .tool-list li a.active {
+  text-decoration: none;
+  color: #EFEFEF;
+  background-image: linear-gradient(#626262, #484848);
 }
 @media (max-width: 768px) {
+  .participants-wrapper {
+    border-top: 1px solid #eeeeee;
+    padding-top: 5px;
+  }
+  .vote-box {
+    margin-top: 20px;
+  }
+  .arrow-box {
+    width: 50px;
+    float: left;
+    text-align: left;
+    margin-top: 10px;
+  }
+  .issue-detail-box {
+    clear: both;
+    margin-left: 0px;
+    margin-top: 20px;
+    padding-left: 0px;
+    border: none;
+  }
   .profile-image {
     width: 20px;
     height: 20px;
+  }
+  .description-wrapper .lead {
+    font-size: 16px;
   }
 }

@@ -45,14 +45,14 @@
     <!-- / navbar -->
     <div class="container">
       <div class="row">
-        <div class="col-xs-12 col-sm-9 col-lg-8">
+        <div class="col-xs-12 col-sm-12 col-lg-8 col-lg-offset-2">
             <div class="issue-header-wrapper">
-              <div class="vote-box">
+              <div class="arrow-box">
                 <a href="#" class="big-vote text-g"><i class="fa fa-caret-up"></i></a>
                 <a href="#" class="big-vote down text-g"><i class="fa fa-caret-down"></i></a>
               </div>
-              <!-- vote box -->
-              <div class="vote-box totals">
+              <!-- arrow box -->
+              <div class="vote-box">
                 <div class="net-vote bold text-success">100</div>
                 <div class="vote-summary-wrapper">
                   <span class="text-success float-left"><small><i class="fa fa-plus"></i></small><span class="bold">100</span></span>
@@ -65,13 +65,8 @@
                 <h3 class="italic text-gl">#1234</h3>
               </div>
             </div>
-          <div class="description-wrapper">
-            <p class="lead text-gl">Shank leberkas landjaeger filet mignon beef ribs venison swine et dolor. Voluptate bacon pork loin tail, id beef ribs frankfurter quis commodo. Meatball duis aliqua magna veniam. Deserunt fatback dolore irure ribeye dolore flank venison ea ut strip steak swine. Nulla esse dolore, id pork chop in turkey voluptate ut officia ground round anim.</p>
-          </div>
-        </div>
-        <!-- col -->
-        <div class="col-xs-12 col-sm-3 col-lg-4">
-              <h5 class="bold italic">[#] Participant(s)</h5>
+            <div class="participants-wrapper">
+              <h5 class="bold italic text-success">+1'ers</h5>
               <div class="facepile-container">
                 <a href="">
                   <img alt="elvarb" class="profile-image" src="https://avatars3.githubusercontent.com/u/1716457?v=3&amp;s=80">
@@ -81,18 +76,6 @@
                 </a>
                 <a href="">
                   <img alt="elvarb" class="profile-image" src="https://avatars3.githubusercontent.com/u/6923044?v=3&amp;s=80">
-                </a>
-                <a href="">
-                  <img alt="elvarb" class="profile-image" src="https://avatars3.githubusercontent.com/u/7791737?v=3&amp;s=80">
-                </a>
-                <a href="">
-                  <img alt="elvarb" class="profile-image" src="https://avatars3.githubusercontent.com/u/3141362?v=3&amp;s=80">
-                </a>
-                <a href="">
-                  <img alt="elvarb" class="profile-image" src="https://avatars3.githubusercontent.com/u/9211094?v=3&amp;s=80">
-                </a>
-                <a href="">
-                  <img alt="elvarb" class="profile-image" src="https://avatars3.githubusercontent.com/u/1010?v=3&amp;s=80">
                 </a>
                 <a href="">
                   <img alt="elvarb" class="profile-image" src="https://avatars3.githubusercontent.com/u/471821?v=3&amp;s=80">
@@ -117,10 +100,117 @@
                 </a>
               </div>
               <!-- facepile container -->
+            </div>
+            <!-- participats wrapper -->
+            <div class="participants-wrapper">
+              <h5 class="bold italic text-danger">-1'ers</h5>
+              <div class="facepile-container">
+                <a href="">
+                  <img alt="elvarb" class="profile-image" src="https://avatars3.githubusercontent.com/u/1716457?v=3&amp;s=80">
+                </a>
+                <a href="">
+                  <img class="profile-image" src="https://avatars2.githubusercontent.com/u/1430522?v=3&amp;s=80" >
+                </a>
+                <a href="">
+                  <img alt="elvarb" class="profile-image" src="https://avatars3.githubusercontent.com/u/6923044?v=3&amp;s=80">
+                </a>
+                <a href="">
+                  <img alt="elvarb" class="profile-image" src="https://avatars3.githubusercontent.com/u/7791737?v=3&amp;s=80">
+                </a>
+                <a href="">
+                  <img alt="elvarb" class="profile-image" src="https://avatars3.githubusercontent.com/u/3141362?v=3&amp;s=80">
+                </a>
+                <a href="">
+                  <img alt="elvarb" class="profile-image" src="https://avatars3.githubusercontent.com/u/9211094?v=3&amp;s=80">
+                </a>
+              </div>
+              <!-- facepile container -->
+            </div>
+            <!-- participats wrapper -->
+          <div class="description-wrapper">
+            <p class="lead text-gl">Shank leberkas landjaeger filet mignon beef ribs venison swine et dolor. Voluptate bacon pork loin tail, id beef ribs frankfurter quis commodo. Meatball duis aliqua magna veniam. Deserunt fatback dolore irure ribeye dolore flank venison ea ut strip steak swine. Nulla esse dolore, id pork chop in turkey voluptate ut officia ground round anim.</p>
+          </div>
+          <!-- description wrapper -->
+          <div class="comment-wrapper">
+            <div class="comment-toolbar">
+              <ul class="tool-list">
+                <li><a href="#"><i class="fa fa-plus"></i> Add Comment</a></li>
+              </ul>
+            </div>
+            <!-- comment toolbar -->
+            <div class="comment-media media">
+              <div class="media-left">
+                <a href="#">
+                  <img class="media-object" src="https://avatars3.githubusercontent.com/u/885279?v=3&amp;s=64" alt="...">
+                </a>
+              </div>
+              <div class="media-body">
+                <h4 class="media-heading"><a href="#" class="username bold text-glr">@username</a></h4>
+                <textarea class="form-control"></textarea>
+                <button class="btn btn-sm btn-success pull-right add-comment-button"><i class="fa fa-plus"></i> Comment</button>
+              </div>
+            </div>
+            <!-- comment media -->
+            <div class="media">
+              <div class="media-left">
+                <a href="#">
+                  <img class="media-object" src="https://avatars3.githubusercontent.com/u/885279?v=3&amp;s=64" alt="...">
+                </a>
+              </div>
+              <div class="media-body">
+                <h4 class="media-heading"><a href="#" class="username bold text-g">@username</a></h4>
+                <p class="comment-text">Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
+              </div>
+            </div>
+            <!-- media -->
+            <div class="user-vote-action-wrapper">
+              <span class="user-image-wrapper">
+                <a href="#"><img alt="elvarb" class="profile-image" src="https://avatars3.githubusercontent.com/u/885279?v=3&amp;s=80"></a>
+                <a href="#"><img alt="elvarb" class="profile-image" src="https://avatars3.githubusercontent.com/u/939704?v=3&amp;s=80"></a>
+              </span>
+              <span class="action"> +1'ed</span>
+            </div>
+            <!-- user vote action wrapper -->
+            <div class="user-vote-action-wrapper">
+              <span class="user-image-wrapper">
+                <a href="#"><img alt="elvarb" class="profile-image" src="https://avatars3.githubusercontent.com/u/885279?v=3&amp;s=80"></a>
+                <a href="#"><img alt="elvarb" class="profile-image" src="https://avatars3.githubusercontent.com/u/939704?v=3&amp;s=80"></a>
+              </span>
+              <span class="action"> -1'ed</span>
+            </div>
+            <!-- user vote action wrapper -->
+            <div class="media">
+              <div class="media-left">
+                <a href="#">
+                  <img class="media-object" src="https://avatars3.githubusercontent.com/u/1716457?v=3&amp;s=64" alt="...">
+                </a>
+              </div>
+              <div class="media-body">
+                <h4 class="media-heading"><a href="#" class="username bold text-g">@username</a></h4>
+                <p class="comment-text">Cras sit amet nibh libero, in gravida nulla. Nulla vel metus sceler verra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
+              </div>
+            </div>
+            <!-- media -->
+          </div>
+          <!-- comment wrapper -->
+        </div>
+        <!-- col -->
+        <div class="col-xs-12 col-sm-3 col-lg-4">
+          
         </div>
       </div>
       <!-- row -->
     </div>
     <!-- container fluid -->
+    <footer>
+      <div class="container">
+        <ul class="footer-nav pull-right">
+          <li><span class="linkless">Built by the following geniuses:</span></li>
+          <li><a class="footer-link" href="#">Genius 1</a></li>
+          <li><a class="footer-link" href="#">Genius 2</a></li>
+          <li><a class="footer-link" href="#">Genius 3</a></li>
+        </ul>
+      </div>
+    </footer>
   </body>
 </html>

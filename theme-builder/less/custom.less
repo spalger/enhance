@@ -119,6 +119,52 @@
 	height: 13px;
 }
 
+//Footer
+
+@footer-base-color: #DEDEDE;
+footer{
+	margin-top: 50px;
+	background-image: linear-gradient(lighten(@footer-base-color, 20%), lighten(@footer-base-color, 5%));
+	border-bottom: 1px solid darken(@footer-base-color, 3%);
+	border-top: 1px solid lighten(@footer-base-color, 3%);
+	border-left: 1px solid lighten(@footer-base-color, 3%);
+	border-right: 1px solid darken(@footer-base-color, 3%);
+	border-radius: 0px;
+}
+
+footer ul.footer-nav{
+	list-style-type: none;
+	margin: 0px;
+	padding: 0px;
+}
+
+footer .footer-nav li{
+	float: left;
+}
+
+footer .footer-nav li .linkless{
+	padding: 10px 15px;
+	display: inline-block;
+}
+
+footer .footer-nav a.footer-link{
+	display: inline-block;
+	color: @gray-darker;
+	padding: 10px 15px;
+	border-left: 1px solid lighten(@footer-base-color, 30%);
+	border-right: 1px solid darken(@footer-base-color, 1%);
+}
+
+footer .footer-nav a.footer-link:hover,
+footer .footer-nav a.footer-link:active,
+footer .footer-nav a.footer-link.active{
+	text-decoration: none;
+	color: lighten(@gray-darker, 20%);
+	background-image: linear-gradient(lighten(@footer-base-color, 5%), lighten(@footer-base-color, 20%));
+	// border-left: 1px solid lighten(@footer-base-color, 3%);
+	border-right: 1px solid darken(@footer-base-color, 3%);
+}
+
 // Issues List
 
 .issue-list-item{
@@ -244,21 +290,20 @@
 	margin-top: 10px;
 }
 
-.vote-box.totals{
-	background-color: @gray-lighter;
-	border: 1px solid @gray-light;
-	padding: 10px;
+.arrow-box{
+	width: 70px;
+	float: left;
+	text-align: center;
 }
 
-.vote-box a{
+.arrow-box a{
 	display: block;
 	margin: 0;
 	padding: 0;
-	line-height: .6;
-	height: 30px;
+	line-height: .5;
 }
 
-.vote-box .big-vote{
+.arrow-box .big-vote{
 	font-size: 50px;
 }
 
@@ -272,6 +317,8 @@
 	float: left;
 	margin-left: 20px;
 	margin-top: 20px;
+	padding-left: 20px;
+	border-left: 3px solid @gray-lighter;
 }
 
 .detailed-issue-title{
@@ -285,22 +332,165 @@
 	clear: both;
 	margin-top: 15px;
 	padding-top: 15px;
+	margin-bottom: 15px;
+	padding-bottom: 15px;
 	border-top: 1px solid @gray-lighter;
+	border-bottom: 1px solid @gray-lighter;
+}
+
+.participants-wrapper{
+	margin-top: 20px;
 }
 
 // -- Right Column
 
 .profile-image{
-	width: 30px;
-	height: 30px;
+	width: 20px;
+	height: 20px;
+}
+
+// Comment Section
+
+img.media-object{
+	width: 64px;
+	height: 64px;
+	margin-right: 10px;
+	background-color: #FFFFFF;
+	border: 1px solid darken(@gray-lighter, 20%);
+}
+
+.media-heading a:hover{
+	text-decoration: none;
+}
+
+.comment-text{
+	color: @gray-light;
+	font-size: 14px;
+	line-height: 1.45;
+}
+
+.comment-wrapper .media{
+	margin: 0;
+	padding: 10px;
+	background-image: linear-gradient(lighten(@navbar-default-bg, 1%), darken(@navbar-default-bg, 1%));
+	border-bottom: 1px solid darken(@gray-lighter, 3%);
+	border-top: 1px solid lighten(@gray-lighter, 3%);
+	border-left: 1px solid lighten(@gray-lighter, 3%);
+	border-right: 1px solid darken(@gray-lighter, 3%);		
+	clear: both;
+}
+
+.comment-wrapper .media.comment-media{
+	margin: 0;
+	padding: 10px;
+	background-image: linear-gradient(lighten(#333333, 20%), lighten(#333333, 5%));
+	border-bottom: 1px solid darken(#333333, 3%);
+	border-top: 1px solid lighten(#333333, 3%);
+	border-left: 1px solid lighten(#333333, 3%);
+	border-right: 1px solid darken(#333333, 3%);		
+	clear: both;
+}
+
+.comment-wrapper{
+	border: 1px solid darken(@gray-lighter, 5%);
+	// background-color: @gray-lighter;
+	border-radius: 2px;
+}
+
+.comment-wrapper .user-vote-action-wrapper{
+	margin: 0;
+	padding: 10px;
+	background-image: linear-gradient(lighten(@navbar-default-bg, 2%), darken(@navbar-default-bg, 2%));	
+	//background-image: linear-gradient(lighten(@navbar-default-bg, 1%), darken(@navbar-default-bg, 1%));
+	border-bottom: 1px solid darken(@gray-lighter, 3%);
+	border-right: 1px solid darken(@gray-lighter, 3%);	
+	border-top: 1px solid lighten(@gray-lighter, 3%);
+	border-left: 1px solid lighten(@gray-lighter, 3%);
+	clear: both;
+}
+
+.comment-wrapper .user-vote-action-wrapper img{
+	border: 1px solid darken(@gray-lighter, 20%);	
+}
+
+.comment-wrapper .user-vote-action-wrapper .action{
+	color: @gray-light;
+	margin-left: 20px;
+}
+
+.comment-wrapper .comment-toolbar{
+	background-color: #111111;
+	background-image: linear-gradient(lighten(#222222, 20%), lighten(#222222, 10%));	
+	overflow: hidden;
+}
+
+.add-comment-button{
+	margin-top: 15px;
+}
+
+.comment-wrapper .tool-list{
+	list-style-type: none;
+	overflow: hidden;
+	margin: 0;
+}
+
+.comment-wrapper .tool-list li{
+	float: right;
+	margin: none;
+}
+
+.comment-wrapper .tool-list li a{
+	padding-top: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	padding-right: 10px;
+	display: block;
+	color: #FFFFFF;
+	border-left: 1px solid lighten(#111111, 20%);
+}
+
+.comment-wrapper .tool-list li a:hover,
+.comment-wrapper .tool-list li a:active,
+.comment-wrapper .tool-list li a.active{
+	text-decoration: none;
+	color: #EFEFEF;
+	background-image: linear-gradient(lighten(#222222, 25%), lighten(#222222, 15%));		
 }
 
 
-
 @media (max-width: @screen-sm-min) {
+	.participants-wrapper{
+		border-top: 1px solid @gray-lighter;
+		padding-top: 5px;
+	}
+
+	.vote-box{
+		margin-top: 20px;
+	}
+
+	.arrow-box{
+		width: 50px;
+		float: left;
+		text-align: left;
+		margin-top: 10px;
+	}
+
+	.issue-detail-box{
+		clear: both;
+		margin-left: 0px;
+		margin-top: 20px;
+		padding-left: 0px;
+		border: none;
+	}
+
+
 	.profile-image{
 		width: 20px;
 		height: 20px;
+	}
+
+	.description-wrapper .lead{
+		font-size: 16px;
 	}
 }
 
