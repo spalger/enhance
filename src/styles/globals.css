@@ -7459,3 +7459,8 @@ img.media-object {
   padding: 5px;
   width: 200px;
 }
+
+.detail-view .row {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
