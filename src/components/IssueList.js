@@ -49,7 +49,7 @@ export default component({
       return (
         li({class: 'list-group-item issue-list-item'},
           popularity,
-          div({class: 'col-xs-8 table-centered'},
+          div({class: 'col-xs-offset-1 col-xs-5 table-centered'},
             h3({class: 'issue-name'},
               a({href: '/#/issue/' + issue.number}, issue.title)
             ),
