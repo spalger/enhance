@@ -22,7 +22,7 @@ export default component({
     this.bindTo(RequestStore, 'route')
     this.bindTo(IssueStore, 'issues')
 
-    IssueActions.fetch()
+    IssueActions.fetchAll()
 
     log.msg('@TODO load issues -- IssueList.js')
   },

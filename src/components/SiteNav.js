@@ -9,7 +9,7 @@ export default component({
     this.handlers = {
       voteActive: _.exec(this, 'makeActive', 'Vote'),
       createActive: _.exec(this, 'makeActive', 'Create'),
-      setupActive: _.exec(this, 'makeActive', 'Setup')
+      aboutActive: _.exec(this, 'makeActive', 'About')
     }
   },
 
@@ -39,7 +39,7 @@ export default component({
     var navLinks = [
       li({ onClick: this.handlers.voteActive, class: getClass('Vote')},
         a({class: 'bold', href: '#/'},
-          i({class: 'fa fa-sort'}),
+          i({class: 'fa fa-check'}),
           span({class: 'hidden-xs'}, ' Vote')
         )
       ),
@@ -49,10 +49,10 @@ export default component({
           span({class: 'hidden-xs'}, ' Create Issue')
         )
       ),
-      li({ onClick: this.handlers.setupActive, class: getClass('Setup')},
-        a({class: 'bold', href: '#/setup'},
+      li({ onClick: this.handlers.aboutActive, class: getClass('About')},
+        a({class: 'bold', href: '#/about'},
           i({class: 'fa fa-cog'}),
-          span({class: 'hidden-xs'}, ' Setup')
+          span({class: 'hidden-xs'}, ' About')
         )
       ),
       li(
@@ -73,7 +73,6 @@ export default component({
     return div({class: 'navbar navbar-default navbar-static-top noselect'},
       div({class: 'container-fluid'},
         a({class: 'navbar-brand text-info bold', href: '#'},
-          i({class: 'fa fa-github'}),
           em(' ENHANCE')
         ),
         ul({class: 'nav navbar-nav pull-right'}, navLinks)
