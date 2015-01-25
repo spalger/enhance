@@ -5,7 +5,7 @@ var join = require('path').join;
 
 module.exports = function (paths, dev) {
   return {
-    devtool: dev ? 'source-map' : null,
+    // devtool: dev ? 'source-map' : null,
     context: paths.SRC,
     entry: paths.ENTRY,
     output: {

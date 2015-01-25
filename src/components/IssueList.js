@@ -7,6 +7,8 @@ import deku from 'deku'
 import RequestStore from 'stores/RequestStore'
 import IssueStore from 'stores/IssueStore'
 import IssueActions from 'actions/IssueActions'
+// import BallotActions from 'actions/BallotActions'
+import BallotStore from 'stores/BallotStore'
 
 import log from 'lib/log'
 
@@ -23,6 +25,8 @@ export default component({
     this.bindTo(IssueStore, 'issues')
 
     IssueActions.fetchAll()
+
+    BallotStore.onSync()
 
     log.msg('@TODO load issues -- IssueList.js')
   },
