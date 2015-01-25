@@ -52,7 +52,7 @@ export default Reflux.createStore({
   },
 
   onRequestLogin: function () {
-    var scope = 'public_repo,gist'
+    var scope = 'public_repo'
     function checkForFail(err) {
       if (err) UserActions.loginFailure(err)
     }
@@ -88,5 +88,9 @@ export default Reflux.createStore({
 
   getGithubToken: function() {
     return _.get(this, 'user.github.accessToken')
+  },
+
+  isLoggedIn: function () {
+    return !!this.getGithubToken()
   }
 })

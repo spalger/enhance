@@ -1,79 +1,48 @@
 import _ from 'lodash'
 import Reflux from 'reflux'
-import request from 'superagent'
-import config from 'config'
-import log from 'lib/log'
 
+import config from 'config'
+import github from 'lib/github'
+import log from 'lib/log'
 import IssueActions from 'actions/IssueActions'
 import UserStore from 'stores/UserStore'
 import issueModel from 'models/issueModel'
 
-var { apiUrl, author, repo, enhanceLabel } = config.github;
+var { author, repo, enhanceLabel } = config.github;
 var defaultPerPage = 100;
 
-function fetchIssues(options, cb) {
-  options = options || {}
-  if (typeof options === 'function') {
-    cb = options
-    options = {}
-  }
-
-  var payload = _.defaults(options, {
-    labels : [ enhanceLabel ],
+function fetchIssues(options) {
+  return github
+  .path(['repos', author, repo, 'issues'])
+  .query(_.defaults(options, {
+    labels: [ enhanceLabel ],
     per_page: defaultPerPage,
-    sort : 'updated',
-    direction : 'desc',
-  })
-
-  var r = request
-  .get([ apiUrl, 'repos', author, repo, 'issues' ].join('/'))
-  .query(payload)
-
-  // if logged in, use token
-  if (this.userToken) {
-    r = r.set('Authorization', 'token ' + this.userToken) // required token
-  }
-
-  r.end(function (err, issues) {
+    sort: 'updated',
+    direction: 'desc',
+  }))
+  .send()
+  .then(function (issues) {
     issueModel.upsert(issues);
-    cb(err, issues)
+    return issues;
   });
 }
 
 export default Reflux.createStore({
   listenables: IssueActions,
 
-  issues : [],
-
-  init() {
-    this.userToken = UserStore.getGithubToken()
-  },
+  issues: [],
 
   /* returned object keys: url, labels_url, comments_url, events_url, html_url, id, number, title,
    user, labels (array), state, locked, comments (int), created_at, updated_at, pull_request (obj)
    body */
   onFetch(options) {
-    fetchIssues(options, (error, res) => {
-      var issues;
-
-      if (error) {
-        log.error('Error getting all repo issues: ' + error);
-      }
-
-      if (res && res.body) {
-        issues = res.body
-      } else if (res && res.text) {
-        try {
-          issues = JSON.parse(res.text)
-        } catch (err) {
-          throw err
-        }
-      } else {
-        throw new Error('Could not parse response')
-      }
-
+    fetchIssues(options)
+    .then((res) => {
       // update db with any changed results
-      this.trigger(issues);
+      this.trigger(res.body);
+    })
+    .catch((err) => {
+      log.error('Error getting all repo issues:', err);
     });
   },
 
@@ -81,36 +50,24 @@ export default Reflux.createStore({
     options = options || {}
     var currentPage = options.page || 1
 
-    var _payloadBuilder = (err, res) => {
-      // TODO: store issues
-
+    return fetchIssues(options)
+    .then((res) => {
       if (res.body.length === defaultPerPage) {
         this.onPayload({ page: currentPage+1 })
       }
-    }
-
-    fetchIssues(options, _payloadBuilder);
+    });
   },
 
   onCreate(title, body) {
-
-    if (! this.userToken) {
+    if (!UserStore.isLoggedIn()) {
       return log.error('Login required');
     }
 
-    request
-      .post([ apiUrl, 'repos', author, repo, 'issues' ] .join('/'))
-      .send({ title: title, body : body })
-      .set('Authorization', 'token ' + this.userToken) // required token
-      .end(function(error, res) {
-        if (error) {
-          log.error('Error creating an issue: ' + error);
-        }
-
-        if (res) {
-          log.success('Issue created');
-        }
-      });
+    return github
+    .path(['repos', author, repo, 'issues'])
+    .method('post')
+    .body({ title: title, body: body })
+    .send();
   },
 
   onSearch(keyboardEvent) {

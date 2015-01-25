@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import Promise from 'bluebird'
+import log from 'lib/log'
 import pathToRegexp from 'path-to-regexp'
 import RouteActions from 'actions/RouteActions'
 
@@ -80,12 +81,11 @@ class Router {
           return Promise.try(route.handler, [req]).then(next)
         }
 
-        let view = document.getElementById('app-container')
-        view.innerHTML = route.template || ''
-        break
+        RouteActions.request(req)
+        return;
       }
 
-      RouteActions.request(req)
+      log.error('unhandled request', req);
     }
 
     return Promise.try(next)

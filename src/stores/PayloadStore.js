@@ -1,163 +1,111 @@
 import _ from 'lodash'
-import moment from 'moment'
 import Reflux from 'reflux'
-import request from 'superagent'
-import config from 'config'
-import log from 'lib/log'
-import Promise from 'bluebird'
 
+import config from 'config'
+import github from 'lib/github'
+import log from 'lib/log'
 import PayloadActions from 'actions/PayloadActions'
 import UserStore from 'stores/UserStore'
+import UserActions from 'stores/UserStore'
 
-var { apiUrl } = config.github;
-var { payloadId } = config;
+var payloadId = config.payload.id;
+var FILENAME = 'enhance.payload.json';
 
 export default Reflux.createStore({
   listenables: PayloadActions,
 
-  payload : [],
-
-  _create(payload) {
-    var token = UserStore.getGithubToken()
-    if (! token) {
-      return log.error('Login required')
-    }
-
-    request
-      .post([ apiUrl, 'gists'] .join('/'))
-      .send(this._basicGistObject(payload, 'create'))
-      .set('Authorization', 'token ' + token) // required token
-      .end((error, res) => {
-        if (res && _.isEqual(res.status, 201)) {
-          var parsed = this._parseResponse(res)
-          if (parsed) {
-            log.success('Please add this payloadId to /src/config.js: ', parsed.id)
-          }
-        } else {
-          log.error('Error creating an issue', error)
-        }
-      });
-  },
-
-  _parseResponse(res) {
-    try {
-      return JSON.parse(res.text)
-    } catch (e) {
-      log.error('Unable to parse response on update payload')
-    }
-  },
-
-  _basicGistObject(payload, type) {
-    var gistObject = { files : {} }
-    var filename = moment().format('MM-DD-YYYY-hh-mm-ss') + '_enhance.json'
-    gistObject.files[filename] = { content : payload }
-
-    if (_.isEqual(type, 'create')) {
-      gistObject.public = true
-    }
-
-    return gistObject
-  },
-
-  _update(payload) {
-    var token = UserStore.getGithubToken()
-    if (! token) {
-      return log.error('Login required')
-    }
-
-    var gistObject = this._basicGistObject(payload, 'update')
-
-    this._getInfo()
-    .then((gistInfo) => {
-      var oldFile = this._getFileObjectFromGistInfo(gistInfo)
-      if (oldFile) {
-        gistObject.files[oldFile.filename] = null // delete the old file if it exists
-      }
-
-      request
-        .patch([ apiUrl, 'gists', payloadId] .join('/'))
-        .send(gistObject)
-        .set('Authorization', 'token ' + token) // required token
-        .end(function(error, res) {
-          if (res && _.isEqual(res.status, 200)) {
-            log.success('Updated payload')
-          } else {
-            log.error('Error creating an issue', error)
-          }
-        });
-    })
-  },
+  payload: [],
 
   onSync(payload) {
     // create payload for first time if no id in config
     return payloadId ? this._update(payload) : this._create(payload)
   },
 
+  // get the gist raw url, then load the raw gist data
   onGet() {
-    // get the gist raw url, then load the raw gist data
-    return this._getInfo()
-    .then((gistInfo) => {
-      var fileObject = this._getFileObjectFromGistInfo(gistInfo);
-
-      if (fileObject) {
-        return this._getRaw(fileObject)
-        .then((rawGist) => {
-          return rawGist
-        });
-      }
-
-      return;
+    return this._getGistPayload()
+    .then(this._getRaw)
+    .then((payload) => {
+      this.trigger(payload);
+    })
+    .catch((err) => {
+      log.error('Failed to fetch payload data')
+      throw err;
     })
   },
 
-  _getFileObjectFromGistInfo(gistInfo) {
-    try {
-      return _.toArray(gistInfo.files).pop()
-    } catch (e) {
-      log.error('Unable to get old payload filename');
+  _basicGistObject(payload) {
+    return {
+      files: {
+        [FILENAME]: {
+          content: payload
+        }
+      }
     }
   },
 
-  _getInfo() {
-    var token = UserStore.getGithubToken()
-    if (! payloadId) {
-      log.msg('No payloadId specified in /src/config.js')
-      return
+  _create(payload) {
+    if (!UserStore.isLoggedIn()) {
+      return UserActions.requireLogin();
     }
 
-    return new Promise((res, rej) => {
-      request
-        .get([ apiUrl, 'gists', payloadId] .join('/'))
-        .set('Authorization', 'token ' + token) // @ todo not required
-        .end((error, response) => {
-          if (response && _.isEqual(response.status, 200)) {
-            var parsed = this._parseResponse(response);
+    var gistBody = _.assign(
+      this._basicGistObject(payload),
+      { public: true }
+    );
 
-            if (parsed) {
-              log.success('Gist metadata fetched successfully');
-              return res(parsed)
-            }
-          } else {
-            log.error('Error getting gist: ' + error);
-            return rej()
-          }
-        });
+    return github
+    .path(['gists'])
+    .method('post')
+    .scopes('gist')
+    .body(gistBody)
+    .then((res) => {
+      log.success('Please add this payloadId to /src/config.js: ', res.body.id)
+    })
+    .catch((err) => {
+      log.error('Error creating an issue', err)
     });
   },
 
-  _getRaw(fileObject) {
-    return new Promise((res, rej) => {
-      request
-        .get(fileObject.raw_url)
-        .end(function(error, raw) {
-          if (raw) {
-            log.success('Raw gist loaded')
-            return res(raw)
-          } else {
-            log.error('Error getting gist: ' + error)
-            return rej()
-          }
-        });
+  _update(fileContents) {
+    if (!UserStore.isLoggedIn()) {
+      return UserActions.requireLogin();
+    }
+
+    var gistBody = this._basicGistObject(fileContents);
+    return github
+    .path(['gists', payloadId])
+    .method('patch')
+    .scopes('gist')
+    .body(gistBody)
+    .then(() => {
+      log.success('Updated payload');
     })
+    .catch((err) => {
+      log.error('Error creating an issue', err);
+    });
+  },
+
+  _getGistPayload() {
+    return github
+    .path(['gists', payloadId])
+    .send()
+    .catch(function (err) {
+      log.error('Error getting gist:', err);
+      throw err;
+    });
+  },
+
+  _getRaw(resp) {
+    return github
+    .url(resp.body.files[FILENAME].raw_url)
+    .auth(false)
+    .then(function (resp) {
+      return resp.text;
+    })
+    .catch(function (err) {
+      log.error('Error getting gist body:', err)
+      throw err
+    });
   }
 })

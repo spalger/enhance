@@ -8,5 +8,7 @@ export default {
   storage: {
     index: 'enhance-store'
   },
-  payloadId : '3ac4ad4b20f5d49750d1'
+  payload: {
+    id: null
+  }
 }
