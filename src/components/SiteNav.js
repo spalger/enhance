@@ -3,6 +3,7 @@ import deku from 'deku'
 import component from 'lib/component'
 import UserBadge from 'components/UserBadge'
 import UserStore from 'stores/UserStore'
+import ProjectName from 'components/ProjectName'
 
 export default component({
   constructor() {
@@ -73,7 +74,8 @@ export default component({
     return div({class: 'navbar navbar-default navbar-static-top noselect'},
       div({class: 'container-fluid'},
         a({class: 'navbar-brand text-info bold', href: '#'},
-          em(' ENHANCE')
+          em(' ENHANCE'),
+          deku.dom(ProjectName)
         ),
         ul({class: 'nav navbar-nav pull-right'}, navLinks)
       )

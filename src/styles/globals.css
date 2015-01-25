@@ -7443,3 +7443,7 @@ img.media-object {
 .show-comment-box {
   display: block !important;
 }
+.browsing {
+  font-size: 12px;
+  padding-left: 15px;
+}
