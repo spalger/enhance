@@ -1,6 +1,6 @@
 {
   "name": "ss15-enhance",
-  "root": "./",
+  "root": "./build",
   "clean_urls": true,
   "error_page": "error.html"
 }

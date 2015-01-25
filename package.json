@@ -4,7 +4,9 @@
   "description": "enhance",
   "main": "index.js",
   "scripts": {
-    "dev": "gulp server"
+    "dev": "gulp server",
+    "build": "rm -Rf build && gulp build && cp -r src/index.html src/styles src/fonts build",
+    "deploy": "npm run build && divshot deploy"
   },
   "repository": {
     "type": "git",

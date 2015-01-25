@@ -74,6 +74,15 @@ gulp.task('server', function (done) {
   });
 });
 
+gulp.task('build', function (done) {
+  var packer = getPacker(false);
+  packer.run(function (err, stats) {
+    if (err) done(gutil.error(new gutil.PluginError('webpack', err)));
+    if (stats.hasErrors() || stats.hasWarnings()) done(gutil.error(stats.toString()));
+    done();
+  });
+});
+
 gulp.task('lint', function () {
   return gulp.src(resolve(paths.SRC, '**/*.js'))
     .pipe(jshint({ linter: require('jshint') }))
