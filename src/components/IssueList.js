@@ -8,8 +8,6 @@ import RequestStore from 'stores/RequestStore'
 import IssueStore from 'stores/IssueStore'
 // import PopularityStore from 'stores/PopularityStore'
 import IssueActions from 'actions/IssueActions'
-// import BallotActions from 'actions/BallotActions'
-import BallotStore from 'stores/BallotStore'
 
 export default component({
   initialState() {
@@ -25,11 +23,6 @@ export default component({
     //this.listenTo(PopularityStore, this.addScores, this.addScores)
 
     IssueActions.fetchAll()
-    BallotStore.onSync()
-  },
-
-  addScores(scores) {
-
   },
 
   getIssues(dom, state) {
