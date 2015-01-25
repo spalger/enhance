@@ -35,7 +35,7 @@ export default component({
       div({class: 'container-fluid'},
         a({class: 'navbar-brand text-info bold', href: '#'},
           i({class: 'fa fa-github'}),
-          em('ENHANCE')
+          em(' ENHANCE')
         ),
         ul({class: 'nav navbar-nav pull-right'},
           li({ onClick : this.handlers.voteActive, class: getClass('Vote')},
