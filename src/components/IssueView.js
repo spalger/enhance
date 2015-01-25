@@ -1,5 +1,7 @@
 import component from 'lib/component'
 
+// import IssueStore from 'stores/IssueStore'
+// import CommentStore from 'stores/CommentStore'
 import RequestStore from 'stores/RequestStore'
 
 import log from 'lib/log'
@@ -13,6 +15,8 @@ export default component({
 
   afterMount() {
     this.bindTo(RequestStore, 'route')
+    // this.bindTo(IssueStore, 'issue')
+    // this.bindTo(CommentStore, 'comments')
 
     log.msg('@TODO load issues -- IssueList.js')
   },

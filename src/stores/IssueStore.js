@@ -14,7 +14,7 @@ var defaultPerPage = 100;
 function fetchIssues(options) {
   return github
   .path(['repos', author, repo, 'issues'])
-  .query(_.defaults(options, {
+  .query(_.defaults(options || {}, {
     labels: [ enhanceLabel ],
     per_page: defaultPerPage,
     sort: 'updated',
@@ -39,7 +39,7 @@ export default Reflux.createStore({
     fetchIssues(options)
     .then((res) => {
       // update db with any changed results
-      this.trigger(res.body);
+      this.trigger(res);
     })
     .catch((err) => {
       log.error('Error getting all repo issues:', err);
