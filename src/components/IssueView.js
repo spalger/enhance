@@ -1,5 +1,6 @@
 import component from 'lib/component'
 import _ from 'lodash'
+import deku from 'deku'
 
 import IssueStore from 'stores/IssueStore'
 import CommentStore from 'stores/CommentStore'
@@ -9,7 +10,7 @@ import RequestStore from 'stores/RequestStore'
 import IssueActions from 'actions/IssueActions'
 import CommentActions from 'actions/CommentActions'
 
-import marked from 'lib/marked'
+import Markdown from 'Markdown'
 
 import log from 'lib/log'
 
@@ -75,7 +76,10 @@ export default component({
               comment.user.login
             )
           ),
-          div({class: 'comment-text' }, marked.parse(comment.body))
+          div(
+            { class: 'comment-text' },
+            deku.dom(Markdown, { markdown: comment.body })
+          )
         )
       )
     })
@@ -222,8 +226,8 @@ export default component({
           div({class: 'comment-toolbar'},
             ul({class: 'tool-list'},
               li(
-                a( { onClick : this.submitComment.bind(null, state) },
-                  i({class: 'fa fa-plus'}, ' Add Comment')
+                a({ onClick: this.submitComment.bind(null, state) },
+                  i({ class: 'fa fa-plus' }, ' Add Comment')
                 )
               )
             )
