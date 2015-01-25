@@ -6964,6 +6964,14 @@ a.text-gdr {
 .background-danger {
   background-color: #df3e3e;
 }
+html,
+body {
+  height: 100%;
+}
+body {
+  display: flex;
+  flex-direction: column;
+}
 a {
   cursor: pointer;
 }
@@ -7009,6 +7017,19 @@ a {
 }
 .float-fix {
   overflow: hidden;
+}
+site-nav,
+site-footer {
+  flex: 0 0 auto;
+}
+enhance-app {
+  flex: 1 1 auto;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+enhance-app > * {
+  flex: 1 0 auto;
 }
 .panel.login-panel {
   margin-top: 100px;
