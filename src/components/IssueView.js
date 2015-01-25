@@ -178,7 +178,7 @@ export default component({
 
     return (
       div({class: 'comment-media media' + commentBoxClass },
-        image,
+        div({class: 'media-left'}, image),
         div({class: 'media-body'},
           h4({class: 'media-heading'},
             a({class: 'username bold text-glr'}, username)
