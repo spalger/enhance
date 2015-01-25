@@ -63,7 +63,7 @@ export default Reflux.createStore({
       log.success('Please add this payloadId to /src/config.js: ', res.body.id)
     })
     .catch((err) => {
-      log.error('Error creating an issue', err)
+      log.error('Error creating gist', err)
     });
   },
 
@@ -82,7 +82,7 @@ export default Reflux.createStore({
       log.success('Updated payload');
     })
     .catch((err) => {
-      log.error('Error creating an issue', err);
+      log.error('Error updating gist', err);
     });
   },
 
