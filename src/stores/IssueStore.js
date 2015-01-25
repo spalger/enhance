@@ -22,8 +22,8 @@ function fetchIssues(options) {
   }))
   .send()
   .then(function (issues) {
-    issueModel.upsert(issues);
-    return issues;
+    issueModel.upsert(issues.body);
+    return issues.body;
   });
 }
 
