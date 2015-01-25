@@ -18,19 +18,17 @@ export default Reflux.createStore({
 
   onPersist(payload) {
     // create payload for first time if no id in config
-    return payloadId ? this._update(payload) : this._create(payload)
+    PayloadActions.persist.promise(payloadId ? this._update(payload) : this._create(payload))
   },
 
   // get the gist raw url, then load the raw gist data
   onGet() {
-    return this._getGistPayload()
-    .then(this._getRaw)
-    .then((payload) => {
-      this.trigger(payload);
-    })
-    .catch((err) => {
-      log.error('Failed to fetch payload data', err)
-    })
+    var res = this._getGistPayload().then(this._getRaw)
+    PayloadActions.get.promise(res)
+  },
+
+  onGetCompleted(payload) {
+    this.trigger(payload)
   },
 
   _create(payload) {
@@ -43,17 +41,11 @@ export default Reflux.createStore({
       { public: true }
     );
 
-    return github
+    return github .method('post')
     .path(['gists'])
-    .method('post')
     .scopes('gist')
     .body(gistBody)
-    .then((res) => {
-      log.success('Please add this payloadId to /src/config.js: ', res.body.id)
-    })
-    .catch((err) => {
-      log.error('Error creating gist', err)
-    });
+    .send()
   },
 
   _update(payload) {
@@ -62,17 +54,12 @@ export default Reflux.createStore({
     }
 
     var gistBody = this._basicGistObject(payload);
-    return github
+
+    return github .method('patch')
     .path(['gists', payloadId])
-    .method('patch')
     .scopes('gist')
     .body(gistBody)
-    .then(() => {
-      log.success('Updated payload');
-    })
-    .catch((err) => {
-      log.error('Error updating gist', err);
-    });
+    .send()
   },
 
   _basicGistObject(payload) {

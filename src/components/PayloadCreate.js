@@ -13,17 +13,25 @@ export default component({
     this.listenTo(PayloadStore, function (payload) {
       log.msg('payload', payload)
     })
+    this.listenTo(PayloadActions.get.failed, function (err) {
+      log.error('Failed to load payload data', err)
+    })
+  },
+
+  persistPayload() {
+    var payload = IssueActions.fetchAll()
+
   },
 
   getPayload() {
-    IssueActions.payload()
+    PayloadActions.get()
   },
 
   render() {
     var { div, button } = this.dom
     return div(
       button({ onClick: _.bindKey(PayloadActions, 'persist', '{ "key": "value" }')}, 'Create payload'),
-      button({ onClick: _.bindKey(PayloadActions, 'get') }, 'Fetch payload')
+      button({ onClick: this.getPayload }, 'Fetch payload')
     )
   }
 })

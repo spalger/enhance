@@ -1,6 +1,8 @@
 import Reflux from 'reflux'
 
-export default Reflux.createActions([
-  'persist',
-  'get'
-])
+var actions = Reflux.createActions({
+  'persist': { asyncResult: true },
+  'get': { asyncResult: true }
+})
+
+export default actions
