@@ -11,10 +11,10 @@ CustomElement.register('site-footer', require('Footer'));
 CustomElement.register('logout-button', require('LogoutButton'));
 CustomElement.register('create-issue', require('CreateIssue'));
 CustomElement.register('thank-you', require('ThankYou'));
+CustomElement.register('payload-create', require('PayloadCreate'));
 
 // dev elements
 CustomElement.register('site-devnav', require('siteNavDev.html'));
 
 // custom extensions extend current html elements
 require('LoginLink').register('a', 'login-link')
-require('PayloadCreate').register('a', 'payload-create')
