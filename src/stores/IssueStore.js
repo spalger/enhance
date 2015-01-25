@@ -6,26 +6,10 @@ import github from 'lib/github'
 import log from 'lib/log'
 import IssueActions from 'actions/IssueActions'
 import UserStore from 'stores/UserStore'
+import UserActions from 'actions/UserActions'
 import issueModel from 'models/issueModel'
 
 var { org, repo, enhanceLabel } = config.github;
-var defaultPerPage = 100;
-
-function fetchIssues(options) {
-  return github
-  .path(['repos', org, repo, 'issues'])
-  .query(_.defaults(options || {}, {
-    labels: [ enhanceLabel ],
-    per_page: defaultPerPage,
-    sort: 'updated',
-    direction: 'desc',
-  }))
-  .send()
-  .then(function (issues) {
-    issueModel.upsert(issues.body);
-    return issues.body;
-  });
-}
 
 export default Reflux.createStore({
   listenables: IssueActions,
@@ -33,18 +17,24 @@ export default Reflux.createStore({
   issues: [],
 
   issue : {}, // single issue loaded on detail page
+  defaultPerPage: 100,
 
   /* returned object keys: url, labels_url, comments_url, events_url, html_url, id, number, title,
    user, labels (array), state, locked, comments (int), created_at, updated_at, pull_request (obj)
    body */
   onFetch(options) {
-    fetchIssues(options)
+    this._fetchIssues(options)
     .then((res) => {
       // update db with any changed results
       this.trigger(res);
     })
     .catch((err) => {
-      log.error('Error getting all repo issues', err);
+      if(err.resp && err.resp.status && err.resp.status === 403) {
+        log.error('Error getting issues, you have reached the Github rate limit. Please login to continue');
+        UserActions.requireLogin();
+      } else {
+        log.error('Error getting issues', err);
+      }
     });
   },
 
@@ -52,27 +42,43 @@ export default Reflux.createStore({
     // @todo should this pull from issueModel versus making a request?
     return github
     .path(['repos', org, repo, 'issues', issueId])
-    .send()
     .then((issue) => {
       this.issue = issue.body;
       this.trigger(this.issue);
     })
-    .catch(() => {
-      log.error('Unable to fetch issue');
-      IssueActions.fetchByIdFailed(issueId);
+    .catch((err) => {
+      if(err.resp && err.resp.status && err.resp.status === 403) {
+        log.error('Error getting issue, you have reached the Github rate limit. Please login to continue')
+        UserActions.requireLogin()
+      } else {
+        log.error('Unable to fetch issue');
+        IssueActions.fetchByIdFailed(issueId);
+      }
     })
   },
 
-  onPayload(options) {
-    options = options || {}
-    var currentPage = options.page || 1
+  // recursive method to fetch all issues using IssueStore
+  onFetchAll(options) {
+    var self = this;
+    var allIssues = [];
+    options = _.defaults(options || {}, { page: 1 })
 
-    return fetchIssues(options)
-    .then((res) => {
-      if (res.body.length === defaultPerPage) {
-        this.onPayload({ page: currentPage+1 })
-      }
-    });
+    function fetch() {
+      return self._fetchIssues(options)
+      .then((issues) => {
+        allIssues = allIssues.concat(issues)
+        if (issues.length === self.defaultPerPage) {
+          ++options.page
+          return fetch()
+        }
+      })
+    }
+
+    return fetch()
+    .then(function () {
+      this.trigger(allIssues)
+      return allIssues
+    })
   },
 
   onCreate(title, body) {
@@ -101,5 +107,22 @@ export default Reflux.createStore({
     });
 
     log.info('Search results: ', returnedIssues.length);
+  },
+
+  _fetchIssues(options) {
+    return github
+    .path(['repos', org, repo, 'issues'])
+    .query(_.defaults(options || {}, {
+      labels: [ enhanceLabel ],
+      per_page: this.defaultPerPage,
+      sort: 'updated',
+      direction: 'desc',
+    }))
+    .then(function (issues) {
+      return issueModel.upsert(issues.body)
+      .then(function () {
+        return issues.body
+      });
+    });
   }
 })

@@ -27,7 +27,8 @@ export default component({
       upvotes : [],
       downvotes : [],
       user: UserStore.user,
-      newComment: '' // new user comment from textarea
+      newComment: '', // new user comment from textarea
+      showCommentBox : false
     };
   },
 
@@ -173,8 +174,10 @@ export default component({
       );
     }
 
+    var commentBoxClass = state.showCommentBox ? ' show-comment-box' : '';
+
     return (
-      div({class: 'comment-media media'},
+      div({class: 'comment-media media' + commentBoxClass },
         image,
         div({class: 'media-body'},
           h4({class: 'media-heading'},
@@ -222,6 +225,10 @@ export default component({
         i({class: 'fa fa-caret-down ' + downvoteClass, onClick: this.downvote.bind(null, state)})
       )
     )
+  },
+
+  toggleCommentBox(state) {
+    this.setState({ showCommentBox : ! state.showCommentBox })
   },
 
   render(props, state) {
@@ -279,8 +286,8 @@ export default component({
         div({class: 'comment-wrapper'},
           div({class: 'comment-toolbar'},
             ul({class: 'tool-list'},
-              li(
-                a({ onClick: this.submitComment.bind(null, state) },
+              li({ onClick: this.toggleCommentBox.bind(null, state) },
+                a(
                   i({ class: 'fa fa-plus' }, ' Add Comment')
                 )
               )

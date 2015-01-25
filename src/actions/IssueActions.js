@@ -2,7 +2,7 @@ import Reflux from 'reflux'
 
 export default Reflux.createActions([
   'fetch',
-  'payload',
+  'fetchAll',
   'create',
   'search',
   'fetchById',

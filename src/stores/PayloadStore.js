@@ -4,9 +4,13 @@ import Reflux from 'reflux'
 import config from 'config'
 import github from 'lib/github'
 import log from 'lib/log'
+
 import PayloadActions from 'actions/PayloadActions'
-import UserStore from 'stores/UserStore'
+
 import UserActions from 'actions/UserActions'
+import UserStore from 'stores/UserStore'
+
+import IssueStore from 'stores/IssueStore'
 
 var payloadId = config.payload.id;
 var FILENAME = 'enhance.payload.json';
@@ -16,31 +20,27 @@ export default Reflux.createStore({
 
   payload: [],
 
-  onSync(payload) {
+  onGenerate() {
+    var payload = IssueStore.onFetchAll()
+    // .then((issues) => {
+    //   // append comments using the ballot sync
+    // })
+    PayloadActions.generate.promise(payload)
+  },
+
+  onSave(payload) {
     // create payload for first time if no id in config
-    return payloadId ? this._update(payload) : this._create(payload)
+    PayloadActions.save.promise(payloadId ? this._update(payload) : this._create(payload))
   },
 
   // get the gist raw url, then load the raw gist data
   onGet() {
-    return this._getGistPayload()
-    .then(this._getRaw)
-    .then((payload) => {
-      this.trigger(payload);
-    })
-    .catch((err) => {
-      log.error('Failed to fetch payload data')
-    })
+    var res = this._getGistPayload().then(this._getRaw)
+    PayloadActions.get.promise(res)
   },
 
-  _basicGistObject(payload) {
-    return {
-      files: {
-        [FILENAME]: {
-          content: payload
-        }
-      }
-    }
+  onGetCompleted(payload) {
+    this.trigger(payload)
   },
 
   _create(payload) {
@@ -53,36 +53,35 @@ export default Reflux.createStore({
       { public: true }
     );
 
-    return github
+    return github .method('post')
     .path(['gists'])
-    .method('post')
     .scopes('gist')
     .body(gistBody)
-    .then((res) => {
-      log.success('Please add this payloadId to /src/config.js: ', res.body.id)
-    })
-    .catch((err) => {
-      log.error('Error creating gist', err)
-    });
+    .send()
   },
 
-  _update(fileContents) {
+  _update(payload) {
     if (!UserStore.isLoggedIn()) {
       return UserActions.requireLogin();
     }
 
-    var gistBody = this._basicGistObject(fileContents);
-    return github
+    var gistBody = this._basicGistObject(payload);
+
+    return github .method('patch')
     .path(['gists', payloadId])
-    .method('patch')
     .scopes('gist')
     .body(gistBody)
-    .then(() => {
-      log.success('Updated payload');
-    })
-    .catch((err) => {
-      log.error('Error updating gist', err);
-    });
+    .send()
+  },
+
+  _basicGistObject(payload) {
+    return {
+      files: {
+        [FILENAME]: {
+          content: payload
+        }
+      }
+    }
   },
 
   _getGistPayload() {

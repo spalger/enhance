@@ -1,18 +1,23 @@
-// import _ from 'lodash'
-
 import component from 'lib/component'
-import IssueActions from 'actions/IssueActions'
-// import IssueStore from 'stores/IssueStore'
+import PayloadActions from 'actions/PayloadActions'
+import PayloadStore from 'stores/PayloadStore'
 
 export default component({
-  getPayload() {
-    IssueActions.payload()
+  afterMount() {
+    console.log('button mounted')
+    // PayloadActions.generate.
+  },
+
+  generate() {
+    console.log('time to generate')
+    PayloadActions.generate()
   },
 
   render() {
-    var { p, button } = this.dom
-    return p('payloadin',
-      button({ onClick: this.getPayload }, 'pay the loads')
-    )
+    var { a, i } = this.dom
+    return a({ class: 'btn btn-lg btn-default full-width context-margin', onClick: this.generate },
+      i({ class: 'fa fa-cubes' }),
+      ' Generate Project Payload'
+    );
   }
 })

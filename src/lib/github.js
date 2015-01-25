@@ -61,7 +61,6 @@ PartialReq.prototype.path = setter('url', function (val) {
   return config.github.apiUrl + '/' + val.map(encodeURIComponent).join('/')
 })
 
-
 PartialReq.prototype._getReq = function () {
   var {url, method, query, body, auth} = this.params
 

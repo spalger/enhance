@@ -28,7 +28,7 @@ export default component({
   },
 
   getIssues(dom, state) {
-    var {div, ul, li, a, img, i, p, span, h3} = dom
+    var {div, ul, li, a, img, p, span, h3} = dom
 
     if (! state.issues) {
       return deku.dom(LoadingContent)
@@ -42,16 +42,8 @@ export default component({
       return (
         li({class: 'list-group-item issue-list-item'},
           div({class: 'col-xs-2 centered shrink-gutter-left shrink-gutter-right'},
-            div(
-              a({class: 'voting-links centered'},
-                i({class: 'fa fa-caret-up'})
-              )
-            ),
-            div(
-              a({class: 'voting-links centered'},
-                i({class: 'fa fa-caret-down'})
-              )
-            ),
+            h3('Popularity'),
+            p(''),
             p({class: 'big-count'}, '100')
           ),
           div({class: 'col-xs-6 table-centered'},
