@@ -7002,6 +7002,7 @@ footer .footer-nav a.footer-link.active {
   padding-right: 10px;
 }
 .issue-profile-image img {
+  width: 50px;
   border-radius: 50%;
   border: 1px solid #eeeeee;
   display: inline;
