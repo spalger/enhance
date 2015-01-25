@@ -1,5 +1,6 @@
 import component from 'lib/component'
 import _ from 'lodash'
+import deku from 'deku'
 
 import IssueStore from 'stores/IssueStore'
 import CommentStore from 'stores/CommentStore'
@@ -9,6 +10,8 @@ import RequestStore from 'stores/RequestStore'
 import IssueActions from 'actions/IssueActions'
 import CommentActions from 'actions/CommentActions'
 
+import Markdown from 'Markdown'
+
 import log from 'lib/log'
 
 export default component({
@@ -17,6 +20,8 @@ export default component({
       route: null,
       issue: null,
       comments: null,
+      upvotes : [],
+      downvotes : [],
       user: UserStore.user,
       newComment: '' // new user comment from textarea
     };
@@ -28,8 +33,36 @@ export default component({
     this.listenTo(CommentActions.downvoteSuccess, this.rerenderView)
     this.listenTo(RequestStore, _.noop, this.routeUpdated)
     this.bindTo(IssueStore, 'issue')
-    this.bindTo(CommentStore, 'comments')
+    this.listenTo(CommentStore, this.updateComments)
     log.msg('@TODO load issues -- IssueList.js')
+  },
+
+  updateComments(comments) {
+    var votes = {};
+    var upvotePattern = /\+1/;
+    var downvotePattern = /\-1/;
+
+    _.each(comments, (comment) => {
+      if(upvotePattern.test(comment.body)) {
+        votes[comment.user.login] = { type : 'upvote', comment: comment };
+      } else if (downvotePattern.test(comment.body)) {
+        votes[comment.user.login] = { type: 'downvote', comment: comment };
+      }
+    });
+
+    var upvotes = _.filter(votes, (vote) => {
+      if (_.isEqual(vote.type, 'upvote')) {
+        return vote.comment;
+      }
+    });
+
+    var downvotes = _.filter(votes, (vote) => {
+      if (_.isEqual(vote.type, 'downvote')) {
+        return vote.comment;
+      }
+    });
+
+    this.setState({comments: comments, upvotes : _.pluck(upvotes, 'comment'), downvotes: _.pluck(downvotes, 'comment') })
   },
 
   routeUpdated(route) {
@@ -43,16 +76,38 @@ export default component({
     CommentActions.getByIssue(issueNumber)
   },
 
-  _renderFacepile() {
 
+  _renderFaces(dom, votes) {
+    var { a, img } = dom;
+    return _.map(votes, (vote) => {
+      return a(
+          img({
+            alt: vote.user.login,
+            title : vote.user.login,
+            class: 'profile-image',
+            src: 'https://avatars3.githubusercontent.com/u/' + vote.user.id + '?v=3&amp;s=80'
+          })
+        )
+    })
   },
 
-  _renderUserComment() {
 
+  _renderFacepile(dom, type, state) {
+    var { div, h5 } = dom;
+    var className = type === 'upvotes' ? 'success' : 'danger';
+    var typeOfUser = type === 'upvotes' ? '+1`ers' : '-1`ers';
+    var votes = state[type];
+
+    return div({class: 'participants-wrapper'},
+      h5({class: 'bold italic text-' + className}, typeOfUser),
+      div({class: 'facepile-container'},
+        this._renderFaces(dom, votes)
+      )
+    );
   },
 
   renderComments(dom, comments) {
-    var {div, a, img, h4, p} = dom
+    var {div, a, img, h4} = dom
 
     if (! comments) {
       return div('Loading...')
@@ -73,7 +128,10 @@ export default component({
               comment.user.login
             )
           ),
-          p({class: 'comment-text'}, comment.body)
+          div(
+            { class: 'comment-text' },
+            deku.dom(Markdown, { markdown: comment.body })
+          )
         )
       )
     })
@@ -99,9 +157,37 @@ export default component({
     CommentActions.comment(state.issue.number, state.newComment);
   },
 
+  renderTextbox(dom, user, state) {
+    var {div, a, img, h4, textarea, button, span, i} = dom
+    var { newComment } = state
+    var image = span('');
+    var username = user.profile && user.profile.name ? user.profile.name : 'Please login to comment'
+    if(user) {
+      image = a(
+        img({class: 'media-object', src: 'https://avatars3.githubusercontent.com/u/' + user.github.id + '?v=3&amp;s=64'})
+      );
+    }
+
+    return (
+      div({class: 'comment-media media'},
+        image,
+        div({class: 'media-body'},
+          h4({class: 'media-heading'},
+            a({class: 'username bold text-glr'}, username)
+          ),
+          textarea({class: 'form-control', onKeyUp: this.updateNewComment}, newComment),
+          button(
+            {class: 'btn btn-sm btn-success pull-right add-comment-button', onClick : this.submitComment.bind(null, state) },
+            i({class: 'fa fa-plus'}, ' Comment')
+          )
+        )
+      )
+    )
+  },
+
   render(props, state) {
-    var {div, ul, li, span, h1, h3, h4, h5, a, img, i, small, textarea, button, p} = this.dom
-    var { issue, comments, user, newComment } = state
+    var {div, ul, li, span, h1, h3, a, i, small, p} = this.dom
+    var { issue, comments, user, upvotes, downvotes } = state
 
     // deps
     if (! issue) {
@@ -121,19 +207,19 @@ export default component({
               )
             ),
             div({class:'vote-box'},
-              div({class: 'net-vote bold text-success'}, '100'),
+              div({class: 'net-vote bold text-success'}, upvotes.length - downvotes.length),
               div({class: 'vote-summary-wrapper'},
                 span({class: 'text-success float-left'},
                   small(
                     i({class: 'fa fa-plus'})
                   ),
-                  span({class: 'bold'}, '100')
+                  span({class: 'bold'}, upvotes.length)
                 ),
-                span({class: 'text-success float-danger'},
+                span({class: 'text-danger float-right'},
                   small(
                     i({class: 'fa fa-minus'})
                   ),
-                  span({class: 'bold'}, '100')
+                  span({class: 'bold'}, downvotes.length)
                 )
               )
             ),
@@ -146,45 +232,10 @@ export default component({
               ),
               h3({class: 'italic text-gl'}, '#' + issue.number)
             )
-          ),
-          div({class: 'participant-wrapper'},
-            h5({class: 'bold italic text-success'}, '+1`ers'),
-            div({class: 'facepile-container'},
-              a(
-                img({alt: 'elvarb', class: 'profile-image', src: 'https://avatars3.githubusercontent.com/u/6923044?v=3&amp;s=80'})
-              ),
-              a(
-                img({alt: 'elvarb', class: 'profile-image', src: 'https://avatars3.githubusercontent.com/u/471821?v=3&amp;s=80'})
-              ),
-              a(
-                img({alt: 'elvarb', class: 'profile-image', src: 'https://avatars3.githubusercontent.com/u/322834?v=3&amp;s=80'})
-              ),
-              a(
-                img({alt: 'elvarb', class: 'profile-image', src: 'https://avatars3.githubusercontent.com/u/6923044?v=3&amp;s=80'})
-              ),
-              a(
-                img({alt: 'elvarb', class: 'profile-image', src: 'https://avatars3.githubusercontent.com/u/6923044?v=3&amp;s=80'})
-              ),
-              a(
-                img({alt: 'elvarb', class: 'profile-image', src: 'https://avatars3.githubusercontent.com/u/6923044?v=3&amp;s=80'})
-              ),
-              a(
-                img({alt: 'elvarb', class: 'profile-image', src: 'https://avatars3.githubusercontent.com/u/6923044?v=3&amp;s=80'})
-              )
-            )
-          ),
-          div({class: 'participants-wrapper'},
-            h5({class: 'bold italic text-danger'}, '-1`ers'),
-            div({class: 'facepile-container'},
-              a(
-                img({alt: 'elvarb', class: 'profile-image', src: 'https://avatars3.githubusercontent.com/u/6923044?v=3&amp;s=80'})
-              ),
-              a(
-                img({alt: 'elvarb', class: 'profile-image', src: 'https://avatars3.githubusercontent.com/u/471821?v=3&amp;s=80'})
-              )
-            )
           )
         ),
+        this._renderFacepile(this.dom, 'upvotes', state),
+        this._renderFacepile(this.dom, 'downvotes', state),
         div({class: 'description-wrapper'},
           p({class: 'lead text-gl'}, issue.body)
         ),
@@ -192,65 +243,14 @@ export default component({
           div({class: 'comment-toolbar'},
             ul({class: 'tool-list'},
               li(
-                a( { onClick : this.submitComment.bind(null, state) },
-                  i({class: 'fa fa-plus'}, ' Add Comment')
+                a({ onClick: this.submitComment.bind(null, state) },
+                  i({ class: 'fa fa-plus' }, ' Add Comment')
                 )
               )
             )
           ),
-          div({class: 'comment-media media'},
-            div({class: 'media-left'},
-              a(
-                img({class: 'media-object', src: 'https://avatars3.githubusercontent.com/u/' + user.github.id + '?v=3&amp;s=64'})
-              )
-            ),
-            div({class: 'media-body'},
-              h4({class: 'media-heading'},
-                a({class: 'username bold text-glr'}, user.profile.name)
-              ),
-              textarea({class: 'form-control', onKeyUp: this.updateNewComment}, newComment),
-              button(
-                {class: 'btn btn-sm btn-success pull-right add-comment-button', onClick : this.submitComment.bind(null, state) },
-                i({class: 'fa fa-plus'}, ' Comment')
-              )
-            )
-          ),
-          this.renderComments(this.dom, comments),
-          div({class: 'user-vote-action-wrapper'},
-            span({class: 'user-image-wrapper'},
-              a(
-                img({class: 'profile-image', src: 'https://avatars3.githubusercontent.com/u/885279?v=3&amp;s=64'})
-              ),
-              a(
-                img({class: 'profile-image', src: 'https://avatars3.githubusercontent.com/u/939704?v=3&amp;s=80'})
-              )
-            ),
-            span({class: 'action'}, '+1`ed')
-          ),
-          div({class: 'user-vote-action-wrapper'},
-            span({class: 'user-image-wrapper'},
-              a(
-                img({class: 'profile-image', src: 'https://avatars3.githubusercontent.com/u/885279?v=3&amp;s=80'})
-              ),
-              a(
-                img({class: 'profile-image', src: 'https://avatars3.githubusercontent.com/u/939704?v=3&amp;s=80'})
-              )
-            ),
-            span({class: 'action'}, '-1`ed')
-          ),
-          div({class: 'media'},
-            div({class: 'media-left'},
-              a(
-                img({class: 'media-object', src: 'https://avatars3.githubusercontent.com/u/885279?v=3&amp;s=64'})
-              )
-            ),
-            div({class: 'media-body'},
-              h4({class: 'media-heading'},
-                a({class: 'username bold text-g'}, '@username')
-              ),
-              p({class: 'comment-text'}, 'Things and stuff')
-            )
-          )
+          this.renderTextbox(this.dom, user, state),
+          this.renderComments(this.dom, comments)
         )
       )
     )

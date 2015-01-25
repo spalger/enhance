@@ -1,8 +1,8 @@
-import ClickToActionExtension from 'lib/CustomExtension'
+import ClickToActionExtension from 'lib/ClickToActionExtension'
 import UserActions from 'actions/UserActions'
 
 class LoginLink extends ClickToActionExtension {
-  execAction() {
+  execActions() {
     UserActions.requestLogin();
   }
 }

@@ -6,9 +6,9 @@ import UserBadge from 'components/UserBadge'
 export default component({
   constructor() {
     this.handlers = {
-      voteActive : _.bindKey(this, 'makeActive', 'Vote'),
-      createActive : _.bindKey(this, 'makeActive', 'Create'),
-      setupActive : _.bindKey(this, 'makeActive', 'Setup')
+      voteActive: _.bindKey(this, 'makeActive', 'Vote'),
+      createActive: _.bindKey(this, 'makeActive', 'Create'),
+      setupActive: _.bindKey(this, 'makeActive', 'Setup')
     }
   },
 
@@ -38,19 +38,19 @@ export default component({
           em(' ENHANCE')
         ),
         ul({class: 'nav navbar-nav pull-right'},
-          li({ onClick : this.handlers.voteActive, class: getClass('Vote')},
+          li({ onClick: this.handlers.voteActive, class: getClass('Vote')},
             a({class: 'bold', href: '#'},
               i({class: 'fa fa-sort'}),
               span({class: 'hidden-xs'}, ' Vote')
             )
           ),
-          li({ onClick : this.handlers.createActive, class: getClass('Create')},
+          li({ onClick: this.handlers.createActive, class: getClass('Create')},
             a({class: 'bold', href: '#/create-issue'},
               i({class: 'fa fa-plus'}),
               span({class: 'hidden-xs'}, ' Create Issue')
             )
           ),
-          li({ onClick : this.handlers.setupActive, class: getClass('Setup')},
+          li({ onClick: this.handlers.setupActive, class: getClass('Setup')},
             a({class: 'bold', href: '#/setup'},
               i({class: 'fa fa-cog'}),
               span({class: 'hidden-xs'}, ' Setup')

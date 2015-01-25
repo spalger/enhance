@@ -4,7 +4,9 @@
   "description": "enhance",
   "main": "index.js",
   "scripts": {
-    "dev": "gulp server"
+    "dev": "gulp server",
+    "build": "rm -Rf build && gulp build && cp -r src/index.html src/styles src/fonts build",
+    "deploy": "npm run build && divshot deploy"
   },
   "repository": {
     "type": "git",
@@ -25,6 +27,7 @@
     "deku": "0.0.17",
     "deku-scrub": "0.0.3",
     "domready": "~1.0.7",
+    "emoji-images": "^0.1.1",
     "exports-loader": "^0.6.2",
     "express": "^4.11.1",
     "firebase": "^2.1.1",
@@ -40,6 +43,7 @@
     "lodash-deep": "~1.5.3",
     "loglevel": "~1.2.0",
     "lunr": "^0.5.7",
+    "marked": "^0.3.2",
     "messenger": "git://github.com/HubSpot/messenger",
     "moment": "^2.9.0",
     "path-to-regexp": "~1.0.3",

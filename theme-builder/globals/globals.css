@@ -5164,6 +5164,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
     display: none;
   }
 }
+.navbar-nav > li > user-badge > a,
 .navbar-nav > li > a {
   padding-top: 10px;
   padding-bottom: 10px;
@@ -5199,6 +5200,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   .navbar-nav > li {
     float: left;
   }
+  .navbar-nav > li > user-badge > a,
   .navbar-nav > li > a {
     padding-top: 16px;
     padding-bottom: 16px;
@@ -5352,11 +5354,14 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .navbar-default .navbar-text {
   color: #333333;
 }
+.navbar-default .navbar-nav > li > user-badge > a,
 .navbar-default .navbar-nav > li > a {
   color: #333333;
   border-left: 1px solid #ededed;
 }
+.navbar-default .navbar-nav > li > user-badge > a:hover,
 .navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > user-badge > a:focus,
 .navbar-default .navbar-nav > li > a:focus {
   color: #111111;
   background-image: linear-gradient(#e8e8e8, #f5f5f5);
@@ -5452,10 +5457,13 @@ fieldset[disabled] .navbar-default .btn-link:focus {
 .navbar-inverse .navbar-text {
   color: #9d9d9d;
 }
+.navbar-inverse .navbar-nav > li > user-badge > a,
 .navbar-inverse .navbar-nav > li > a {
   color: #9d9d9d;
 }
+.navbar-inverse .navbar-nav > li > user-badge > a:hover,
 .navbar-inverse .navbar-nav > li > a:hover,
+.navbar-inverse .navbar-nav > li > user-badge > a:focus,
 .navbar-inverse .navbar-nav > li > a:focus {
   color: #ffffff;
   background-color: transparent;
@@ -6956,6 +6964,9 @@ a.text-gdr {
 .background-danger {
   background-color: #df3e3e;
 }
+a {
+  cursor: pointer;
+}
 .centered {
   text-align: center;
 }
@@ -7147,6 +7158,7 @@ footer .footer-nav a.footer-link.active {
   padding-right: 10px;
 }
 .issue-profile-image img {
+  width: 50px;
   border-radius: 50%;
   border: 1px solid #eeeeee;
   display: inline;

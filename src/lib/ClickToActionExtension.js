@@ -1,12 +1,6 @@
+import CustomExtension from 'lib/CustomExtension'
 
-class ClickToActionExtension extends HTMLElement {
-  static register(baseTag, tagName) {
-    return document.registerElement(tagName, {
-      prototype: this.prototype,
-      extends: baseTag
-    });
-  }
-
+class ClickToActionExtension extends CustomExtension {
   attachedCallback() {
     this.onClick = (event) => {
       if (this.execActions() !== false) {
