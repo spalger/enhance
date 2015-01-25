@@ -25,17 +25,29 @@ function fetchIssues(options, cb) {
     direction : 'desc',
   })
 
-  request
+  var r = request
   .get([ apiUrl, 'repos', author, repo, 'issues' ].join('/'))
   .query(payload)
-  //.set('Authorization', 'foobar')
-  .end(cb);
+
+  // if logged in, use token
+  if (this.userToken) {
+    r = r.set('Authorization', 'token ' + this.userToken) // required token
+  }
+
+  r.end(function (err, issues) {
+    issueModel.upsert(issues);
+    cb(err, issues)
+  });
 }
 
 export default Reflux.createStore({
   listenables: IssueActions,
 
   issues : [],
+
+  init() {
+    this.userToken = UserStore.getGithubToken()
+  },
 
   /* returned object keys: url, labels_url, comments_url, events_url, html_url, id, number, title,
    user, labels (array), state, locked, comments (int), created_at, updated_at, pull_request (obj)
@@ -61,7 +73,6 @@ export default Reflux.createStore({
       }
 
       // update db with any changed results
-      issueModel.upsert(issues);
       this.trigger(issues);
     });
   },
@@ -82,16 +93,15 @@ export default Reflux.createStore({
   },
 
   onCreate(title, body) {
-    var token = UserStore.getGithubToken()
 
-    if (! token) {
+    if (! this.userToken) {
       return log.error('Login required');
     }
 
     request
       .post([ apiUrl, 'repos', author, repo, 'issues' ] .join('/'))
       .send({ title: title, body : body })
-      .set('Authorization', 'token ' + token) // required token
+      .set('Authorization', 'token ' + this.userToken) // required token
       .end(function(error, res) {
         if (error) {
           log.error('Error creating an issue: ' + error);
