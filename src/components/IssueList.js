@@ -44,25 +44,25 @@ export default component({
         li({class: 'list-group-item issue-list-item'},
           div({class: 'col-xs-2 centered shrink-gutter-left shrink-gutter-right'},
             div(
-              a({class: 'voting-links centered noselect'},
+              a({class: 'voting-links centered'},
                 i({class: 'fa fa-caret-up'})
               )
             ),
             div(
-              a({class: 'voting-links centered noselect'},
+              a({class: 'voting-links centered'},
                 i({class: 'fa fa-caret-down'})
               )
             ),
-            p({class: 'big-count noselect'}, '100')
+            p({class: 'big-count'}, '100')
           ),
           div({class: 'col-xs-6 table-centered'},
             h3({class: 'issue-name'},
               a({href: '/#/issue/' + issue.number}, issue.title)
             ),
-            p({class: 'enhancement-description noselect'}, issue.body)
+            p({class: 'enhancement-description'}, issue.body)
           ),
           div({class: 'col-xs-3 no-gutter-left srhink-gutter-right'},
-            ul({class: 'list-unstyled issue-info-list noselect'},
+            ul({class: 'list-unstyled issue-info-list'},
               li(
                 span({class: 'bold'}, '#' + issue.number),
                 ' opened ',
