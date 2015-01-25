@@ -9,6 +9,11 @@ export default component({
 
     return footer(
       div({class: 'container'},
+        ul({class: 'footer-nav'},
+          li(
+            a({class: 'footer-link', href: '#'}, 'What is this?')
+            )
+          ),
         ul({class: 'footer-nav pull-right'},
           li(
             span({class: 'linkless'}, "Producto de Arizona:")
