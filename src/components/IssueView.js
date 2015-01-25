@@ -186,7 +186,7 @@ export default component({
   },
 
   render(props, state) {
-    var {div, ul, li, span, h1, h3, h4, a, img, i, small, p} = this.dom
+    var {div, ul, li, span, h1, h3, a, i, small, p} = this.dom
     var { issue, comments, user, upvotes, downvotes } = state
 
     // deps
@@ -250,42 +250,7 @@ export default component({
             )
           ),
           this.renderTextbox(this.dom, user, state),
-          this.renderComments(this.dom, comments),
-          div({class: 'user-vote-action-wrapper'},
-            span({class: 'user-image-wrapper'},
-              a(
-                img({class: 'profile-image', src: 'https://avatars3.githubusercontent.com/u/885279?v=3&amp;s=64'})
-              ),
-              a(
-                img({class: 'profile-image', src: 'https://avatars3.githubusercontent.com/u/939704?v=3&amp;s=80'})
-              )
-            ),
-            span({class: 'action'}, '+1`ed')
-          ),
-          div({class: 'user-vote-action-wrapper'},
-            span({class: 'user-image-wrapper'},
-              a(
-                img({class: 'profile-image', src: 'https://avatars3.githubusercontent.com/u/885279?v=3&amp;s=80'})
-              ),
-              a(
-                img({class: 'profile-image', src: 'https://avatars3.githubusercontent.com/u/939704?v=3&amp;s=80'})
-              )
-            ),
-            span({class: 'action'}, '-1`ed')
-          ),
-          div({class: 'media'},
-            div({class: 'media-left'},
-              a(
-                img({class: 'media-object', src: 'https://avatars3.githubusercontent.com/u/885279?v=3&amp;s=64'})
-              )
-            ),
-            div({class: 'media-body'},
-              h4({class: 'media-heading'},
-                a({class: 'username bold text-g'}, '@username')
-              ),
-              p({class: 'comment-text'}, 'Things and stuff')
-            )
-          )
+          this.renderComments(this.dom, comments)
         )
       )
     )
