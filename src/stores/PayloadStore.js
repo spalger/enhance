@@ -4,9 +4,11 @@ import Reflux from 'reflux'
 import config from 'config'
 import github from 'lib/github'
 import log from 'lib/log'
+
 import PayloadActions from 'actions/PayloadActions'
-import UserStore from 'stores/UserStore'
+
 import UserActions from 'actions/UserActions'
+import UserStore from 'stores/UserStore'
 
 var payloadId = config.payload.id;
 var FILENAME = 'enhance.payload.json';

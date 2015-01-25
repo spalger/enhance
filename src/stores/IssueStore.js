@@ -66,7 +66,7 @@ export default Reflux.createStore({
     return fetchIssues(options)
     .then((res) => {
       if (res.body.length === defaultPerPage) {
-        this.onFetchAll({ page: ++currentPage })
+        return this.onFetchAll({ page: ++currentPage })
       }
     });
   },
