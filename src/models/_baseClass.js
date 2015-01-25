@@ -45,13 +45,13 @@ export default class Model {
     return this.get(this._id(doc))
     .then((d) => {
       if (doc.updated_at !== d.updated_at) {
-        return this.update(doc, d._rev, cb)
+        return Promise.resolve(this.update(doc, d._rev)).nodeify(cb)
       }
       return d
     })
     .catch((err) => {
       if (err.status === 404) {
-        return this.db.put(doc, this._id(doc), cb)
+        return Promise.resolve(this.db.put(doc, this._id(doc))).nodeify(cb)
       }
       throw err
     })
@@ -64,7 +64,7 @@ export default class Model {
       })
     }
 
-    return this.db.put(doc, this._id(doc), cb)
+    return Promise.resolve(this.db.put(doc, this._id(doc))).nodeify(cb)
   }
 
   update(doc, rev, cb) {
@@ -74,7 +74,7 @@ export default class Model {
       })
     }
 
-    return this.db.put(doc, this._id(doc), rev, cb)
+    return Promise.resolve(this.db.put(doc, this._id(doc), rev)).nodeify(cb)
   }
 
   remove(doc, cb) {
@@ -84,15 +84,15 @@ export default class Model {
       })
     }
 
-    return this.db.remove(doc, cb)
+    return Promise.resolve(this.db.remove(doc)).nodeify(cb)
   }
 
   get(obj, cb) {
-    return this.db.get(obj, cb)
+    return Promise.resolve(this.db.get(obj)).nodeify(cb)
   }
 
   query(fn, options, cb) {
-    this.db.query(fn, options, cb)
+    return Promise.resolve(this.db.query(fn, options)).nodeify(cb)
   }
 
   // wrap lunr indexer

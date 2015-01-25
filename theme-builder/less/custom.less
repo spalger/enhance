@@ -1,0 +1,307 @@
+.background-primary{
+  background-color: @brand-primary; 
+}
+
+.background-success{
+  background-color: @brand-success;   
+}
+
+.background-info{
+  background-color: @brand-info;  
+}
+   
+.background-warning{
+  background-color: @brand-warning;  
+}    
+
+.background-danger{
+  background-color: @brand-danger;   
+} 
+
+//Generic Styles
+
+.centered{
+	text-align: center;
+}
+
+.italic{
+	font-style: italic;
+}
+
+.align-right{
+	text-align: right;
+}
+
+.noselect{
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+}
+
+.table-row{
+	display: table-row;
+}
+
+.table-centered{
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.no-gutter{
+	padding-left:  0px;
+	padding-right: 0px;
+}
+
+.no-gutter-left{
+	padding-left: 0px;
+}
+
+.shrink-gutter-left{
+	padding-left: 5px;
+}
+
+.shrink-gutter-right{
+	padding-right: 5px;
+}
+
+.float-left{
+	float: left;
+}
+
+.float-right{
+	float: right;
+}
+
+//Login Panel
+
+.panel.login-panel{
+	margin-top: 100px;
+}
+
+.huge-icon{
+	font-size: 200px;
+}
+
+// Setup
+
+.setup-panel{
+	margin-top: 30px;
+}
+
+@media (min-width: @screen-sm-min) {
+	.setup-panel{
+		margin-top: 30px;
+	}
+}
+@media (min-width: @screen-lg-min) {
+	.setup-panel{
+		margin-top: 100px;
+	}
+}
+
+.setup-panel dt{
+	font-size: 16px;
+	margin-bottom: 10px;
+}
+
+.setup-panel dd{
+	margin-bottom: 20px;
+}
+
+.setup-panel .btn.full-width{
+	.context-margin-top(30px);
+}
+
+//Header
+
+.header-profile-image img{
+	width: 13px;
+	height: 13px;
+}
+
+// Issues List
+
+.issue-list-item{
+	padding-top: 2px;
+	padding-bottom: 5px;
+}
+
+.voting-links{
+	/*float: left;
+	clear: both;*/
+	font-size: 30px;
+	/*display: block;*/
+	line-height: 0;
+	margin: 0;
+	padding: 0;
+	color: @navbar-default-color;
+}
+
+
+.voting-link:hover,
+.voting-link:active{
+	color: @brand-success;
+	text-decoration: none;
+}
+
+.voting-link.down{
+	margin-top: -10px;
+}
+
+.big-count{
+	font-size: 20px;
+	color: #777777;
+	line-height: 1;
+	font-weight: bold;
+}
+
+.issue-name{
+	margin-top: 8px;
+	padding: 0;
+}
+
+.issue-name a:hover,
+.issue-name a:active{
+	text-decoration: none;
+}
+
+.enhancement-description{
+	font-size: 12px;
+	font-weight: 300;
+	font-color: #777777;
+	font-style: italic;
+	line-height: 1.4;
+}
+
+.issue-info-list{
+	margin-top: 10px;
+	color: #777777;
+}
+
+.issue-info-list li{
+	margin-bottom: 2px;
+	font-size: 11px;
+}
+
+.issue-info-list li.list-space{
+	margin-top: 10px;
+}
+
+.issue-profile-image{
+	margin-top: 20px;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: right;
+	padding-right: 10px;
+}
+
+.issue-profile-image img{
+	border-radius: 50%;
+	border: 1px solid @gray-lighter;
+	display: inline;
+}
+
+@media (max-width: @screen-sm-max) {
+
+	.issue-name{
+		margin-top: 10px;
+		padding: 0;
+		font-size: 14px;
+	}
+	.enhancement-description{
+		font-size: 10px;
+	}
+
+	.issue-info-list li{
+		margin-bottom: 2px;
+		font-size: 10px;
+	}
+
+	.issue-profile-image{
+		margin-top: 30px;
+		padding-right: 7px;
+	}
+
+
+	.issue-profile-image img{
+		display: inline;
+		width: 35px;
+		height: 35px;
+	}
+}
+
+// Detailed View
+// -- Left Column
+
+.issue-header-wrapper{
+	overflow: hidden;
+}
+
+.vote-box{
+	width: 70px;
+	float: left;
+	text-align: center;
+	margin-top: 10px;
+}
+
+.vote-box.totals{
+	background-color: @gray-lighter;
+	border: 1px solid @gray-light;
+	padding: 10px;
+}
+
+.vote-box a{
+	display: block;
+	margin: 0;
+	padding: 0;
+	line-height: .6;
+	height: 30px;
+}
+
+.vote-box .big-vote{
+	font-size: 50px;
+}
+
+.vote-box .net-vote{
+	margin-top: 10px;
+	margin-bottom: 10px;
+	font-size: 30px;
+}
+
+.issue-detail-box{
+	float: left;
+	margin-left: 20px;
+	margin-top: 20px;
+}
+
+.detailed-issue-title{
+	font-size: 30px;
+	margin: 0px;
+	padding: 0px;
+	line-height: 1;
+}
+
+.description-wrapper{
+	clear: both;
+	margin-top: 15px;
+	padding-top: 15px;
+	border-top: 1px solid @gray-lighter;
+}
+
+// -- Right Column
+
+.profile-image{
+	width: 30px;
+	height: 30px;
+}
+
+
+
+@media (max-width: @screen-sm-min) {
+	.profile-image{
+		width: 20px;
+		height: 20px;
+	}
+}
+
+
