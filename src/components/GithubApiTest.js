@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import component from 'lib/component'
+import log from 'lib/log'
 
 import IssueActions from 'actions/IssueActions'
 import 'stores/IssueStore'
@@ -11,7 +12,7 @@ import UserActions from 'actions/UserActions'
 import UserStore from 'stores/UserStore'
 
 import PayloadActions from 'actions/PayloadActions'
-import 'stores/PayloadStore'
+import PayloadStore from 'stores/PayloadStore'
 
 export default component({
 
@@ -24,6 +25,9 @@ export default component({
 
   afterMount() {
     this.listenTo(UserStore, _.bindKey(this, 'updateUser'), _.bindKey(this, 'updateUser'))
+    this.listenTo(PayloadStore, function (payload) {
+      log.msg('payload', payload)
+    })
   },
 
   updateUser(user) {
@@ -56,8 +60,9 @@ export default component({
       br(),
       textarea({ onKeyUp : this.handleComment }),
       button({ onClick : _.bindKey(CommentActions, 'comment', 1, state.comment) }, 'Comment on issue 1'),
-      button({ onClick : _.bindKey(PayloadActions, 'sync', "{ key: 'value' }")}, 'Sync payload'),
-      button({ onClick : _.bindKey(PayloadActions, 'get')}, 'Get payload')
+
+      button({ onClick : _.bindKey(PayloadActions, 'sync', '{ "key": "value" }')}, 'Sync payload'),
+      button({ onClick : _.bindKey(PayloadActions, 'get') }, 'Get payload')
 
     )
   }

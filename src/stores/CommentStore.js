@@ -1,13 +1,13 @@
 import Reflux from 'reflux'
-import request from 'superagent'
 import config from 'config'
-
-import CommentActions from 'actions/CommentActions'
-import UserStore from 'stores/UserStore'
-
+import log from 'lib/log'
 import github from 'lib/github'
 
-var { apiUrl, author, repo, enhanceLabel } = config.github;
+import CommentActions from 'actions/CommentActions'
+import github from 'lib/github'
+
+var { author, repo, enhanceLabel } = config.github;
+
 const UPVOTE = ':+1:'
 const DOWNVOTE = ':-1:'
 
@@ -15,21 +15,15 @@ export default Reflux.createStore({
   listenables: CommentActions,
 
   _create(issueNumber, comment) {
-    var token = UserStore.getGithubToken()
-
-    request
-      .post([ apiUrl, 'repos', author, repo, 'issues', issueNumber, 'comments' ] .join('/'))
-      .send({ body : comment })
-      .set('Authorization', 'token ' + token) // required token
-      .end(function(error, res) {
-        if (error) {
-          console.log('Error creating a comment: ' + error);
-        }
-
-        if (res) {
-          console.log(res); // @todo handle response
-        }
-      });
+    return github
+    .method('post')
+    .path([ 'repos', author, repo, 'issues', issueNumber, 'comments' ])
+    .body({ body : comment })
+    .send()
+    .then(log.msg)
+    .catch((err) => {
+      log.error('Error creating comment:', err)
+    })
   },
 
   /* sample return object keys: url, html_url, issue_url, id, user, created_at, updated_at, body */
@@ -45,47 +39,26 @@ export default Reflux.createStore({
       payload.since = since
     }
 
-    var token = UserStore.getGithubToken()
-
-    github
-      .method('get')
-      .path([ 'repos', author, repo, 'issues', issueNumber, 'comments' ])
-      .token(token)
-      .send()
-      .then(function(res) {
-        var comments = github.parseResponse(res.text);
-        console.log(comments);
-      })
-
-    // request
-    //   .get()
-    //   //.send({ sort : 'updated', direction : 'desc', since : '2015-01-01 })
-    //   //.set('Authorization', 'foobar')
-    //   .end(function(error, res) {
-    //     if (error) {
-    //       console.log('Error getting all repo comments: ' + error);
-    //     }
-
-    //     if (res && res.text) {
-    //       try {
-    //         var comments = JSON.parse(res.text);
-    //         console.log(comments);
-    //       } catch (err) {
-    //         console.log('Error parsing JSON while getting all repo comments');
-    //       }
-    //     }
-    //   });
+    return github
+    .method('get')
+    .path([ 'repos', author, repo, 'issues', issueNumber, 'comments' ])
+    .query(payload)
+    .send()
+    .then(log.msg)
+    .catch((err) => {
+      log.error('Error getting comments by issue:', err)
+    })
   },
 
   onUpvote(issueNumber) {
-    this._create(issueNumber, UPVOTE);
+    return this._create(issueNumber, UPVOTE);
   },
 
   onDownvote(issueNumber) {
-    this._create(issueNumber, DOWNVOTE);
+    return this._create(issueNumber, DOWNVOTE);
   },
 
   onComment(issueNumber, userComment) {
-    this._create(issueNumber, userComment);
+    return this._create(issueNumber, userComment);
   }
 })
