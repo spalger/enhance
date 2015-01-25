@@ -82,6 +82,14 @@ export default component({
     // need issue title, description, number, moment.ago, author, numComments, upvotes/downvotes
   },
 
+  getSearchBar(dom) {
+    var { div, input } = dom
+
+    return div({class: 'search-container'},
+      input( { onKeyUp: IssueActions.search, placeholder: 'Search by title or issue number' })
+    )
+  },
+
   render(props, state) {
     // deps
     if (!state.route) return;
@@ -90,6 +98,7 @@ export default component({
 
     return div({class: 'panel panel-default'},
       ul({class: 'list-group'},
+        this.getSearchBar(this.dom),
         this.getIssues(this.dom, state)
       )
     )

@@ -7447,3 +7447,10 @@ img.media-object {
   font-size: 12px;
   padding-left: 15px;
 }
+.search-container {
+  margin-bottom: 10px;
+}
+.search-container input {
+  padding: 5px;
+  width: 200px;
+}
