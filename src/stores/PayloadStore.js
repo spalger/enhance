@@ -10,12 +10,32 @@ import PayloadActions from 'actions/PayloadActions'
 import UserStore from 'stores/UserStore'
 
 var { apiUrl } = config.github;
-var { payloadId } = config;
+var payloadId = config.payload.id;
 
 export default Reflux.createStore({
   listenables: PayloadActions,
 
   payload : [],
+
+  onSync(payload) {
+    // create payload for first time if no id in config
+    debugger
+    var handler = payloadId ? this._update(payload) : this._create(payload)
+  },
+
+  onGet() {
+    // get the gist raw url, then load the raw gist data
+    return this._getGistPayload()
+    .then(this._getFileObjectFromGistInfo)
+    .then(this._getRaw)
+    .then(this._parseBody)
+    .then((body) => {
+      this.trigger(body)
+    })
+    .catch(function () {
+      log.error('Failed to parse payload data')
+    })
+  },
 
   _create(payload) {
     var token = UserStore.getGithubToken()
@@ -24,26 +44,29 @@ export default Reflux.createStore({
     }
 
     request
-      .post([ apiUrl, 'gists'] .join('/'))
-      .send(this._basicGistObject(payload, 'create'))
-      .set('Authorization', 'token ' + token) // required token
-      .end((error, res) => {
-        if (res && _.isEqual(res.status, 201)) {
-          var parsed = this._parseResponse(res)
-          if (parsed) {
-            log.success('Please add this payloadId to /src/config.js: ', parsed.id)
-          }
-        } else {
-          log.error('Error creating an issue', error)
-        }
-      });
+    .post([ apiUrl, 'gists'] .join('/'))
+    .send(this._basicGistObject(payload, 'create'))
+    .set('Authorization', 'token ' + token) // required token
+    .end((error, res) => {
+      if (res && _.isEqual(res.status, 201)) {
+        var parsed = this._parseBody(res)
+        log.success('Please add this payloadId to /src/config.js: ', parsed.id)
+      } else {
+        log.error('Error creating an issue', error)
+      }
+    });
   },
 
-  _parseResponse(res) {
+  _parseBody(res) {
+    if (res.body) {
+      return res.body;
+    }
+
     try {
       return JSON.parse(res.text)
     } catch (e) {
       log.error('Unable to parse response on update payload')
+      throw e
     }
   },
 
@@ -67,46 +90,24 @@ export default Reflux.createStore({
 
     var gistObject = this._basicGistObject(payload, 'update')
 
-    this._getInfo()
-    .then((gistInfo) => {
-      var oldFile = this._getFileObjectFromGistInfo(gistInfo)
-      if (oldFile) {
-        gistObject.files[oldFile.filename] = null // delete the old file if it exists
+    this._getGistPayload()
+    .then(this._getFileObjectFromGistInfo)
+    .then(function (fileObject) {
+      if (fileObject) {
+        gistObject.files[fileObject.filename] = null // delete the old file if it exists
       }
 
       request
-        .patch([ apiUrl, 'gists', payloadId] .join('/'))
-        .send(gistObject)
-        .set('Authorization', 'token ' + token) // required token
-        .end(function(error, res) {
-          if (res && _.isEqual(res.status, 200)) {
-            log.success('Updated payload')
-          } else {
-            log.error('Error creating an issue', error)
-          }
-        });
-    })
-  },
-
-  onSync(payload) {
-    // create payload for first time if no id in config
-    return payloadId ? this._update(payload) : this._create(payload)
-  },
-
-  onGet() {
-    // get the gist raw url, then load the raw gist data
-    return this._getInfo()
-    .then((gistInfo) => {
-      var fileObject = this._getFileObjectFromGistInfo(gistInfo);
-
-      if (fileObject) {
-        return this._getRaw(fileObject)
-        .then((rawGist) => {
-          return rawGist
-        });
-      }
-
-      return;
+      .patch([ apiUrl, 'gists', payloadId].join('/'))
+      .send(gistObject)
+      .set('Authorization', 'token ' + token) // required token
+      .end(function(error, res) {
+        if (res && res.status === 200) {
+          log.success('Updated payload')
+        } else {
+          log.error('Error creating an issue', error)
+        }
+      });
     })
   },
 
@@ -115,47 +116,40 @@ export default Reflux.createStore({
       return _.toArray(gistInfo.files).pop()
     } catch (e) {
       log.error('Unable to get old payload filename');
+      throw e
     }
   },
 
-  _getInfo() {
+  _getGistPayload() {
     var token = UserStore.getGithubToken()
-    if (! payloadId) {
-      log.msg('No payloadId specified in /src/config.js')
-      return
-    }
 
-    return new Promise((res, rej) => {
+    return new Promise((resolve, reject) => {
       request
-        .get([ apiUrl, 'gists', payloadId] .join('/'))
+        .get([ apiUrl, 'gists', payloadId].join('/'))
         .set('Authorization', 'token ' + token) // @ todo not required
-        .end((error, response) => {
-          if (response && _.isEqual(response.status, 200)) {
-            var parsed = this._parseResponse(response);
-
-            if (parsed) {
-              log.success('Gist metadata fetched successfully');
-              return res(parsed)
-            }
+        .end((error, res) => {
+          if (res && res.status === 200) {
+            return resolve(this._parseBody(res))
           } else {
             log.error('Error getting gist: ' + error);
-            return rej()
+            return reject(error)
           }
         });
     });
   },
 
   _getRaw(fileObject) {
-    return new Promise((res, rej) => {
+    if (! fileObject) return
+
+    return new Promise((resolve, reject) => {
       request
         .get(fileObject.raw_url)
         .end(function(error, raw) {
           if (raw) {
-            log.success('Raw gist loaded')
-            return res(raw)
+            return resolve(raw)
           } else {
             log.error('Error getting gist: ' + error)
-            return rej()
+            return reject(error)
           }
         });
     })
