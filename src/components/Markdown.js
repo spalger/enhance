@@ -3,7 +3,7 @@ import marked from 'lib/marked'
 import github from 'lib/github'
 
 const TAG_RE = /\:([a-z0-9_\-\+]+)\:/g;
-
+const LINK_TAG = "<style> @import 'styles/markdown.css'; </style>"
 export default component({
   afterMount(el, props) {
     github.emoji.then(function (urls) {
@@ -14,7 +14,7 @@ export default component({
         return `<img class="emoji" title="${name}" alt="${name}" src="${url}" height="20" width="20" align="absmiddle">`
       });
 
-      el.createShadowRoot().innerHTML = withEmotion;
+      el.createShadowRoot().innerHTML = LINK_TAG + "\n" + withEmotion;
     })
   },
 

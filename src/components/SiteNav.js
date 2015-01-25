@@ -39,7 +39,7 @@ export default component({
     var navLinks = [
       li({ onClick: this.handlers.voteActive, class: getClass('Vote')},
         a({class: 'bold', href: '#/'},
-          i({class: 'fa fa-sort'}),
+          i({class: 'fa fa-check'}),
           span({class: 'hidden-xs'}, ' Vote')
         )
       ),

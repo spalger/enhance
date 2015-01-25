@@ -7214,6 +7214,10 @@ issue-list .panel {
     height: 35px;
   }
 }
+.container.detail-view {
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
 .issue-header-wrapper {
   overflow: hidden;
 }
@@ -7288,6 +7292,10 @@ img.media-object {
   color: #777777;
   font-size: 14px;
   line-height: 1.45;
+}
+.comment-text img {
+  display: inline-block;
+  max-width: 300px;
 }
 .comment-wrapper .media {
   margin: 0;
