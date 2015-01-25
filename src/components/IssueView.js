@@ -166,11 +166,18 @@ export default component({
             ),
             span({class: 'action'}, '-1`ed')
           ),
-          div({class: 'media-body'},
-            h4({class: 'media-heading'},
-              a({class: 'username bold text-g'}, '@username')
+          div({class: 'media'},
+            div({class: 'media-left'},
+              a(
+                img({class: 'media-object', src: 'https://avatars3.githubusercontent.com/u/885279?v=3&amp;s=64'})
+              )
             ),
-            p({class: 'comment-text'}, 'Things and stuff')
+            div({class: 'media-body'},
+              h4({class: 'media-heading'},
+                a({class: 'username bold text-g'}, '@username')
+              ),
+              p({class: 'comment-text'}, 'Things and stuff')
+            )
           )
         )
       )
