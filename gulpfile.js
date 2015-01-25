@@ -27,7 +27,7 @@ paths.DIST = abs('dist');
 paths.BUILD = abs('build');
 
 // main module, imports all other modules for your app
-paths.ENTRY = resolve(paths.SRC, 'index.js');
+paths.ENTRY = resolve(paths.SRC, 'app.js');
 
 // output file for the bundle
 paths.BUNDLE = resolve(paths.BUILD, 'bundle.js');
