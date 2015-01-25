@@ -10,12 +10,34 @@ import PayloadActions from 'actions/PayloadActions'
 import UserStore from 'stores/UserStore'
 
 var { apiUrl } = config.github;
-var { payloadId } = config;
+var payloadId = config.payload.id;
 
 export default Reflux.createStore({
   listenables: PayloadActions,
 
   payload : [],
+
+  onSync(payload) {
+    // create payload for first time if no id in config
+    return payloadId ? this._update(payload) : this._create(payload)
+  },
+
+  onGet() {
+    // get the gist raw url, then load the raw gist data
+    return this._getInfo()
+    .then((gistInfo) => {
+      var fileObject = this._getFileObjectFromGistInfo(gistInfo);
+
+      if (fileObject) {
+        return this._getRaw(fileObject)
+        .then((rawGist) => {
+          return rawGist
+        });
+      }
+
+      return;
+    })
+  },
 
   _create(payload) {
     var token = UserStore.getGithubToken()
@@ -85,28 +107,6 @@ export default Reflux.createStore({
             log.error('Error creating an issue', error)
           }
         });
-    })
-  },
-
-  onSync(payload) {
-    // create payload for first time if no id in config
-    return payloadId ? this._update(payload) : this._create(payload)
-  },
-
-  onGet() {
-    // get the gist raw url, then load the raw gist data
-    return this._getInfo()
-    .then((gistInfo) => {
-      var fileObject = this._getFileObjectFromGistInfo(gistInfo);
-
-      if (fileObject) {
-        return this._getRaw(fileObject)
-        .then((rawGist) => {
-          return rawGist
-        });
-      }
-
-      return;
     })
   },
 
