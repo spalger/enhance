@@ -80,7 +80,7 @@ PartialReq.prototype.send = function () {
         switch (resp && resp.status) {
         case UNAUTHORIZED:
         case NOT_FOUND:
-          if (UserStore.isLoggedIn()) {
+          if (!UserStore.isLoggedIn()) {
             return reject(new NeedsLogin(req, resp))
           }
 
