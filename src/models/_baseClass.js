@@ -92,6 +92,9 @@ export default class Model {
   }
 
   query(fn, options, cb) {
+    options = _.defaults(options || {}, {
+      include_docs: true
+    })
     return Promise.resolve(this.db.query(fn, options)).nodeify(cb)
   }
 

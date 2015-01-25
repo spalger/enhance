@@ -27,13 +27,18 @@ export default Reflux.createStore({
     });
 
     var getPage = () => {
-      return github
-      .path(['repos', org, repo, 'issues', 'comments'])
-      .query({
+      var queryOptions = {
         page: num,
         per_page: per_page,
-        since: isNaN(lastFetch) ? 0 : (new Date(lastFetch)).toISOString()
-      })
+      }
+
+      if(! isNaN(lastFetch)) {
+        queryOptions.since = (new Date(lastFetch)).toISOString()
+      }
+
+      return github
+      .path(['repos', org, repo, 'issues', 'comments'])
+      .query(queryOptions)
       .then(function (resp) {
         return resp.body
       })
