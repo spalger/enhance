@@ -65,7 +65,7 @@ PartialReq.prototype._getReq = function () {
   var {url, method, query, body, auth} = this.params
 
   var req = request(method, url)
-  if (query) req.query(query)
+  if (query) req.query(_.merge(query, { ts: Date.now() }))
   if (body) req.send(body)
 
   if (auth !== false) {
