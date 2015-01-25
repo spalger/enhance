@@ -3,6 +3,7 @@ import deku from 'deku'
 import component from 'lib/component'
 import UserBadge from 'components/UserBadge'
 import UserStore from 'stores/UserStore'
+import ProjectName from 'components/ProjectName'
 
 export default component({
   constructor() {
@@ -22,7 +23,6 @@ export default component({
   },
 
   makeActive(active) {
-    console.log(active); // @todo grab from routes versus click handlers
     this.setState({ active })
   },
 
@@ -51,7 +51,7 @@ export default component({
       ),
       li({ onClick: this.handlers.aboutActive, class: getClass('About')},
         a({class: 'bold', href: '#/about'},
-          i({class: 'fa fa-cog'}),
+          i({class: 'fa fa-info'}),
           span({class: 'hidden-xs'}, ' About')
         )
       ),
@@ -73,7 +73,8 @@ export default component({
     return div({class: 'navbar navbar-default navbar-static-top noselect'},
       div({class: 'container-fluid'},
         a({class: 'navbar-brand text-info bold', href: '#'},
-          em(' ENHANCE')
+          em(' ENHANCE'),
+          deku.dom(ProjectName)
         ),
         ul({class: 'nav navbar-nav pull-right'}, navLinks)
       )

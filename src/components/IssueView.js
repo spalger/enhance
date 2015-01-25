@@ -40,7 +40,6 @@ export default component({
     this.listenTo(RequestStore, _.noop, this.routeUpdated)
     this.bindTo(IssueStore, 'issue')
     this.listenTo(CommentStore, this.updateComments)
-    log.msg('@TODO load issues -- IssueList.js')
   },
 
   updateComments(comments) {

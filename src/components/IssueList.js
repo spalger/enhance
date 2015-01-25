@@ -8,8 +8,6 @@ import RequestStore from 'stores/RequestStore'
 import IssueStore from 'stores/IssueStore'
 import IssueActions from 'actions/IssueActions'
 
-import log from 'lib/log'
-
 export default component({
   initialState() {
     return {
@@ -23,8 +21,6 @@ export default component({
     this.bindTo(IssueStore, 'issues')
 
     IssueActions.fetchAll()
-
-    log.msg('@TODO load issues -- IssueList.js')
   },
 
   getIssues(dom, state) {
@@ -82,6 +78,14 @@ export default component({
     // need issue title, description, number, moment.ago, author, numComments, upvotes/downvotes
   },
 
+  getSearchBar(dom) {
+    var { div, input } = dom
+
+    return div({class: 'search-container'},
+      input( { onKeyUp: IssueActions.search, placeholder: 'Search by title or issue number' })
+    )
+  },
+
   render(props, state) {
     // deps
     if (!state.route) return;
@@ -90,6 +94,7 @@ export default component({
 
     return div({class: 'panel panel-default'},
       ul({class: 'list-group'},
+        this.getSearchBar(this.dom),
         this.getIssues(this.dom, state)
       )
     )

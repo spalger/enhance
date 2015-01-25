@@ -44,7 +44,6 @@ export default Reflux.createStore({
   },
 
   onFetchById(issueId) {
-    // @todo should this pull from issueModel versus making a request?
     return github
     .path(['repos', org, repo, 'issues', issueId])
     .then((issue) => {
@@ -91,6 +90,7 @@ export default Reflux.createStore({
 
     return fetch()
     .then(() => {
+      this.issues = allIssues;
       this.trigger(allIssues)
       return allIssues
     })
@@ -109,19 +109,14 @@ export default Reflux.createStore({
   },
 
   onSearch(keyboardEvent) {
-    var results = issueModel.search(keyboardEvent.target.value); //contains refs and score
-    var returnedIssues = [];
-    var self = this;
+    if (! keyboardEvent.target.value) {
+      return this.trigger(this.issues)
+    }
 
-    _.each(results, function(result) {
-      _.each(self.issues, function(issue) {
-        if (_.isEqual(issue.number, Number(result.ref))) {
-          returnedIssues.push(issue);
-        }
-      });
-    });
-
-    log.info('Search results: ', returnedIssues.length);
+    issueModel.search(keyboardEvent.target.value)
+    .then((results) => {
+      this.trigger(results);
+    })
   },
 
   _fetchIssues(options) {
