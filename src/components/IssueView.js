@@ -9,6 +9,8 @@ import RequestStore from 'stores/RequestStore'
 import IssueActions from 'actions/IssueActions'
 import CommentActions from 'actions/CommentActions'
 
+import marked from 'lib/marked'
+
 import log from 'lib/log'
 
 export default component({
@@ -52,7 +54,7 @@ export default component({
   },
 
   renderComments(dom, comments) {
-    var {div, a, img, h4, p} = dom
+    var {div, a, img, h4} = dom
 
     if (! comments) {
       return div('Loading...')
@@ -73,7 +75,7 @@ export default component({
               comment.user.login
             )
           ),
-          p({class: 'comment-text'}, comment.body)
+          div({class: 'comment-text' }, marked.parse(comment.body))
         )
       )
     })
@@ -99,9 +101,37 @@ export default component({
     CommentActions.comment(state.issue.number, state.newComment);
   },
 
+  renderTextbox(dom, user, state) {
+    var {div, a, img, h4, textarea, button, span, i} = dom
+    var { newComment } = state
+    var image = span('');
+    var username = user.profile && user.profile.name ? user.profile.name : 'Please login to comment'
+    if(user) {
+      image = a(
+        img({class: 'media-object', src: 'https://avatars3.githubusercontent.com/u/' + user.github.id + '?v=3&amp;s=64'})
+      );
+    }
+
+    return (
+      div({class: 'comment-media media'},
+        image,
+        div({class: 'media-body'},
+          h4({class: 'media-heading'},
+            a({class: 'username bold text-glr'}, username)
+          ),
+          textarea({class: 'form-control', onKeyUp: this.updateNewComment}, newComment),
+          button(
+            {class: 'btn btn-sm btn-success pull-right add-comment-button', onClick : this.submitComment.bind(null, state) },
+            i({class: 'fa fa-plus'}, ' Comment')
+          )
+        )
+      )
+    )
+  },
+
   render(props, state) {
-    var {div, ul, li, span, h1, h3, h4, h5, a, img, i, small, textarea, button, p} = this.dom
-    var { issue, comments, user, newComment } = state
+    var {div, ul, li, span, h1, h3, h4, h5, a, img, i, small, p} = this.dom
+    var { issue, comments, user } = state
 
     // deps
     if (! issue) {
@@ -198,23 +228,7 @@ export default component({
               )
             )
           ),
-          div({class: 'comment-media media'},
-            div({class: 'media-left'},
-              a(
-                img({class: 'media-object', src: 'https://avatars3.githubusercontent.com/u/' + user.github.id + '?v=3&amp;s=64'})
-              )
-            ),
-            div({class: 'media-body'},
-              h4({class: 'media-heading'},
-                a({class: 'username bold text-glr'}, user.profile.name)
-              ),
-              textarea({class: 'form-control', onKeyUp: this.updateNewComment}, newComment),
-              button(
-                {class: 'btn btn-sm btn-success pull-right add-comment-button', onClick : this.submitComment.bind(null, state) },
-                i({class: 'fa fa-plus'}, ' Comment')
-              )
-            )
-          ),
+          this.renderTextbox(this.dom, user, state),
           this.renderComments(this.dom, comments),
           div({class: 'user-vote-action-wrapper'},
             span({class: 'user-image-wrapper'},
