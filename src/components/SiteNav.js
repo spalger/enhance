@@ -41,19 +41,19 @@ export default component({
           li({ onClick : this.handlers.voteActive, class: getClass('Vote')},
             a({class: 'bold', href: '#'},
               i({class: 'fa fa-sort'}),
-              span({class: 'hidden-xs'}, 'Vote')
+              span({class: 'hidden-xs'}, ' Vote')
             )
           ),
           li({ onClick : this.handlers.createActive, class: getClass('Create')},
-            a({class: 'bold', href: '#'},
+            a({class: 'bold', href: '#/create-issue'},
               i({class: 'fa fa-plus'}),
-              span({class: 'hidden-xs'}, 'Create')
+              span({class: 'hidden-xs'}, ' Create Issue')
             )
           ),
           li({ onClick : this.handlers.setupActive, class: getClass('Setup')},
             a({class: 'bold', href: '#/setup'},
               i({class: 'fa fa-cog'}),
-              span({class: 'hidden-xs'}, 'Setup')
+              span({class: 'hidden-xs'}, ' Setup')
             )
           ),
           li(
