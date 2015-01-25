@@ -19,6 +19,6 @@
   ],
   "devDependencies": {
     "firebase": "~2.1.1",
-    "lokijs": "*"
+    "pouchdb": "~3.2.1"
   }
 }
