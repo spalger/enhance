@@ -87,11 +87,13 @@ export default Reflux.createStore({
 
   onAlreadyLoggedIn: function (user) {
     log.info('user is logged in', user)
+    UserActions.ready()
     this._setUser(user)
   },
 
   onNotAlreadyLoggedIn: function () {
     log.info('user it not logged in')
+    UserActions.ready()
     this._setUser(false)
   },
 

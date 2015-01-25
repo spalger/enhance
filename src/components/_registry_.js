@@ -15,3 +15,6 @@ CustomElement.register('thank-you', require('ThankYou'));
 
 // dev elements
 CustomElement.register('site-devnav', require('siteNavDev.html'));
+
+// custom extensions extend current html elements
+require('LoginLink').register('a', 'login-link')

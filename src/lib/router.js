@@ -18,26 +18,30 @@ class Router {
   }
 
   // on(path, template)
-  // OR
+  // - OR -
   // on(path, handler)
-  // OR
+  // - OR -
+  // on(path, handler, handler, handler, template)
+  // - OR -
   // on(route) – with route.template and route.path + route[any]
-  on(pattern, handler) {
-    var route
+  on(pattern, ...handlers) {
+    handlers.forEach((handler) => {
+      var route
 
-    if (_.isString(pattern)) {
-      route = {
-        pattern,
-        handler: _.isFunction(handler) && handler,
-        template: _.isString(handler) && handler
+      if (_.isString(pattern)) {
+        route = {
+          pattern,
+          handler: _.isFunction(handler) && handler,
+          template: _.isString(handler) && handler
+        }
+      } else {
+        route = _.clone(route)
       }
-    } else {
-      route = _.clone(route)
-    }
 
-    route.keys = []
-    route.regexp = pathToRegexp(route.pattern, route.keys)
-    this.routes.push(route)
+      route.keys = []
+      route.regexp = pathToRegexp(route.pattern, route.keys)
+      this.routes.push(route)
+    })
   }
 
   goto(hash) {

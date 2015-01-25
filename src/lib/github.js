@@ -3,6 +3,7 @@ import request from 'superagent'
 
 import UserActions from 'actions/UserActions'
 import UserStore from 'stores/UserStore'
+import {ListenerMethods} from 'reflux'
 import log from 'lib/log'
 import Promise from 'bluebird'
 
@@ -38,6 +39,7 @@ function updateUserScope(resp) {
   UserStore.updateScopes(scopes);
 }
 
+_.assign(PartialReq.prototype, ListenerMethods);
 PartialReq.prototype.query = setter('query')
 PartialReq.prototype.url = setter('url')
 PartialReq.prototype.body = setter('body')
