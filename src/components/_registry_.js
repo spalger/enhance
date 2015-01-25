@@ -1,7 +1,6 @@
 import CustomElement from 'lib/CustomElement'
 
 CustomElement.register('github-api-test', require('GithubApiTest'));
-CustomElement.register('payload-create', require('PayloadCreate'));
 CustomElement.register('print-request', require('PrintRequest'));
 CustomElement.register('logging-test', require('LoggingTest'));
 CustomElement.register('user-badge', require('UserBadge'));
@@ -18,3 +17,4 @@ CustomElement.register('site-devnav', require('siteNavDev.html'));
 
 // custom extensions extend current html elements
 require('LoginLink').register('a', 'login-link')
+require('PayloadCreate').register('a', 'payload-create')
