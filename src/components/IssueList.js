@@ -96,7 +96,7 @@ export default component({
     var { div, input } = dom
 
     return div({class: 'search-container'},
-      input( { onKeyUp: IssueActions.search, placeholder: 'Search by title or issue number' })
+      input( { onKeyUp: IssueActions.search, class: 'form-control', placeholder: 'Search by title or issue number' })
     )
   },
 
