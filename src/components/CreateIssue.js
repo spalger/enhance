@@ -1,11 +1,15 @@
 import component from 'lib/component'
+import config from 'config'
 
 export default component({
   render() {
-    var {div} = this.dom
+    var {div, a} = this.dom
+    var { github } = config
 
     return div(
-      'Textarea here'
+      a({ target: '_blank', href: [github.baseUrl, github.author, github.repo, 'issues', 'new'].join('/') },
+        'Create Issue'
+      )
     )
   }
 })
