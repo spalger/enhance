@@ -1,0 +1,63 @@
+<div class="background-primary">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12  col-sm-10 col-sm-offset-1">
+        <div class="panel panel-default setup-panel">
+          <div class="panel-body">
+            <h1><i class="fa fa-cog fa-spin"></i> Enhance Setup Guide</h1>
+            <hr>
+            <h2 class="italic">Overview</h2>
+            <dl>
+              <dt>The Problem</dt>
+              <dd>
+                In Github repositories, there can sometimes be a lot of noise on the Issues page.
+                Supporters oftentimes submit issues for <em>Enhancements</em> that remain open while others
+                upvote, downvote, and leave comments on these open issues, but contributors don't have a great way
+                to leave these open for the community while stripping them off the Issues page.
+              </dd>
+              <dt>The Solution</dt>
+              <dd>
+                That's where Enhance comes in. Contributors can close Github feature requests, labeling them with 'enhancement'
+                (or a similar configurable label) and direct supporters to the repository's Enhance voting app.<br /><br />
+
+                From here the community can actively monitor all feature requests and discuss with the contributors.
+                The layout is easy to understand, reduces the noise on the issue page, and promotes community involvement.<br /><br />
+
+                Enhance uses <strong>Firebase</strong> for Github authentication and requires Github's
+                public repository scope in order to upvote, downvote, leave comments,
+                and open issues through the API on the user's behalf.<br /><br />
+
+                In an effort to support even the largest repositories like Angular without hitting Github's API rate limit,
+                we are utilizing <strong>PouchDB</strong> to pull down a repositories Issues/Comments and store them in
+                <strong>Indexed DB</strong> or <strong>Local Storage</strong>.
+                On page refresh we run a diff on all new issues/comments since the last updated timestamp in the user's persistent
+                data.<br /><br />
+
+                <strong>Lunr</strong> is used to index the persistent data and allow
+                users to easily search for issues by title or issue number.<br /><br />
+
+                <strong>Messenger</strong> is utilized to notify the user of events
+                happening behind the scenes, and easily indicate any required
+                actions or errors that occur. Events are managed through <strong>Reflux</strong>.<br /><br />
+
+                And behind the scenes, <strong>WebComponents</strong> are utilized for
+                rendering through <strong>Deku</strong>. The code is written in
+                <strong>ES6</strong>, and <strong>Webpack</strong> is utilized in our build process
+                to transpile the code for backwards compatibility.<br /><br />
+              </dd>
+            </dl>
+            <hr>
+            <h2 class="italic">Getting Started</h2>
+            <dl>
+              <dt>Here is step number 1</dt>
+              <dd>Meatball nulla laboris leberkas, bresaola ut salami kevin kielbasa hamburger minim capicola. Cupidatat exercitation chicken incididunt.</dd>
+            </dl>
+            <a href="#/setup/step2" class="btn btn-lg btn-default full-width context-margin">
+              <i class="fa fa-beer"></i> Get Started!
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
