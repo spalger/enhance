@@ -9,6 +9,6 @@ export default {
     index: 'enhance-store'
   },
   payload: {
-    id: '3ac4ad4b20f5d49750d1'
+    id: '2e3c54c1863c9ca289b2'
   }
 }

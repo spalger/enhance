@@ -13,7 +13,7 @@ var NOT_FOUND = 404
 
 function PartialReq(prev, next) {
   this.params = _.merge({
-    // method: 'get'
+    method: 'get'
   }, prev, next)
 }
 
@@ -33,6 +33,7 @@ function setter(prop, mod) {
 }
 
 PartialReq.prototype.query = setter('query')
+PartialReq.prototype.url = setter('url');
 PartialReq.prototype.body = setter('body')
 PartialReq.prototype.scopes = setter('scopes')
 PartialReq.prototype.auth = setter('auth')
@@ -41,17 +42,16 @@ PartialReq.prototype.method = setter('method', function (val) {
   return String(val).toUpperCase()
 })
 
-PartialReq.prototype.path = setter('path', function (val) {
+PartialReq.prototype.path = setter('url', function (val) {
   if (!_.isArray(val)) {
     val = val.split('/').filter(Boolean)
   }
-  return val.map(encodeURIComponent).join('/')
+  return config.github.apiUrl + '/' + val.map(encodeURIComponent).join('/')
 })
 
 
 PartialReq.prototype._getReq = function () {
-  var {method, query, path, body, auth} = this.params
-  var url = config.github.apiUrl + '/' + path
+  var {url, method, query, body, auth} = this.params
 
   var req = request(method, url)
   if (query) req.query(query)
