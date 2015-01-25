@@ -5,20 +5,26 @@ import 'components/_registry_'
 import 'pages/_registry_'
 
 import CustomElement from 'lib/CustomElement'
-import UserActions from 'actions/UserActions'
+import RequestStore from 'stores/RequestStore'
 import {ListenerMethods} from 'reflux'
 import router from 'lib/router'
 
 class EnhanceApp extends CustomElement {
-  attachedCallback() {
+  createdCallback() {
     domready(router.start)
+  }
 
-    this.listenTo()
+  attachedCallback() {
+    this.listenTo(RequestStore, _.bindKey(this, 'renderRequest'))
+  }
+
+  renderRequest(req) {
+    this.renderContent(req.route.template);
   }
 }
 
 _.assign(EnhanceApp.prototype, ListenerMethods);
 
-document.createElement('enhance-app', {
-  prototype: Object.create(EnhanceApp.prototype)
+document.registerElement('enhance-app', {
+  prototype: EnhanceApp.prototype
 })

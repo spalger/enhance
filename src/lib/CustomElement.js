@@ -12,8 +12,10 @@ class CustomElement extends HTMLElement {
   }
 
   attachedCallback() {
-    var content = this.initialContent
+    this.renderContent(this.initialContent);
+  }
 
+  renderContent(content) {
     if (_.isFunction(content) && _.isFunction(content.render)) {
       return this.renderAsComponent(content)
     }
@@ -23,18 +25,6 @@ class CustomElement extends HTMLElement {
     }
 
     throw new Error('content must be a string or a function with a render method');
-  }
-
-  detachedCallback() {
-    this.cleanup();
-  }
-
-  cleanup() {
-    if (this.dekuTree) {
-      this.dekuTree.remove();
-    }
-
-    this.innerHTML = '';
   }
 
   renderAsComponent(Component) {
@@ -52,6 +42,18 @@ class CustomElement extends HTMLElement {
     this.cleanup();
 
     this.innerHTML = html;
+  }
+
+  cleanup() {
+    if (this.dekuTree) {
+      this.dekuTree.remove();
+    }
+
+    this.innerHTML = '';
+  }
+
+  detachedCallback() {
+    this.cleanup();
   }
 }
 
