@@ -20,6 +20,7 @@
     "6to5": "~2.13.6",
     "6to5-loader": "~2.0.0",
     "bluebird": "~2.9.0",
+    "bootbox": "~4.3.0",
     "css-loader": "~0.9.1",
     "deku": "0.0.17",
     "deku-scrub": "0.0.3",
