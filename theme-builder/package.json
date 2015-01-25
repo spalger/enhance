@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "description": "A global files build step and style guide",
   "dependencies": {},
+  "scripts": {
+    "build": "gulp global-styles && cp globals/globals.* ../src/styles/"
+  },
   "devDependencies": {
     "del": "^1.1.1",
     "gulp": "latest",
