@@ -35,7 +35,7 @@ export default component({
       div({class: 'container-fluid'},
         a({class: 'navbar-brand text-info bold', href: '#'},
           i({class: 'fa fa-github'}),
-          em('ENHANCE')
+          em(' ENHANCE')
         ),
         ul({class: 'nav navbar-nav pull-right'},
           li({ onClick : this.handlers.voteActive, class: getClass('Vote')},
@@ -51,7 +51,7 @@ export default component({
             )
           ),
           li({ onClick : this.handlers.setupActive, class: getClass('Setup')},
-            a({class: 'bold', href: '#'},
+            a({class: 'bold', href: '#/setup'},
               i({class: 'fa fa-cog'}),
               span({class: 'hidden-xs'}, 'Setup')
             )
