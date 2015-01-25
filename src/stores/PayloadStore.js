@@ -30,7 +30,6 @@ export default Reflux.createStore({
     })
     .catch((err) => {
       log.error('Failed to fetch payload data')
-      throw err;
     })
   },
 
@@ -63,7 +62,7 @@ export default Reflux.createStore({
       log.success('Please add this payloadId to /src/config.js: ', res.body.id)
     })
     .catch((err) => {
-      log.error('Error creating an issue', err)
+      log.error('Error creating gist', err)
     });
   },
 
@@ -82,7 +81,7 @@ export default Reflux.createStore({
       log.success('Updated payload');
     })
     .catch((err) => {
-      log.error('Error creating an issue', err);
+      log.error('Error updating gist', err);
     });
   },
 
@@ -97,6 +96,11 @@ export default Reflux.createStore({
   },
 
   _getRaw(resp) {
+    var file = resp.body.files[FILENAME];
+    if (!file) {
+      throw new Error(FILENAME + ' does not exist at gist ' + payloadId)
+    }
+
     return github
     .url(resp.body.files[FILENAME].raw_url)
     .auth(false)

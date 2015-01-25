@@ -37,7 +37,9 @@ export default component({
           p({class: 'big-count noselect'}, '100')
         ),
         div({class: 'col-xs-6 table-centered'},
-          h3({class: 'issue-name'}, 'Issue Name Enhancement'),
+          h3({class: 'issue-name'},
+            a({href: '/#/issue/1'}, 'Issue Name Enhancement')
+          ),
           p({class: 'enhancement-description noselect'}, 'Turkey sirloin ground round hamburger. Aliquip in enim tail dolore salami')
         ),
         div({class: 'col-xs-3 no-gutter-left srhink-gutter-right'},
