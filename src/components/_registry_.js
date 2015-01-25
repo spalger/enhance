@@ -8,4 +8,4 @@ CustomElement.register('user-badge', require('UserBadge'));
 CustomElement.register('issue-list', require('IssueList'));
 CustomElement.register('site-nav', require('SiteNav'));
 
-CustomElement.register('site-devnav', require('templates/siteNavDev.html'));
+CustomElement.register('site-devnav', require('siteNavDev.html'));

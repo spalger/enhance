@@ -56,7 +56,7 @@ module.exports = function (paths, dev) {
     resolve: {
       extensions: ['', '.js', '.json'],
       modulesDirectories: ['bower_components', 'node_modules'],
-      root: [ join(paths.SRC, 'components'), paths.SRC ],
+      root: [ join(paths.SRC, 'components'), join(paths.SRC, 'templates'), paths.SRC ],
       alias: {
         reflux: join(paths.ROOT, 'node_modules', 'reflux', 'src', 'index.js'),
         fs: join(paths.SRC, 'lib', 'loki-fs-shim.js')
