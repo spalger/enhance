@@ -6,6 +6,7 @@ import deku from 'deku'
 
 import RequestStore from 'stores/RequestStore'
 import IssueStore from 'stores/IssueStore'
+// import PopularityStore from 'stores/PopularityStore'
 import IssueActions from 'actions/IssueActions'
 // import BallotActions from 'actions/BallotActions'
 import BallotStore from 'stores/BallotStore'
@@ -21,9 +22,14 @@ export default component({
   afterMount() {
     this.bindTo(RequestStore, 'route')
     this.bindTo(IssueStore, 'issues')
+    //this.listenTo(PopularityStore, this.addScores, this.addScores)
 
     IssueActions.fetchAll()
     BallotStore.onSync()
+  },
+
+  addScores(scores) {
+
   },
 
   getIssues(dom, state) {
@@ -38,13 +44,18 @@ export default component({
     }
 
     return _.map(state.issues, (issue) => {
+      var popularity = div('');
+      if (issue.score) {
+        popularity = div({class: 'col-xs-2 centered shrink-gutter-left shrink-gutter-right'},
+          h3('Popularity'),
+          p(''),
+          p({class: 'big-count'}, issue.score)
+        );
+      }
+
       return (
         li({class: 'list-group-item issue-list-item'},
-          div({class: 'col-xs-2 centered shrink-gutter-left shrink-gutter-right'},
-            h3('Popularity'),
-            p(''),
-            p({class: 'big-count'}, '100')
-          ),
+          popularity,
           div({class: 'col-xs-6 table-centered'},
             h3({class: 'issue-name'},
               a({href: '/#/issue/' + issue.number}, issue.title)
