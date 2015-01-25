@@ -6,7 +6,7 @@ import log from 'lib/log'
 
 import IssueActions from 'actions/IssueActions'
 import UserStore from 'stores/UserStore'
-import Issues from 'models/issues'
+import issueModel from 'models/issueModel'
 
 var { apiUrl, author, repo, enhanceLabel } = config.github;
 var defaultPerPage = 100;
@@ -61,7 +61,7 @@ export default Reflux.createStore({
       }
 
       // update db with any changed results
-      Issues.upsert(issues);
+      issueModel.upsert(issues);
       this.trigger(issues);
     });
   },
@@ -104,7 +104,7 @@ export default Reflux.createStore({
   },
 
   onSearch(keyboardEvent) {
-    var results = Issues.search(keyboardEvent.target.value); //contains refs and score
+    var results = issueModel.search(keyboardEvent.target.value); //contains refs and score
     var returnedIssues = [];
     var self = this;
 
