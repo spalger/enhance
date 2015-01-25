@@ -1,22 +1,22 @@
 .background-primary{
-  background-color: @brand-primary; 
+  background-color: @brand-primary;
 }
 
 .background-success{
-  background-color: @brand-success;   
+  background-color: @brand-success;
 }
 
 .background-info{
-  background-color: @brand-info;  
+  background-color: @brand-info;
 }
-   
+
 .background-warning{
-  background-color: @brand-warning;  
-}    
+  background-color: @brand-warning;
+}
 
 .background-danger{
-  background-color: @brand-danger;   
-} 
+  background-color: @brand-danger;
+}
 
 //Generic Styles
 
@@ -180,8 +180,10 @@ footer .footer-nav a.footer-link.active{
 // Issues List
 
 .issue-list-item{
+	border: 1px solid @list-group-border;
 	padding-top: 2px;
 	padding-bottom: 5px;
+	margin-bottom: 20px;
 }
 
 .voting-links{
@@ -190,7 +192,7 @@ footer .footer-nav a.footer-link.active{
 	font-size: 30px;
 	/*display: block;*/
 	line-height: 0;
-	margin: 0;
+	margin: 0;f
 	padding: 0;
 	color: @navbar-default-color;
 }
@@ -223,12 +225,25 @@ footer .footer-nav a.footer-link.active{
 	text-decoration: none;
 }
 
-.enhancement-description{
-	font-size: 12px;
-	font-weight: 300;
-	font-color: #777777;
-	font-style: italic;
-	line-height: 1.4;
+.enhancement-description {
+  font-size: 13px;
+  font-weight: 300;
+  font-color: #777777;
+  font-style: italic;
+  line-height: 1.4;
+  max-height: 69px;
+  overflow: hidden;
+  position: relative;
+}
+
+.enhancement-description:before {
+  position: absolute;
+  top: 52px;
+  left: 0px;
+  right: 0px;
+  height: 18px;
+  background: linear-gradient(transparent, #f2f2f2);
+  content: "";
 }
 
 .issue-info-list{
@@ -389,7 +404,7 @@ img.media-object{
 	border-bottom: 1px solid darken(@gray-lighter, 3%);
 	border-top: 1px solid lighten(@gray-lighter, 3%);
 	border-left: 1px solid lighten(@gray-lighter, 3%);
-	border-right: 1px solid darken(@gray-lighter, 3%);		
+	border-right: 1px solid darken(@gray-lighter, 3%);
 	clear: both;
 }
 
@@ -400,7 +415,7 @@ img.media-object{
 	border-bottom: 1px solid darken(#333333, 3%);
 	border-top: 1px solid lighten(#333333, 3%);
 	border-left: 1px solid lighten(#333333, 3%);
-	border-right: 1px solid darken(#333333, 3%);		
+	border-right: 1px solid darken(#333333, 3%);
 	clear: both;
 }
 
@@ -413,17 +428,17 @@ img.media-object{
 .comment-wrapper .user-vote-action-wrapper{
 	margin: 0;
 	padding: 10px;
-	background-image: linear-gradient(lighten(@navbar-default-bg, 2%), darken(@navbar-default-bg, 2%));	
+	background-image: linear-gradient(lighten(@navbar-default-bg, 2%), darken(@navbar-default-bg, 2%));
 	//background-image: linear-gradient(lighten(@navbar-default-bg, 1%), darken(@navbar-default-bg, 1%));
 	border-bottom: 1px solid darken(@gray-lighter, 3%);
-	border-right: 1px solid darken(@gray-lighter, 3%);	
+	border-right: 1px solid darken(@gray-lighter, 3%);
 	border-top: 1px solid lighten(@gray-lighter, 3%);
 	border-left: 1px solid lighten(@gray-lighter, 3%);
 	clear: both;
 }
 
 .comment-wrapper .user-vote-action-wrapper img{
-	border: 1px solid darken(@gray-lighter, 20%);	
+	border: 1px solid darken(@gray-lighter, 20%);
 }
 
 .comment-wrapper .user-vote-action-wrapper .action{
@@ -433,7 +448,7 @@ img.media-object{
 
 .comment-wrapper .comment-toolbar{
 	background-color: #111111;
-	background-image: linear-gradient(lighten(#222222, 20%), lighten(#222222, 10%));	
+	background-image: linear-gradient(lighten(#222222, 20%), lighten(#222222, 10%));
 	overflow: hidden;
 }
 
@@ -467,7 +482,7 @@ img.media-object{
 .comment-wrapper .tool-list li a.active{
 	text-decoration: none;
 	color: #EFEFEF;
-	background-image: linear-gradient(lighten(#222222, 25%), lighten(#222222, 15%));		
+	background-image: linear-gradient(lighten(#222222, 25%), lighten(#222222, 15%));
 }
 
 
@@ -483,7 +498,7 @@ img.media-object{
 }
 
 .modal-body {
-	background-image: linear-gradient(darken(@gray-lighter, 2%), darken(@gray-lighter, 7%));			
+	background-image: linear-gradient(darken(@gray-lighter, 2%), darken(@gray-lighter, 7%));
 }
 
 .modal-body .form-control{
