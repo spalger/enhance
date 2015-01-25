@@ -24,7 +24,7 @@
     "bluebird": "~2.9.0",
     "bootbox": "~4.3.0",
     "css-loader": "~0.9.1",
-    "deku": "0.0.17",
+    "deku": "git://github.com/spenceralger/deku#patchEvents",
     "deku-scrub": "0.0.3",
     "domready": "~1.0.7",
     "emoji-images": "^0.1.1",

@@ -4,7 +4,7 @@
   "description": "A global files build step and style guide",
   "dependencies": {},
   "scripts": {
-    "build": "gulp global-styles && cp globals/globals.* ../src/styles/"
+    "build": "gulp global-styles && cp globals/globals.css ../src/styles/"
   },
   "devDependencies": {
     "del": "^1.1.1",

@@ -6,9 +6,9 @@ import UserBadge from 'components/UserBadge'
 export default component({
   constructor() {
     this.handlers = {
-      voteActive: _.bindKey(this, 'makeActive', 'Vote'),
-      createActive: _.bindKey(this, 'makeActive', 'Create'),
-      setupActive: _.bindKey(this, 'makeActive', 'Setup')
+      voteActive: _.exec(this, 'makeActive', 'Vote'),
+      createActive: _.exec(this, 'makeActive', 'Create'),
+      setupActive: _.exec(this, 'makeActive', 'Setup')
     }
   },
 
