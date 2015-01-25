@@ -8,6 +8,9 @@ import UserStore from 'stores/UserStore'
 import RequestStore from 'stores/RequestStore'
 import router from 'lib/router'
 
+import deku from 'deku'
+import LoadingContent from 'LoadingContent'
+
 import IssueActions from 'actions/IssueActions'
 import CommentActions from 'actions/CommentActions'
 
@@ -227,7 +230,13 @@ export default component({
 
     // deps
     if (! issue) {
-      return div('Loading...');
+      return div({class: 'container'},
+        div({class: 'row'},
+          div({ class: 'col-xs-12 col-sm-12-col-lg-10 col-lg-offset-1'},
+            deku.dom(LoadingContent)
+          )
+        )
+      )
     }
 
     return div({class: 'container'},
