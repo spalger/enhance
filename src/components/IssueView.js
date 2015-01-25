@@ -17,12 +17,16 @@ export default component({
       route: null,
       issue: null,
       comments: null,
-      user: UserStore.user
+      user: UserStore.user,
+      newComment: '' // new user comment from textarea
     };
   },
 
   afterMount() {
-    this.listenTo(RequestStore, this.routeUpdated, this.routeUpdated)
+    this.listenTo(CommentActions.commentAddSuccess, this.rerenderView)
+    this.listenTo(CommentActions.upvoteSuccess, this.rerenderView)
+    this.listenTo(CommentActions.downvoteSuccess, this.rerenderView)
+    this.listenTo(RequestStore, _.noop, this.routeUpdated)
     this.bindTo(IssueStore, 'issue')
     this.bindTo(CommentStore, 'comments')
     log.msg('@TODO load issues -- IssueList.js')
@@ -31,6 +35,12 @@ export default component({
   routeUpdated(route) {
     IssueActions.fetchById(route.params.id)
     CommentActions.getByIssue(route.params.id)
+  },
+
+  // comment just posted by user
+  rerenderView(issueNumber) {
+    this.setState({ newComment: '', comments: null })
+    CommentActions.getByIssue(issueNumber)
   },
 
   _renderFacepile() {
@@ -59,7 +69,7 @@ export default component({
         ),
         div({class: 'media-body'},
           h4({class: 'media-heading'},
-            a({class: 'username bold text-g'},
+            a({class: 'username bold text-g', href: comment.user.html_url},
               comment.user.login
             )
           ),
@@ -69,17 +79,34 @@ export default component({
     })
   },
 
+  updateNewComment(event) {
+    this.setState({ newComment : event.target.value })
+  },
+
+  upvote(state) {
+    CommentActions.upvote(state.issue.number);
+  },
+
+  downvote(state) {
+    CommentActions.downvote(state.issue.number);
+  },
+
+  submitComment(state) {
+    if (! state.newComment) {
+      return log.error('Please enter text to leave a comment');
+    }
+
+    CommentActions.comment(state.issue.number, state.newComment);
+  },
+
   render(props, state) {
     var {div, ul, li, span, h1, h3, h4, h5, a, img, i, small, textarea, button, p} = this.dom
-    var { issue, comments, user } = state
+    var { issue, comments, user, newComment } = state
 
     // deps
     if (! issue) {
       return div('Loading...');
     }
-
-    console.log(issue);
-    console.log(comments);
 
     return div({class: 'container'},
       div({class: 'row'},
@@ -87,10 +114,10 @@ export default component({
           div({class: 'issue-header-wrapper'},
             div({class: 'arrow-box'},
               a({class: 'big-vote text-g'},
-                i({class: 'fa fa-caret-up'})
+                i({class: 'fa fa-caret-up', onClick: this.upvote.bind(null, state)})
               ),
               a({class: 'big-vote down text-g'},
-                i({class: 'fa fa-caret-down'})
+                i({class: 'fa fa-caret-down', onClick: this.downvote.bind(null, state)})
               )
             ),
             div({class:'vote-box'},
@@ -165,7 +192,7 @@ export default component({
           div({class: 'comment-toolbar'},
             ul({class: 'tool-list'},
               li(
-                a(
+                a( { onClick : this.submitComment.bind(null, state) },
                   i({class: 'fa fa-plus'}, ' Add Comment')
                 )
               )
@@ -181,8 +208,9 @@ export default component({
               h4({class: 'media-heading'},
                 a({class: 'username bold text-glr'}, user.profile.name)
               ),
-              textarea({class: 'form-control'}),
-              button({class: 'btn btn-sm btn-success pull-right add-comment-button'},
+              textarea({class: 'form-control', onKeyUp: this.updateNewComment}, newComment),
+              button(
+                {class: 'btn btn-sm btn-success pull-right add-comment-button', onClick : this.submitComment.bind(null, state) },
                 i({class: 'fa fa-plus'}, ' Comment')
               )
             )

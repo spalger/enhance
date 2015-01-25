@@ -4,5 +4,8 @@ export default Reflux.createActions([
   'getByIssue',
   'upvote',
   'downvote',
-  'comment'
+  'comment',
+  'commentAddSuccess',
+  'upvoteSuccess',
+  'downvoteSuccess'
 ])

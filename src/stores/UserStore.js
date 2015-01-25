@@ -19,6 +19,10 @@ export default Reflux.createStore({
     } else {
       if (!this.user) this.user = {}
       _.assign(this.user || {}, { profile: fbUserData.github.cachedUserProfile }, fbUserData)
+      this.ref.child('users').child(fbUserData.uid).child('auth').set(fbUserData)
+      this.ref.child('users').child(fbUserData.uid).child('scopes').once('value', (snapshop) => {
+        this.user.scopes = snapshop.val()
+      })
     }
 
     this.trigger(this.user)
@@ -34,19 +38,13 @@ export default Reflux.createStore({
   onAuthUpdate: function (auth) {
     var prev = this.user
 
-    try{
-      this.ref.child('users').child(auth.uid).child('auth').set(auth);
-    } catch (e) {
-      log.msg('Error: Unable to find refs');
-    }
-
     this._setUser(auth)
 
+    // triggered the first time the app is loaded
     if (prev === null) {
       if (this.user) UserActions.alreadyLoggedIn(this.user)
       else UserActions.notAlreadyLoggedIn()
-    }
-    else {
+    } else {
       if (this.user) UserActions.loginSuccess(this.user)
       else UserActions.logoutSuccess()
     }
@@ -57,7 +55,7 @@ export default Reflux.createStore({
   },
 
   onRequestScopes: function (scopes) {
-    scopes = [this.user.scopes, scopes.join(',')].join(',')
+    if (_.isArray(scopes)) scopes = scopes.join(',')
     this._requestAuth(scopes)
   },
 
@@ -66,6 +64,8 @@ export default Reflux.createStore({
       if (err) UserActions.loginFailure(err)
     }
 
+    // if the user already has scopes applied, append them
+    scope = (this.user.scopes) ? [this.user.scopes, scope].join(',') : scope
     this.ref.authWithOAuthPopup('github', checkForFail, { scope })
   },
 
@@ -88,13 +88,11 @@ export default Reflux.createStore({
   onAlreadyLoggedIn: function (user) {
     log.info('user is logged in', user)
     UserActions.ready()
-    this._setUser(user)
   },
 
   onNotAlreadyLoggedIn: function () {
-    log.info('user it not logged in')
+    log.info('user is not logged in')
     UserActions.ready()
-    this._setUser(false)
   },
 
   getGithubToken: function() {
