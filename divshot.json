@@ -2,5 +2,5 @@
   "name": "ss15-enhance",
   "root": "./build",
   "clean_urls": true,
-  "error_page": "error.html"
+  "error_page": "notFound.html"
 }

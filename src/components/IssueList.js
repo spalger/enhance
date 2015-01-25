@@ -10,8 +10,6 @@ import IssueActions from 'actions/IssueActions'
 // import BallotActions from 'actions/BallotActions'
 import BallotStore from 'stores/BallotStore'
 
-import log from 'lib/log'
-
 export default component({
   initialState() {
     return {
@@ -25,10 +23,7 @@ export default component({
     this.bindTo(IssueStore, 'issues')
 
     IssueActions.fetchAll()
-
     BallotStore.onSync()
-
-    log.msg('@TODO load issues -- IssueList.js')
   },
 
   getIssues(dom, state) {
@@ -86,6 +81,14 @@ export default component({
     // need issue title, description, number, moment.ago, author, numComments, upvotes/downvotes
   },
 
+  getSearchBar(dom) {
+    var { div, input } = dom
+
+    return div({class: 'search-container'},
+      input( { onKeyUp: IssueActions.search, placeholder: 'Search by title or issue number' })
+    )
+  },
+
   render(props, state) {
     // deps
     if (!state.route) return;
@@ -94,6 +97,7 @@ export default component({
 
     return div({class: 'panel panel-default'},
       ul({class: 'list-group'},
+        this.getSearchBar(this.dom),
         this.getIssues(this.dom, state)
       )
     )

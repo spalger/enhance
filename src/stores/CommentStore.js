@@ -42,7 +42,6 @@ export default Reflux.createStore({
   },
 
   /* sample return object keys: url, html_url, issue_url, id, user, created_at, updated_at, body */
-  /* @todo since is the MouseEvent currently */
   onGetByIssue(issueNumber, since) {
     var payload = {
       labels: [ enhanceLabel ],

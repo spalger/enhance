@@ -40,7 +40,6 @@ export default component({
     this.listenTo(RequestStore, _.noop, this.routeUpdated)
     this.bindTo(IssueStore, 'issue')
     this.listenTo(CommentStore, this.updateComments)
-    log.msg('@TODO load issues -- IssueList.js')
   },
 
   updateComments(comments) {
@@ -103,6 +102,10 @@ export default component({
     var className = type === 'upvotes' ? 'success' : 'danger';
     var typeOfUser = type === 'upvotes' ? '+1`ers' : '-1`ers';
     var votes = state[type];
+
+    if (! votes.length) {
+      return div('')
+    }
 
     return div({class: 'participants-wrapper'},
       h5({class: 'bold italic text-' + className}, typeOfUser),

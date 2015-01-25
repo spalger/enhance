@@ -83,32 +83,34 @@
       <!-- row -->
     </div>
     <!-- container -->
-    <div class="modal fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false"><div class="modal-backdrop fade in" style="height: 984px;"></div>
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-body float-fix">
-          <h4 class="bold italic text-uppercase modal-title">Create Issue</h4>
-          <div class="">
-            <form>
-              <div class="form-group">
-                <label for="issueTitle">Title:</label>
-                <input type="text" class="form-control" id="issueTitle" placeholder=" Title">
-              </div>
-              <div class="form-group">
-                <label for="issueDescription">Comment: </label>
-                <textarea class="form-control modal-ta" id="issueDescription" placeholder="Leave a comment"></textarea>
-              </div>
-              <button class="btn btn-danger bold"><i class="fa fa-close"></i> Cancel</button>
-              <button type="submit" class="btn btn-success pull-right bold"><i class="fa fa-check"></i> Create Issue</button>
-            </form>
+    <div class="modal fade in" tabindex="-1" role="dialog" style="display: block" aria-labelledby="myModalLabel" aria-hidden="false">
+      <div class="modal-backdrop fade in" style="height: 984px"></div>
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-body float-fix">
+            <a href="#" class="pull-right text-danger"><i class="fa fa-close"></i></a>            
+            <h3 class="bold italic text-uppercase modal-title">Welcome to Enhance!</h3>
+            <div class="modal-text-wrapper">
+              <p class="lead">Enhance makes it easy to manage feature requests on GitHub.</p>
+              <hr>
+              <p class="lead">Community participants can:</p>
+              <ul class="intro-modal-text pull-right">
+                <li>Vote on enhancement issues</li>
+                <li>Comment on feature requests</li>
+                <li>View voting and comment timeline</li>
+                <li>&amp; more to come!</li>
+              </ul>
+            </div>
+            <!-- modal text wrapper -->
           </div>
+          <!-- modal body -->
         </div>
-        <!-- modal body -->
+        <!-- /.modal-content -->
       </div>
-      <!-- /.modal-content -->
-    </div>
     <!-- /.modal-dialog -->
   </div>
+
+
     <footer>
       <div class="container-fluid">
         <ul class="footer-nav pull-right">

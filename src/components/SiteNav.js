@@ -3,13 +3,14 @@ import deku from 'deku'
 import component from 'lib/component'
 import UserBadge from 'components/UserBadge'
 import UserStore from 'stores/UserStore'
+import ProjectName from 'components/ProjectName'
 
 export default component({
   constructor() {
     this.handlers = {
       voteActive: _.exec(this, 'makeActive', 'Vote'),
       createActive: _.exec(this, 'makeActive', 'Create'),
-      setupActive: _.exec(this, 'makeActive', 'Setup')
+      aboutActive: _.exec(this, 'makeActive', 'About')
     }
   },
 
@@ -22,7 +23,6 @@ export default component({
   },
 
   makeActive(active) {
-    console.log(active); // @todo grab from routes versus click handlers
     this.setState({ active })
   },
 
@@ -49,10 +49,10 @@ export default component({
           span({class: 'hidden-xs'}, ' Create Issue')
         )
       ),
-      li({ onClick: this.handlers.setupActive, class: getClass('Setup')},
-        a({class: 'bold', href: '#/setup'},
-          i({class: 'fa fa-cog'}),
-          span({class: 'hidden-xs'}, ' Setup')
+      li({ onClick: this.handlers.aboutActive, class: getClass('About')},
+        a({class: 'bold', href: '#/about'},
+          i({class: 'fa fa-info'}),
+          span({class: 'hidden-xs'}, ' About')
         )
       ),
       li(
@@ -73,8 +73,8 @@ export default component({
     return div({class: 'navbar navbar-default navbar-static-top noselect'},
       div({class: 'container-fluid'},
         a({class: 'navbar-brand text-info bold', href: '#'},
-          i({class: 'fa fa-github'}),
-          em(' ENHANCE')
+          em(' ENHANCE'),
+          deku.dom(ProjectName)
         ),
         ul({class: 'nav navbar-nav pull-right'}, navLinks)
       )

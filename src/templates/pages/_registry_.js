@@ -5,8 +5,8 @@ import requireLogin from 'lib/middleware/requireLogin'
 // app routes
 router.on('/', require('pages/home.html'))
 router.on('/issue/:id', require('pages/issue-details.html'))
-router.on('/setup', requireLogin, require('pages/setup.html'))
-router.on('/setup/step2', requireLogin, require('pages/setupPayload.html'))
+router.on('/about', requireLogin, require('pages/about.html'))
+// router.on('/setup/step2', requireLogin, require('pages/setupPayload.html'))
 router.on('/create-issue', require('pages/create-issue.html'))
 router.on('/issue-created/:id', require('pages/issue-created.html'))
 router.on('/logout', () => {
