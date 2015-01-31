@@ -273,7 +273,7 @@ export default component({
             ),
             div({class: 'issue-detail-box'},
               h1({class: 'detailed-issue-title bold italic'},
-                a({class: 'text-success', href: issue.url},
+                a({class: 'text-success', href: issue.html_url, target: '_blank'},
                   i({class: 'fa fa-github'})
                 ),
                 ' ' + issue.title
