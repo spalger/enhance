@@ -35,6 +35,16 @@ export default class Model {
     return String(doc[this.primaryKey])
   }
 
+  _getDocs(docs, opts) {
+    if (!opts || opts.include_docs) {
+      return docs.rows.map(function(row) {
+        return row.doc
+      })
+    }
+
+    return docs
+  }
+
   upsert(doc, cb) {
     if (_.isArray(doc)) {
       return Promise.map(doc, (d) => {
@@ -89,6 +99,15 @@ export default class Model {
 
   get(obj, cb) {
     return Promise.resolve(this.db.get(obj)).nodeify(cb)
+  }
+
+  fetch(opt, cb) {
+    opt = _.defaults(opt || {}, { include_docs: true })
+
+    var docs = this.db.allDocs(opt)
+    .then(this._getDocs)
+
+    return Promise.resolve(docs).nodeify(cb)
   }
 
   query(fn, options, cb) {
