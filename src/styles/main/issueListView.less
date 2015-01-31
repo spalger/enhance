@@ -1,0 +1,135 @@
+@issue-list-spacing: 20px;
+
+issue-list {
+  display: block;
+  padding-top: @issue-list-spacing;
+
+  .panel > .list-group .list-group-item.issue-list-item {
+    border-left: 1px solid #dddddd;
+    border-right: 1px solid #dddddd;
+    padding-top: 2px;
+    padding-bottom: 5px;
+    margin-bottom: @issue-list-spacing;
+  }
+
+  .panel {
+    border-width: 0px;
+  }
+}
+
+
+.voting-links {
+  font-size: 30px;
+  line-height: 0;
+  margin: 0;
+  padding: 0;
+  color: @navbar-default-color;
+}
+
+
+.voting-link:hover,
+.voting-link:active {
+  color: @brand-success;
+  text-decoration: none;
+}
+
+.voting-link.down {
+  margin-top: -10px;
+}
+
+.big-count {
+  font-size: 20px;
+  color: #777777;
+  line-height: 1;
+  font-weight: bold;
+}
+
+.issue-name {
+  margin-top: 8px;
+  padding: 0;
+}
+
+.issue-name a:hover,
+.issue-name a:active {
+  text-decoration: none;
+}
+
+.enhancement-description {
+  font-size: 13px;
+  font-weight: 300;
+  font-color: #777777;
+  font-style: italic;
+  line-height: 1.4;
+  max-height: 69px;
+  overflow: hidden;
+  position: relative;
+}
+
+.enhancement-description:before {
+  position: absolute;
+  top: 52px;
+  left: 0px;
+  right: 0px;
+  height: 18px;
+  background: linear-gradient(transparent, #f2f2f2);
+  content: "";
+}
+
+.issue-info-list {
+  margin-top: 10px;
+  color: #777777;
+}
+
+.issue-info-list li {
+  margin-bottom: 2px;
+  font-size: 11px;
+}
+
+.issue-info-list li.list-space {
+  margin-top: 10px;
+}
+
+.issue-profile-image {
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: right;
+  padding-right: 10px;
+}
+
+.issue-profile-image img {
+  width: 50px;
+  border-radius: 50%;
+  border: 1px solid @gray-lighter;
+  display: inline;
+}
+
+@media (max-width: @screen-sm-max) {
+
+  .issue-name {
+    margin-top: 10px;
+    padding: 0;
+    font-size: 14px;
+  }
+  .enhancement-description {
+    font-size: 10px;
+  }
+
+  .issue-info-list li {
+    margin-bottom: 2px;
+    font-size: 10px;
+  }
+
+  .issue-profile-image {
+    margin-top: 30px;
+    padding-right: 7px;
+  }
+
+
+  .issue-profile-image img {
+    display: inline;
+    width: 35px;
+    height: 35px;
+  }
+}
+

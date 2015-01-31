@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import domready from 'domready'
 
+import 'styles/main.less'
 import 'components/_registry_'
 import 'pages/_registry_'
 
@@ -11,7 +12,6 @@ import log from 'lib/log'
 import {ListenerMethods} from 'reflux'
 import router from 'lib/router'
 import modals from 'lib/modals'
-import await from 'lib/await'
 
 class EnhanceApp extends CustomElement {
   createdCallback() {

@@ -6,8 +6,7 @@
   "scripts": {
     "dev": "gulp server",
     "build": "rm -Rf build && gulp build && cp -r src/index.html src/templates/pages/notFound.html src/styles src/fonts build",
-    "deploy": "npm run build && divshot deploy",
-    "build-css": "cd ./theme-builder/; gulp global-styles && cp globals/globals.css ../src/styles/"
+    "deploy": "npm run build && divshot deploy"
   },
   "repository": {
     "type": "git",
@@ -18,12 +17,16 @@
   "bugs": {
     "url": "https://github.com/staticshowdown/ss15-enhance/issues"
   },
+  "engines": {
+    "iojs": "1.0.x"
+  },
   "homepage": "https://github.com/staticshowdown/ss15-enhance",
   "devDependencies": {
     "6to5": "~2.13.6",
     "6to5-loader": "~2.0.0",
     "bluebird": "~2.9.0",
     "bootbox": "~4.3.0",
+    "bootstrap": "^3.3.2",
     "css-loader": "~0.9.1",
     "deku": "git://github.com/spenceralger/deku#patchEvents",
     "deku-scrub": "0.0.3",
@@ -31,7 +34,9 @@
     "emoji-images": "^0.1.1",
     "exports-loader": "^0.6.2",
     "express": "^4.11.1",
+    "file-loader": "^0.8.1",
     "firebase": "^2.1.1",
+    "font-awesome": "^4.3.0",
     "format": "~0.2.1",
     "gulp": "^3.8.10",
     "gulp-jshint": "^1.9.0",
@@ -53,6 +58,7 @@
     "reflux": "^0.2.3",
     "style-loader": "~0.8.3",
     "superagent": "^0.21.0",
+    "url-loader": "^0.5.5",
     "webpack": "~1.5.3"
   },
   "dependencies": {}

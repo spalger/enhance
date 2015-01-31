@@ -26,8 +26,15 @@ paths.DIST = abs('dist');
 // dir for final tar/zip version of the site
 paths.BUILD = abs('build');
 
+// the root styles directory
+paths.STYLES = abs('src', 'styles');
+
 // main module, imports all other modules for your app
-paths.ENTRY = resolve(paths.SRC, 'app.js');
+paths.ENTRY = {
+  bundle: resolve(paths.SRC, 'app.js'),
+  'markdown-comment': resolve(paths.STYLES, 'markdown-comment.less'),
+  'markdown-description': resolve(paths.STYLES, 'markdown-description.less')
+};
 
 // output file for the bundle
 paths.BUNDLE = resolve(paths.BUILD, 'bundle.js');

@@ -1,0 +1,70 @@
+@footer-base-color: #DEDEDE;
+
+site-nav,
+site-footer {
+  flex: 0 0 auto;
+}
+
+enhance-app {
+  flex: 1 1 auto;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+
+  > * {
+    flex: 1 0 auto;
+  }
+}
+
+// - header
+.navbar {
+  margin-bottom: 0px;
+}
+
+.header-profile-image img {
+  width: 13px;
+  height: 13px;
+}
+
+// - footer
+footer {
+  background-image: linear-gradient(lighten(@footer-base-color, 20%), lighten(@footer-base-color, 5%));
+  border-bottom: 1px solid darken(@footer-base-color, 3%);
+  border-top: 1px solid lighten(@footer-base-color, 3%);
+  border-left: 1px solid lighten(@footer-base-color, 3%);
+  border-right: 1px solid darken(@footer-base-color, 3%);
+  border-radius: 0px;
+}
+
+footer ul.footer-nav {
+  list-style-type: none;
+  margin: 0px;
+  padding: 0px;
+}
+
+footer .footer-nav li {
+  float: left;
+}
+
+footer .footer-nav li .linkless {
+  padding: 10px 15px;
+  display: inline-block;
+}
+
+footer .footer-nav a.footer-link {
+  display: inline-block;
+  color: @gray-darker;
+  padding: 10px 15px;
+  border-left: 1px solid lighten(@footer-base-color, 30%);
+  border-right: 1px solid darken(@footer-base-color, 1%);
+}
+
+footer .footer-nav a.footer-link:hover,
+footer .footer-nav a.footer-link:active,
+footer .footer-nav a.footer-link.active {
+  text-decoration: none;
+  color: lighten(@gray-darker, 20%);
+  background-image: linear-gradient(lighten(@footer-base-color, 5%), lighten(@footer-base-color, 20%));
+  // border-left: 1px solid lighten(@footer-base-color, 3%);
+  border-right: 1px solid darken(@footer-base-color, 3%);
+}

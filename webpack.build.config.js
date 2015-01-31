@@ -1,6 +1,5 @@
 var webpack = require('webpack');
 var dirname = require('path').dirname;
-var basename = require('path').basename;
 var join = require('path').join;
 
 module.exports = function (paths, dev) {
@@ -10,7 +9,7 @@ module.exports = function (paths, dev) {
     entry: paths.ENTRY,
     output: {
       path: dirname(paths.BUNDLE),
-      filename: basename(paths.BUNDLE),
+      filename: "[name].js",
       devtoolModuleFilenameTemplate: '[resource-path]',
     },
     module: {
@@ -37,7 +36,12 @@ module.exports = function (paths, dev) {
         {
           test: /\.css$/,
           loader: 'style-loader!css-loader'
-        }
+        },
+
+        { test: /\.woff2?(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&minetype=application/font-woff" },
+        { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,    loader: "url?limit=10000&minetype=application/octet-stream" },
+        { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,    loader: "file" },
+        { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,    loader: "url?limit=10000&minetype=image/svg+xml" }
       ],
       noParse: [
         join(paths.ROOT, 'bower_components', 'pouchdb', 'dist', 'pouchdb.js')
