@@ -17,6 +17,7 @@ import CommentActions from 'actions/CommentActions'
 import Markdown from 'Markdown'
 
 import log from 'lib/log'
+import uppercase from 'lib/uppercase'
 
 export default component({
   initialState() {
@@ -200,14 +201,17 @@ export default component({
     var { div, a, i } = dom
     var { user, upvotes, downvotes } = state
 
-    var upvoteClass;
+    var upvoteClass
+    var upvoteClickHandler = this.upvote.bind(null, state)
     var downvoteClass
+    var downvoteClickHandler = this.downvote.bind(null, state)
 
     if (user) {
       // if user logged in, look for his vote
       _.each(upvotes, (upvote) => {
         if(_.isEqual(upvote.user.login, user.github.username)) {
           upvoteClass = 'text-success';
+          upvoteClickHandler = _.noop;
         }
       });
 
@@ -215,6 +219,7 @@ export default component({
         _.each(downvotes, (downvote) => {
           if(_.isEqual(downvote.user.login, user.github.username)) {
             downvoteClass = 'text-danger';
+            downvoteClickHandler = _.noop;
           }
         })
       }
@@ -222,10 +227,10 @@ export default component({
 
     return div({class: 'arrow-box'},
       a({class: 'big-vote text-g'},
-        i({class: 'fa fa-caret-up ' + upvoteClass, onClick: this.upvote.bind(null, state)})
+        i({class: 'fa fa-caret-up ' + upvoteClass, onClick: upvoteClickHandler})
       ),
       a({class: 'big-vote down text-g'},
-        i({class: 'fa fa-caret-down ' + downvoteClass, onClick: this.downvote.bind(null, state)})
+        i({class: 'fa fa-caret-down ' + downvoteClass, onClick: downvoteClickHandler})
       )
     )
   },
@@ -278,13 +283,19 @@ export default component({
                 ),
                 ' ' + issue.title
               ),
-              h3({class: 'italic text-gl'}, '#' + issue.number)
+              h3({class: 'italic text-gl'}, '#' + issue.number),
+              h3(
+                span({class: 'italic text-gl'}, 'Status: '),
+                span(uppercase(issue.state))
+              )
             )
           ),
         this._renderFacepile(this.dom, 'upvotes', state),
         this._renderFacepile(this.dom, 'downvotes', state),
         div({class: 'description-wrapper'},
-          p({class: 'lead text-gl'}, issue.body)
+          p({class: 'lead text-gl'},
+            deku.dom(Markdown, { markdown: issue.body })
+          )
         ),
         div({class: 'comment-wrapper'},
           div({class: 'comment-toolbar'},
