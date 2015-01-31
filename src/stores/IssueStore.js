@@ -19,23 +19,13 @@ export default Reflux.createStore({
     window.location.reload()
   },
 
-  /* returned object keys: url, labels_url, comments_url, events_url, html_url, id, number, title,
-   user, labels (array), state, locked, comments (int), created_at, updated_at, pull_request (obj)
-   body */
   onFetchCompleted(issues) {
+    // TODO: paginate results
     this.trigger(issues)
   },
 
   onFetchFailed(err) {
     log.error('Error getting issues', err);
-  },
-
-  onFetchFromApiCompleted(issues) {
-    this.trigger(issues)
-  },
-
-  onFetchFromApiFailed(err) {
-    log.error('Fetching issue from github failed', err);
   },
 
   // recursive method to fetch all issues using IssueStore
