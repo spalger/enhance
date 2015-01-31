@@ -1,0 +1,25 @@
+{
+  "name": "leaf-globals",
+  "version": "0.0.1",
+  "description": "A global files build step and style guide",
+  "dependencies": {},
+  "scripts": {
+    "build": "gulp global-styles && cp globals/globals.css ../src/styles/"
+  },
+  "devDependencies": {
+    "del": "^1.1.1",
+    "gulp": "latest",
+    "gulp-autoprefixer": "^2.0.0",
+    "gulp-concat": "^2.4.3",
+    "gulp-debug": "^2.0.0",
+    "gulp-jshint": "^1.9.0",
+    "gulp-less": "latest",
+    "gulp-minify-css": "^0.3.11",
+    "gulp-notify": "^2.1.0",
+    "gulp-plumber": "^0.6.6",
+    "gulp-rename": "^1.2.0",
+    "gulp-theme-less": "^0.2.0",
+    "gulp-uglify": "^1.0.2",
+    "gulp-util": "^3.0.2"
+  }
+}

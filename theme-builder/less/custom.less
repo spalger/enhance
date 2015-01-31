@@ -1,0 +1,629 @@
+.background-primary{
+  background-color: @brand-primary;
+}
+
+.background-success{
+  background-color: @brand-success;
+}
+
+.background-info{
+  background-color: @brand-info;
+}
+
+.background-warning{
+  background-color: @brand-warning;
+}
+
+.background-danger{
+  background-color: @brand-danger;
+}
+
+//Generic Styles
+
+html, body {
+	height: 100%;
+}
+
+body {
+	display: flex;
+	flex-direction: column;
+}
+
+a{
+	cursor: pointer;
+}
+
+.centered{
+	text-align: center;
+}
+
+.italic{
+	font-style: italic;
+}
+
+.align-right{
+	text-align: right;
+}
+
+.noselect{
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+}
+
+.table-row{
+	display: table-row;
+}
+
+.table-centered{
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.no-gutter{
+	padding-left:  0px;
+	padding-right: 0px;
+}
+
+.no-gutter-left{
+	padding-left: 0px;
+}
+
+.shrink-gutter-left{
+	padding-left: 5px;
+}
+
+.shrink-gutter-right{
+	padding-right: 5px;
+}
+
+.float-left{
+	float: left;
+}
+
+.float-right{
+	float: right;
+}
+
+.float-fix{
+	overflow: hidden;
+}
+
+site-nav,
+site-footer {
+	flex: 0 0 auto;
+}
+
+enhance-app {
+	flex: 1 1 auto;
+	overflow: auto;
+	display: flex;
+	flex-direction: column;
+
+	> * {
+		flex: 1 0 auto;
+	}
+}
+
+//Login Panel
+
+.panel.login-panel{
+	margin-top: 100px;
+}
+
+.huge-icon{
+	font-size: 200px;
+}
+
+// Setup
+
+.setup-panel{
+	margin-top: 30px;
+}
+
+@media (min-width: @screen-sm-min) {
+	.setup-panel{
+		margin-top: 30px;
+	}
+}
+@media (min-width: @screen-lg-min) {
+	.setup-panel{
+		margin-top: 100px;
+	}
+}
+
+.setup-panel dt{
+	font-size: 16px;
+	margin-bottom: 10px;
+}
+
+.setup-panel dd{
+	margin-bottom: 20px;
+}
+
+.setup-panel .btn.full-width{
+	.context-margin-top(30px);
+}
+
+//Header
+
+.navbar{
+	margin-bottom: 0px;
+}
+
+.header-profile-image img{
+	width: 13px;
+	height: 13px;
+}
+
+//Footer
+
+@footer-base-color: #DEDEDE;
+footer{
+	background-image: linear-gradient(lighten(@footer-base-color, 20%), lighten(@footer-base-color, 5%));
+	border-bottom: 1px solid darken(@footer-base-color, 3%);
+	border-top: 1px solid lighten(@footer-base-color, 3%);
+	border-left: 1px solid lighten(@footer-base-color, 3%);
+	border-right: 1px solid darken(@footer-base-color, 3%);
+	border-radius: 0px;
+}
+
+footer ul.footer-nav{
+	list-style-type: none;
+	margin: 0px;
+	padding: 0px;
+}
+
+footer .footer-nav li{
+	float: left;
+}
+
+footer .footer-nav li .linkless{
+	padding: 10px 15px;
+	display: inline-block;
+}
+
+footer .footer-nav a.footer-link{
+	display: inline-block;
+	color: @gray-darker;
+	padding: 10px 15px;
+	border-left: 1px solid lighten(@footer-base-color, 30%);
+	border-right: 1px solid darken(@footer-base-color, 1%);
+}
+
+footer .footer-nav a.footer-link:hover,
+footer .footer-nav a.footer-link:active,
+footer .footer-nav a.footer-link.active{
+	text-decoration: none;
+	color: lighten(@gray-darker, 20%);
+	background-image: linear-gradient(lighten(@footer-base-color, 5%), lighten(@footer-base-color, 20%));
+	// border-left: 1px solid lighten(@footer-base-color, 3%);
+	border-right: 1px solid darken(@footer-base-color, 3%);
+}
+
+// Issues List
+@issue-list-spacing: 20px;
+
+issue-list {
+	display: block;
+	padding-top: @issue-list-spacing;
+
+	.panel > .list-group .list-group-item.issue-list-item {
+		border-top: 1px !important;
+		border: 1px solid @list-group-border;
+		padding-top: 2px;
+		padding-bottom: 5px;
+		margin-bottom: @issue-list-spacing;
+	}
+
+	.panel {
+		border-width: 0px;
+	}
+}
+
+
+.voting-links{
+	/*float: left;
+	clear: both;*/
+	font-size: 30px;
+	/*display: block;*/
+	line-height: 0;
+	margin: 0;f
+	padding: 0;
+	color: @navbar-default-color;
+}
+
+
+.voting-link:hover,
+.voting-link:active{
+	color: @brand-success;
+	text-decoration: none;
+}
+
+.voting-link.down{
+	margin-top: -10px;
+}
+
+.big-count{
+	font-size: 20px;
+	color: #777777;
+	line-height: 1;
+	font-weight: bold;
+}
+
+.issue-name{
+	margin-top: 8px;
+	padding: 0;
+}
+
+.issue-name a:hover,
+.issue-name a:active{
+	text-decoration: none;
+}
+
+.enhancement-description {
+  font-size: 13px;
+  font-weight: 300;
+  font-color: #777777;
+  font-style: italic;
+  line-height: 1.4;
+  max-height: 69px;
+  overflow: hidden;
+  position: relative;
+}
+
+.enhancement-description:before {
+  position: absolute;
+  top: 52px;
+  left: 0px;
+  right: 0px;
+  height: 18px;
+  background: linear-gradient(transparent, #f2f2f2);
+  content: "";
+}
+
+.issue-info-list{
+	margin-top: 10px;
+	color: #777777;
+}
+
+.issue-info-list li{
+	margin-bottom: 2px;
+	font-size: 11px;
+}
+
+.issue-info-list li.list-space{
+	margin-top: 10px;
+}
+
+.issue-profile-image{
+	margin-top: 20px;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: right;
+	padding-right: 10px;
+}
+
+.issue-profile-image img{
+	width: 50px;
+	border-radius: 50%;
+	border: 1px solid @gray-lighter;
+	display: inline;
+}
+
+@media (max-width: @screen-sm-max) {
+
+	.issue-name{
+		margin-top: 10px;
+		padding: 0;
+		font-size: 14px;
+	}
+	.enhancement-description{
+		font-size: 10px;
+	}
+
+	.issue-info-list li{
+		margin-bottom: 2px;
+		font-size: 10px;
+	}
+
+	.issue-profile-image{
+		margin-top: 30px;
+		padding-right: 7px;
+	}
+
+
+	.issue-profile-image img{
+		display: inline;
+		width: 35px;
+		height: 35px;
+	}
+}
+
+// Detailed View
+// -- Left Column
+
+.container.detail-view{
+	padding-top: 30px;
+	padding-bottom: 30px;
+}
+
+.issue-header-wrapper{
+	overflow: hidden;
+}
+
+.vote-box{
+	width: 70px;
+	float: left;
+	text-align: center;
+	margin-top: 10px;
+}
+
+.arrow-box{
+	width: 70px;
+	float: left;
+	text-align: center;
+}
+
+.arrow-box a{
+	display: block;
+	margin: 0;
+	padding: 0;
+	line-height: .5;
+}
+
+.arrow-box .big-vote{
+	font-size: 50px;
+}
+
+.vote-box .net-vote{
+	margin-top: 10px;
+	margin-bottom: 10px;
+	font-size: 30px;
+}
+
+.issue-detail-box{
+	float: left;
+	margin-left: 20px;
+	margin-top: 20px;
+	padding-left: 20px;
+	border-left: 3px solid @gray-lighter;
+}
+
+.detailed-issue-title{
+	font-size: 30px;
+	margin: 0px;
+	padding: 0px;
+	line-height: 1;
+}
+
+.facepile-container a img {
+	margin-left : 1px;
+}
+
+.description-wrapper{
+	clear: both;
+	margin-top: 15px;
+	padding-top: 15px;
+	margin-bottom: 15px;
+	padding-bottom: 15px;
+	border-top: 1px solid @gray-lighter;
+	border-bottom: 1px solid @gray-lighter;
+}
+
+.participants-wrapper{
+	margin-top: 20px;
+}
+
+// -- Right Column
+
+.profile-image{
+	width: 20px;
+	height: 20px;
+}
+
+// Comment Section
+
+img.media-object{
+	width: 64px;
+	height: 64px;
+	margin-right: 10px;
+	background-color: #FFFFFF;
+	border: 1px solid darken(@gray-lighter, 20%);
+}
+
+.media-heading a:hover{
+	text-decoration: none;
+}
+
+.comment-text{
+	color: @gray-light;
+	font-size: 14px;
+	line-height: 1.45;
+
+	img{
+		display: inline-block;
+		max-width: 300px;
+	}
+}
+
+.comment-wrapper .media{
+	margin: 0;
+	padding: 10px;
+	background-image: linear-gradient(lighten(@navbar-default-bg, 1%), darken(@navbar-default-bg, 1%));
+	border-bottom: 1px solid darken(@gray-lighter, 3%);
+	border-top: 1px solid lighten(@gray-lighter, 3%);
+	border-left: 1px solid lighten(@gray-lighter, 3%);
+	border-right: 1px solid darken(@gray-lighter, 3%);
+	clear: both;
+}
+
+.comment-wrapper .media.comment-media{
+	margin: 0;
+	padding: 10px;
+	background-image: linear-gradient(lighten(#333333, 20%), lighten(#333333, 5%));
+	border-bottom: 1px solid darken(#333333, 3%);
+	border-top: 1px solid lighten(#333333, 3%);
+	border-left: 1px solid lighten(#333333, 3%);
+	border-right: 1px solid darken(#333333, 3%);
+	clear: both;
+	display: none;
+}
+
+.comment-wrapper{
+	border: 1px solid darken(@gray-lighter, 5%);
+	// background-color: @gray-lighter;
+	border-radius: 2px;
+}
+
+.comment-wrapper .user-vote-action-wrapper{
+	margin: 0;
+	padding: 10px;
+	background-image: linear-gradient(lighten(@navbar-default-bg, 2%), darken(@navbar-default-bg, 2%));
+	//background-image: linear-gradient(lighten(@navbar-default-bg, 1%), darken(@navbar-default-bg, 1%));
+	border-bottom: 1px solid darken(@gray-lighter, 3%);
+	border-right: 1px solid darken(@gray-lighter, 3%);
+	border-top: 1px solid lighten(@gray-lighter, 3%);
+	border-left: 1px solid lighten(@gray-lighter, 3%);
+	clear: both;
+}
+
+.comment-wrapper .user-vote-action-wrapper img{
+	border: 1px solid darken(@gray-lighter, 20%);
+}
+
+.comment-wrapper .user-vote-action-wrapper .action{
+	color: @gray-light;
+	margin-left: 20px;
+}
+
+.comment-wrapper .comment-toolbar{
+	background-color: #111111;
+	background-image: linear-gradient(lighten(#222222, 20%), lighten(#222222, 10%));
+	overflow: hidden;
+}
+
+.add-comment-button{
+	margin-top: 15px;
+}
+
+.comment-wrapper .tool-list{
+	list-style-type: none;
+	overflow: hidden;
+	margin: 0;
+}
+
+.comment-wrapper .tool-list li{
+	float: right;
+	margin: none;
+}
+
+.comment-wrapper .tool-list li a{
+	padding-top: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	padding-right: 10px;
+	display: block;
+	color: #FFFFFF;
+	border-left: 1px solid lighten(#111111, 20%);
+}
+
+.comment-wrapper .tool-list li a:hover,
+.comment-wrapper .tool-list li a:active,
+.comment-wrapper .tool-list li a.active{
+	text-decoration: none;
+	color: #EFEFEF;
+	background-image: linear-gradient(lighten(#222222, 25%), lighten(#222222, 15%));
+}
+
+
+// Create Issue Modal
+
+.form-control.modal-ta {
+	max-width: 100%;
+	height: 90px;
+}
+
+.modal-content {
+	border: 1px solid darken(@gray-lighter, 5%);
+}
+
+.modal-body {
+	background-image: linear-gradient(darken(@gray-lighter, 2%), darken(@gray-lighter, 7%));
+}
+
+.modal-body .form-control{
+	border-radius: 3px;
+	border: 1px solid darken(@gray-lighter, 8%);
+}
+
+.modal-title {
+	margin-bottom: 10px;
+}
+
+@add-issue-bg-color: #444;
+.add-issue-container{
+	background-image: linear-gradient(lighten(@add-issue-bg-color, 5%), darken(@add-issue-bg-color, 3%));
+	border-bottom: 1px solid darken(@add-issue-bg-color, 15%);
+	border-top: 1px solid lighten(@add-issue-bg-color, 3%);
+	border-left: 1px solid lighten(@add-issue-bg-color, 3%);
+	border-right: 1px solid darken(@add-issue-bg-color, 3%);
+	padding-top: 10px;
+	padding-bottom: 20px;
+}
+
+.add-issue-container label{
+	color: @gray-lighter;
+	margin-top: 10px;
+	font-weight: 300;
+}
+
+.add-issue-container .media-heading{
+	font-size: 16px;
+}
+
+@media (max-width: @screen-sm-min) {
+	.participants-wrapper{
+		border-top: 1px solid @gray-lighter;
+		padding-top: 5px;
+	}
+
+	.vote-box{
+		margin-top: 20px;
+	}
+
+	.arrow-box{
+		width: 50px;
+		float: left;
+		text-align: left;
+		margin-top: 10px;
+	}
+
+	.issue-detail-box{
+		clear: both;
+		margin-left: 0px;
+		margin-top: 20px;
+		padding-left: 0px;
+		border: none;
+	}
+
+
+	.profile-image{
+		width: 20px;
+		height: 20px;
+	}
+
+	.description-wrapper .lead{
+		font-size: 16px;
+	}
+}
+
+.loading-content {
+	font-size: 30px;
+	padding: 20px;
+	margin: 20px;
+}
+
+.show-comment-box {
+	display: block !important;
+}

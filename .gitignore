@@ -4,4 +4,3 @@ build
 npm-debug.log
 .divshot-cache
 theme-builder/globals/globals.min.css
-theme-builder
