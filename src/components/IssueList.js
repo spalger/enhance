@@ -22,7 +22,7 @@ export default component({
     this.bindTo(IssueStore, 'issues')
     //this.listenTo(PopularityStore, this.addScores, this.addScores)
 
-    IssueActions.fetchAll()
+    IssueActions.fetch()
   },
 
   getIssues(dom, state) {
