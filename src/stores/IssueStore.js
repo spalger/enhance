@@ -30,6 +30,14 @@ export default Reflux.createStore({
     log.error('Error getting issues', err);
   },
 
+  onFetchFromApiCompleted(issues) {
+    this.trigger(issues)
+  },
+
+  onFetchFromApiFailed(err) {
+    log.error('Fetching issue from github failed', err);
+  },
+
   // recursive method to fetch all issues using IssueStore
   onFetchAll(options) {
     var self = this;
