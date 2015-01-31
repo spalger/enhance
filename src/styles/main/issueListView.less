@@ -5,6 +5,7 @@ issue-list {
   padding-top: @issue-list-spacing;
 
   .panel > .list-group .list-group-item.issue-list-item {
+    display: flex;
     border-left: 1px solid #dddddd;
     border-right: 1px solid #dddddd;
     padding-top: 2px;
@@ -12,6 +13,21 @@ issue-list {
     margin-bottom: @issue-list-spacing;
     overflow: hidden;
     background-image: linear-gradient(#fdfdfd, #f2f2f2);
+
+    .title {
+      flex: 1 1 auto;
+    }
+
+    .meta {
+      flex: 0 0 180px;
+      padding: 0 10px;
+    }
+
+    .profile {
+      flex: 0 0 auto;
+      align-self: center;
+      padding: 0 10px;
+    }
   }
 
   .panel {
@@ -62,7 +78,7 @@ issue-list {
   font-color: #777777;
   font-style: italic;
   line-height: 1.4;
-  max-height: 69px;
+  max-height: 35px;
   overflow: hidden;
   position: relative;
 }
@@ -89,14 +105,6 @@ issue-list {
 
 .issue-info-list li.list-space {
   margin-top: 10px;
-}
-
-.issue-profile-image {
-  margin-top: 20px;
-  margin-left: auto;
-  margin-right: auto;
-  text-align: right;
-  padding-right: 10px;
 }
 
 .issue-profile-image img {
