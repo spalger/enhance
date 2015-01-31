@@ -16,7 +16,7 @@ export default component({
         return html;
       });
 
-      var scriptTag = `<script src="markdown-${props.style || 'comment'}.js"></style>\n`;
+      var scriptTag = `<script src="markdown-${props.style || 'comment'}.js"></script>\n`;
       el.createShadowRoot().innerHTML = scriptTag + withEmotion;
     })
   },
