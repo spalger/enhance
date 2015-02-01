@@ -11,7 +11,7 @@ export default component({
 
   _renderLabel(type) {
     type = (type === 'upvotes') ? 'upvotes' : 'downvotes'
-    { h5 } = this.dom
+    var { h5 } = this.dom
     var className = type === 'upvotes' ? 'text-success' : 'text-danger';
     var typeOfUser = type === 'upvotes' ? '+1`ers' : '-1`ers';
     return h5({class: className}, typeOfUser)
@@ -42,7 +42,7 @@ export default component({
 
     return div({class: 'participants-wrapper'},
       div({ class: 'upvotes' }, this._renderLabel('upvotes'), this._renderFaces('upvotes')),
-      div({ class: 'downvotes' }, this._renderLabel('downvotes'), this._renderFaces('downvotes')),
-    );
+      div({ class: 'downvotes' }, this._renderLabel('downvotes'), this._renderFaces('downvotes'))
+    )
   }
 })

@@ -111,7 +111,7 @@ export default component({
       div({class: 'row'},
         div({class: 'col-xs-12 col-sm-12 col-lg-10 col-lg-offset-1'},
           div({class: 'issue-header-wrapper'},
-            this.el(VoteControls, { issue: state.issue })
+            this.el(VoteControls, { issue: state.issue }),
             div({class:'vote-box'},
               div({class: 'net-vote bold text-success'}, upvotes.length - downvotes.length),
               div({class: 'vote-summary-wrapper'},
@@ -159,7 +159,7 @@ export default component({
               )
             )
           ),
-          commentBox
+          commentBox,
           this.el(IssueAddComment, { issue: state.issue }),
           issueComments
         )

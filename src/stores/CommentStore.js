@@ -18,7 +18,7 @@ export default Reflux.createStore({
 
   init() {
     this.comments = []
-  }
+  },
 
   onFetchCompleted(comments) {
     this.comments = comments

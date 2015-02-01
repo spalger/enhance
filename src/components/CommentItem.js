@@ -4,7 +4,7 @@ import GithubAvatar from 'components/GithubAvatar'
 
 export default component({
   render(props) {
-    { comment } = props;
+    var { comment } = props;
     var {div, a, img, h4} = dom
 
     if (! comments) {

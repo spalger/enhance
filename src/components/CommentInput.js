@@ -24,7 +24,7 @@ export default component({
     var username = user.profile && user.profile.name ? user.profile.name : 'Please login to comment'
 
     if (user) {
-      image = a(this.el(GithubAvatar, { id: user.github.id })
+      image = a(this.el(GithubAvatar, { id: user.github.id }))
     }
 
     var commentBoxClass = state.showCommentBox ? ' show-comment-box' : '';

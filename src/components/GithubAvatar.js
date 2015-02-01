@@ -8,11 +8,10 @@ export default component({
   },
 
   render(props) {
-    { img } = this.dom
+    var { img } = this.dom
 
     var url = [avatarUrl, props.id, '?s=', props.size].join('')
     var alt = ['avatar-', props.id].join('')
     return img({ class: 'github-avatar', src: url, alt: alt })
-    }
   }
 })
