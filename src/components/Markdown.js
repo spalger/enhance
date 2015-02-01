@@ -2,7 +2,13 @@ import component from 'lib/component'
 import marked from 'lib/marked'
 import github from 'lib/github'
 
+import hljsDefaultStyles from 'highlight.js/styles/default.css'
+import hljsGithubStyles from 'highlight.js/styles/github.css'
+
 const TAG_RE = /\:([a-z0-9_\-\+]+)\:/g
+
+const STYLES = `<style>${hljsDefaultStyles}\n${hljsGithubStyles}</style>`;
+
 export default component({
   afterMount(el, props) {
     github.emoji.then(function (resp) {
@@ -16,12 +22,11 @@ export default component({
         return html;
       });
 
-      var scriptTag = `<script src="markdown-${props.style || 'comment'}.js"></script>\n`;
-      el.createShadowRoot().innerHTML = scriptTag + withEmotion;
+      el.createShadowRoot().innerHTML = STYLES + withEmotion;
     })
   },
 
-  render() {
-    return this.dom.div()
+  render(props) {
+    return this.dom.div({ class: 'markdown markdown-' + (props.style || 'comment') })
   }
 });

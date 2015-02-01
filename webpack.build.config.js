@@ -29,13 +29,20 @@ module.exports = function (paths, dev) {
         // less styles
         {
           test: /\.less$/,
-          loader: 'style-loader!css-loader!less-loader'
+          loader: 'style-loader!css-loader?disableStructuralMinification!less-loader'
         },
 
         // css styles
         {
           test: /\.css$/,
+          exclude: /highlight\.js/,
           loader: 'style-loader!css-loader'
+        },
+
+        // raw css styles
+        {
+          test: /highlight\.js\/.+\.css$/,
+          loader: 'raw-loader'
         },
 
         { test: /\.woff2?(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&minetype=application/font-woff" },

@@ -1,0 +1,25 @@
+.markdown-comment {
+  .md-style();
+}
+
+.markdown-description {
+  .md-style(16px);
+}
+
+.md-style(@font-size: 14px; @line-height: 1.45em;) {
+  p {
+    color: #777777;
+    font-size: @font-size;
+    line-height: @line-height;
+    position: relative;
+    max-width: 100%;
+    padding-right: 20px;
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+}

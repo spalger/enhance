@@ -31,9 +31,7 @@ paths.STYLES = abs('src', 'styles');
 
 // main module, imports all other modules for your app
 paths.ENTRY = {
-  bundle: resolve(paths.SRC, 'app.js'),
-  'markdown-comment': resolve(paths.STYLES, 'markdown-comment.less'),
-  'markdown-description': resolve(paths.STYLES, 'markdown-description.less')
+  bundle: resolve(paths.SRC, 'app.js')
 };
 
 // output file for the bundle

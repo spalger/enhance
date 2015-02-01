@@ -294,7 +294,7 @@ export default component({
         this._renderFacepile(this.dom, 'downvotes', state),
         div({class: 'description-wrapper'},
           p({class: 'lead text-gl'},
-            deku.dom(Markdown, { markdown: issue.body })
+            deku.dom(Markdown, { markdown: issue.body, style: 'description' })
           )
         ),
         div({class: 'comment-wrapper'},
