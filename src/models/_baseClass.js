@@ -2,6 +2,7 @@ import _ from 'lodash'
 import pouchdb from 'pouchdb'
 import lunr from 'lunr'
 import Promise from 'bluebird'
+import config from 'config'
 import log from 'lib/log'
 
 export default class Model {
@@ -44,7 +45,7 @@ export default class Model {
   }
 
   _createDb() {
-    return this.db = new pouchdb(this.name, {
+    return this.db = new pouchdb([config.github.org, config.github.repo, this.name].join('-'), {
       adapter: 'idb'
     })
   }
