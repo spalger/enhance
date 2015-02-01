@@ -5,6 +5,7 @@ class IssueModel extends DBClass {
   constructor() {
     super('issues')
 
+    // used to set and fetch records by id
     this.primaryKey = 'id'
 
     this._setIndexer(function () {

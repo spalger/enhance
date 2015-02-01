@@ -6,6 +6,8 @@ import log from 'lib/log'
 class BallotModel extends DBClass {
   constructor() {
     super('ballot')
+
+    // used to set and fetch records by id
     this.primaryKey = 'issueId'
   }
 

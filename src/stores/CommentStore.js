@@ -16,29 +16,27 @@ const DOWNVOTE = ':-1:'
 export default Reflux.createStore({
   listenables: CommentActions,
 
-   comments : [],
+  init() {
+    this.comments = []
+  }
 
-  _create(issueNumber, comment) {
-    return github
-    .method('post')
-    .path(['repos', org, repo, 'issues', issueNumber, 'comments'])
-    .body({ body: comment })
-    .send()
-    .then(() => {
-      if(_.isEqual(comment, UPVOTE)) {
-        log.success('Your upvote was added to the issue')
-        CommentActions.upvoteSuccess(issueNumber)
-      } else if(_.isEqual(comment, DOWNVOTE)) {
-        log.success('Your downvote was added to the issue')
-        CommentActions.downvoteSuccess(issueNumber)
-      } else {
-        log.success('Your comment was added to the issue')
-        CommentActions.commentAddSuccess(issueNumber)
-      }
-    })
-    .catch((err) => {
-      log.error('Error creating comment', err)
-    })
+  onFetchCompleted(comments) {
+    this.comments = comments
+    this.trigger(this.comments)
+  },
+
+  onFetchFailed(err) {
+    log.error('Failed to fetch comments', err)
+  },
+
+  onCreatsCompleted(comment) {
+    log.success('Your comment was added to the issue')
+    this.comments.push(comment)
+    this.trigger(this.comments)
+  },
+
+  onCreateFailed(err) {
+    log.error('Comment creation failed', err)
   },
 
   /* sample return object keys: url, html_url, issue_url, id, user, created_at, updated_at, body */
