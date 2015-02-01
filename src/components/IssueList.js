@@ -22,7 +22,7 @@ export default component({
     this.bindTo(IssueStore, 'issues')
     //this.listenTo(PopularityStore, this.addScores, this.addScores)
 
-    IssueActions.fetchAll()
+    IssueActions.fetch()
   },
 
   getIssues(dom, state) {
@@ -49,13 +49,13 @@ export default component({
       return (
         li({class: 'list-group-item issue-list-item'},
           popularity,
-          div({class: 'col-xs-offset-1 col-xs-5 table-centered'},
+          div({class: 'title'},
             h3({class: 'issue-name'},
               a({href: '/#/issue/' + issue.number}, issue.title)
             ),
             p({class: 'enhancement-description'}, issue.body)
           ),
-          div({class: 'col-xs-3 no-gutter-left srhink-gutter-right'},
+          div({class: 'meta'},
             ul({class: 'list-unstyled issue-info-list'},
               li(
                 span({class: 'bold'}, '#' + issue.number),
@@ -73,7 +73,7 @@ export default component({
               )
             )
           ),
-          div({class: 'col-xs-1 no-gutter'},
+          div({class: 'profile'},
             div({class: 'issue-profile-image'},
               img({ src: 'https://avatars2.githubusercontent.com/u/' + issue.user.id + '?v=3&s=50'})
             )

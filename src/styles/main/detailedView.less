@@ -7,18 +7,17 @@
 
 .issue-header-wrapper {
   overflow: hidden;
+  display: flex;
 }
 
 .vote-box {
-  width: 70px;
-  float: left;
+  flex: 0 0 70px;
+  padding: 10px;
   text-align: center;
-  margin-top: 10px;
 }
 
 .arrow-box {
-  width: 70px;
-  float: left;
+  flex: 0 0 55px;
   text-align: center;
 }
 
@@ -40,10 +39,8 @@
 }
 
 .issue-detail-box {
-  float: left;
-  margin-left: 20px;
+  flex: 1 1 auto;
   margin-top: 20px;
-  padding-left: 20px;
   border-left: 3px solid @gray-lighter;
 }
 

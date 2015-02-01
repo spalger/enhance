@@ -11,9 +11,7 @@ export default class Model {
 
     this.primaryKey = 'id'
     this.name = name
-    this.db = new pouchdb(name, {
-      adapter: 'idb'
-    })
+    this._createDb()
 
     // use events to pass records to the indexer
     this.db.changes({
@@ -33,6 +31,28 @@ export default class Model {
   _id(doc) {
     if (doc._id) return doc._id
     return String(doc[this.primaryKey])
+  }
+
+  _getDocs(docs, opts) {
+    if (!opts || opts.include_docs) {
+      return docs.rows.map(function(row) {
+        return row.doc
+      })
+    }
+
+    return docs
+  }
+
+  _createDb() {
+    return this.db = new pouchdb(this.name, {
+      adapter: 'idb'
+    })
+  }
+
+  reset() {
+    return this.db.destroy().then(() => {
+      return this._createDb()
+    })
   }
 
   upsert(doc, cb) {
@@ -89,6 +109,15 @@ export default class Model {
 
   get(obj, cb) {
     return Promise.resolve(this.db.get(obj)).nodeify(cb)
+  }
+
+  fetch(opt, cb) {
+    opt = _.defaults(opt || {}, { include_docs: true })
+
+    var docs = this.db.allDocs(opt)
+    .then(this._getDocs)
+
+    return Promise.resolve(docs).nodeify(cb)
   }
 
   query(fn, options, cb) {
