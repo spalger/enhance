@@ -24,8 +24,8 @@ export default component({
     IssueActions.fetch()
   },
 
-  getIssues(dom, state) {
-    var {div, ul, li, a, img, p, span, h3} = dom
+  getIssues(state) {
+    var {div, ul, li, a, img, p, span, h3} = this.dom
 
     if (! state.issues) {
       return this.el(LoadingContent)
@@ -84,8 +84,8 @@ export default component({
     // need issue title, description, number, moment.ago, author, numComments, upvotes/downvotes
   },
 
-  getSearchBar(dom) {
-    var { div, input } = dom
+  getSearchBar() {
+    var { div, input } = this.dom
 
     return div({class: 'search-container'},
       input( { onKeyUp: IssueActions.search, class: 'form-control', placeholder: 'Search by title or issue number' })
@@ -100,8 +100,8 @@ export default component({
 
     return div({class: 'panel panel-default'},
       ul({class: 'list-group'},
-        this.getSearchBar(this.dom),
-        this.getIssues(this.dom, state)
+        this.getSearchBar(),
+        this.getIssues(state)
       )
     )
   }
