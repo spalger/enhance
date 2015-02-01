@@ -1,5 +1,4 @@
 import _ from 'lodash'
-import deku from 'deku'
 import component from 'lib/component'
 import UserBadge from 'components/UserBadge'
 import UserStore from 'stores/UserStore'
@@ -56,7 +55,7 @@ export default component({
         )
       ),
       li(
-        deku.dom(UserBadge)
+        this.el(UserBadge)
       )
     ];
 
@@ -74,7 +73,7 @@ export default component({
       div({class: 'container-fluid'},
         a({class: 'navbar-brand text-info bold', href: '#'},
           em(' ENHANCE'),
-          deku.dom(ProjectName)
+          this.el(ProjectName)
         ),
         ul({class: 'nav navbar-nav pull-right'}, navLinks)
       )

@@ -1,5 +1,4 @@
 import _ from 'lodash'
-import deku from 'deku'
 import Markdown from 'Markdown'
 
 import component from 'lib/component'
@@ -9,6 +8,8 @@ import uppercase from 'lib/uppercase'
 
 import VoteControls from 'components/VoteControls'
 import VoteFacepile from 'components/VoteFacepile'
+import CommentInput from 'components/CommentInput'
+import CommentItem from 'components/CommentItem'
 
 import RequestStore from 'stores/RequestStore'
 import LoadingContent from 'LoadingContent'
@@ -58,37 +59,6 @@ export default component({
     CommentActions.getByIssue(issueNumber)
   },
 
-  renderComments(dom, comments) {
-    var {div, a, img, h4} = dom
-
-    if (! comments) {
-      return div('Loading...')
-    } else if (! comments.length) {
-      return div('')
-    }
-
-    return _.map(comments, function(comment) {
-      return div({class: 'media'},
-        div({class: 'media-left'},
-          a(
-            img({class: 'media-object', src: 'https://avatars3.githubusercontent.com/u/' + comment.user.id + '?v=3&amp;s=64'})
-          )
-        ),
-        div({class: 'media-body'},
-          h4({class: 'media-heading'},
-            a({class: 'username bold text-g', href: comment.user.html_url},
-              comment.user.login
-            )
-          ),
-          div(
-            { class: 'comment-text' },
-            deku.dom(Markdown, { markdown: comment.body })
-          )
-        )
-      )
-    })
-  },
-
   updateNewComment(event) {
     this.setState({ newComment : event.target.value })
   },
@@ -109,36 +79,6 @@ export default component({
     CommentActions.comment(state.issue.number, state.newComment);
   },
 
-  renderTextbox(dom, user, state) {
-    var {div, a, img, h4, textarea, button, span, i} = dom
-    var { newComment } = state
-    var image = span('');
-    var username = user.profile && user.profile.name ? user.profile.name : 'Please login to comment'
-    if(user) {
-      image = a(
-        img({class: 'media-object', src: 'https://avatars3.githubusercontent.com/u/' + user.github.id + '?v=3&amp;s=64'})
-      );
-    }
-
-    var commentBoxClass = state.showCommentBox ? ' show-comment-box' : '';
-
-    return (
-      div({class: 'comment-media media' + commentBoxClass },
-        div({class: 'media-left'}, image),
-        div({class: 'media-body'},
-          h4({class: 'media-heading'},
-            a({class: 'username bold text-glr'}, username)
-          ),
-          textarea({class: 'form-control', onKeyUp: this.updateNewComment}, newComment),
-          button(
-            {class: 'btn btn-sm btn-success pull-right add-comment-button', onClick : this.submitComment.bind(null, state) },
-            i({class: 'fa fa-plus'}, ' Comment')
-          )
-        )
-      )
-    )
-  },
-
   toggleCommentBox(state) {
     this.setState({ showCommentBox : ! state.showCommentBox })
   },
@@ -152,17 +92,26 @@ export default component({
       return div({class: 'container'},
         div({class: 'row'},
           div({ class: 'col-xs-12 col-sm-12 col-lg-10 col-lg-offset-1'},
-            deku.dom(LoadingContent)
+            this.el(LoadingContent)
           )
         )
       )
     }
 
+    var commentBox = '';
+    if (state.showCommentBox) {
+      commentBox = this.el(CommentInput, { issueId: state.issue.id })
+    }
+
+    var issueComments = state.comments.map(function (comment) {
+      return this.el(CommentItem, { comment })
+    })
+
     return div({class: 'container detail-view'},
       div({class: 'row'},
         div({class: 'col-xs-12 col-sm-12 col-lg-10 col-lg-offset-1'},
           div({class: 'issue-header-wrapper'},
-            deku.dom(VoteControls, { issue: this.state.issue })
+            this.el(VoteControls, { issue: state.issue })
             div({class:'vote-box'},
               div({class: 'net-vote bold text-success'}, upvotes.length - downvotes.length),
               div({class: 'vote-summary-wrapper'},
@@ -194,10 +143,10 @@ export default component({
               )
             )
           ),
-        deku.dom(VoteFacepile, { issue: this.state.issue }),
+        this.el(VoteFacepile, { issue: state.issue }),
         div({class: 'description-wrapper'},
           p({class: 'lead text-gl'},
-            deku.dom(Markdown, { markdown: issue.body, style: 'description' })
+            this.el(Markdown, { markdown: issue.body, style: 'description' })
           )
         ),
         div({class: 'comment-wrapper'},
@@ -210,8 +159,9 @@ export default component({
               )
             )
           ),
-          this.renderTextbox(this.dom, user, state),
-          this.renderComments(this.dom, comments)
+          commentBox
+          this.el(IssueAddComment, { issue: state.issue }),
+          issueComments
         )
       )
     )

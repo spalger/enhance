@@ -1,5 +1,7 @@
 import component from 'lib/component'
 
+import GithubAvatar from 'components/GithubAvatar'
+
 export default component({
   beforeMount() {
     // TODO: fetch comment
@@ -23,14 +25,10 @@ export default component({
       return vote.type === type
     })
     .map((vote) => {
-      var avatarUrl = `https://avatars3.githubusercontent.com/u/${vote.user.id}?v=3&amp;s=80`
-
-      return a(img({
+      return a(img(GithubAvatar, { id: vote.user.id }), {
         alt: vote.user.login,
-        title : vote.user.login,
-        class: 'profile-image',
-        src: avatarUrl
-      }))
+        title : vote.user.login
+      })
     })
   },
 
