@@ -14,6 +14,7 @@ actions.fetch.listen(function (options) {
 })
 
 actions.fetchFromApi.listen(function (options) {
+  // TODO: loop through the counts, exhaust issues in the api
   var { org, repo, enhanceLabel } = config.github;
   options = _.defaults(options || {}, {
     labels: [ enhanceLabel ],
