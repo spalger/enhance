@@ -9,7 +9,7 @@ import flux from 'lib/flux'
 export default component
 
 function component(spec) {
-  var DekuComponent = deku.component(_.omit(spec, 'constructor'))
+  var DekuComponent = deku.component(_.isFunction(spec) ? spec : _.omit(spec, 'constructor'));
 
   // allow registering multiple handlers for initialState, beforeMount, etc.
   DekuComponent.use(multipleHandlers)
@@ -25,10 +25,18 @@ function component(spec) {
   // helpers for dom elements
   DekuComponent.use(dom)
 
+  DekuComponent.use(function (Component) {
+    Component.prototype.el = deku.dom;
+
+    Component.mount = function (...args) {
+      args.unshift(Component);
+      return deku.dom.apply(deku, args)
+    }
+  })
+
   return DekuComponent
 }
 
-component.el = deku.dom
 component.dom = dom
 
 var use = deku.component().use;
