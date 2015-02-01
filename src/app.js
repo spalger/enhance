@@ -7,11 +7,15 @@ import 'pages/_registry_'
 
 import CustomElement from 'lib/CustomElement'
 import UserActions from 'actions/UserActions'
+import IssueActions from 'actions/IssueActions'
 import RequestStore from 'stores/RequestStore'
 import log from 'lib/log'
 import {ListenerMethods} from 'reflux'
 import router from 'lib/router'
 import modals from 'lib/modals'
+
+// TODO: remove this - trigger api grabs via store update chain
+IssueActions.fetchFromApi()
 
 class EnhanceApp extends CustomElement {
   createdCallback() {
