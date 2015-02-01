@@ -46,7 +46,7 @@
     "jquery": "~2.1.3",
     "less": "^2.3.1",
     "less-loader": "git://github.com/spenceralger/less-loader#updateLess",
-    "lodash": "~2.4.1",
+    "lodash": "^3.0.1",
     "lodash-deep": "~1.5.3",
     "loglevel": "~1.2.0",
     "lunr": "^0.5.7",
