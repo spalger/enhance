@@ -10,18 +10,15 @@ import issueModel from 'models/issueModel'
 export default Reflux.createStore({
   listenables: IssueActions,
 
-  issues: [],
-
-  issue : {}, // single issue loaded on detail page
-  defaultPerPage: 100,
-
-  _reloadPage() {
-    window.location.reload()
+  init() {
+    this.issues = []
+    this.defaultPerPage = 30
   },
 
   onFetchCompleted(issues) {
     // TODO: paginate results
-    this.trigger(issues)
+    this.issues = issues
+    this.trigger(this.issues)
   },
 
   onFetchFailed(err) {
