@@ -1,6 +1,6 @@
 import React from 'react'
 import Router, { HistoryLocation } from 'react-router'
-import routes from './App/routes'
+import routes from './app/routes'
 
 require('ui/chrome')
 .setNavBackground('#f5f5f5')

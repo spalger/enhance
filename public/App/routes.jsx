@@ -1,13 +1,13 @@
 import React from 'react'
 import { Route } from 'react-router'
 
-import App from './App'
-import About from './About'
-import InboxContainer from './Inbox/InboxContainer'
+import AppContainer from '../containers/App'
+import AboutContainer from '../containers/About'
+import InboxContainer from '../containers/Inbox'
 
 export default (
-  <Route handler={ App } name='home' path='/app/enhance'>
-    <Route handler={ About } name='about' path='about'/>
+  <Route handler={ AppContainer } name='home' path='/app/enhance'>
+    <Route handler={ AboutContainer } name='about' path='about'/>
     <Route handler={ InboxContainer } name='inbox' path='inbox'/>
   </Route>
 )

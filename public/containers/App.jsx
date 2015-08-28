@@ -1,11 +1,9 @@
 import React from 'react'
 import { RouteHandler, Route, Link } from 'react-router'
 import { Provider } from 'react-redux'
-import { devTools, persistState } from 'redux-devtools'
-import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react'
 
-import '../style/enhance.less'
-import store from './store'
+import '../ui/style/enhance.less'
+import store from '../app/store'
 
 export default React.createClass({
   displayName: 'App',
@@ -26,10 +24,6 @@ export default React.createClass({
           </div>
         ) }
         </Provider>
-
-        <DebugPanel bottom right top>
-          <DevTools monitor={ LogMonitor } store={ store } />
-        </DebugPanel>
       </div>
     )
   },
