@@ -1,16 +1,30 @@
 import { createStore } from 'redux'
-import Immutable from 'immutable'
+import Immutable, { fromJS } from 'immutable'
+import inboxActions from './Inbox/actions'
+
+let defaultState = () => {
+  return fromJS({
+    messages: new Immutable.Set(),
+  })
+}
 
 export default createStore(
-  (state = new Immutable.Map(), action) => {
-    switch (action.type) {
+  (state = defaultState(), action) => {
+    switch (action.creator) {
 
-    case 'SEND_BACON':
-      return state
-      break
+    case inboxActions.sendBacon:
+      let message = new Immutable.Map({
+        time: Date.now(),
+        from: 'john@email.com',
+        body: 'BACON!!!',
+      })
+
+      let messages = state.get('messages').add(message)
+
+      return state.set('messages', messages)
 
     default:
-      throw new Error(`unkown action type ${action.type}`)
+      return state
 
     }
   }
