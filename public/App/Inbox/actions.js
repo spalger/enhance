@@ -1,6 +1,3 @@
-import { Actions } from '../Actions'
+import { createAction } from 'redux-actions'
 
-export default new Actions([
-  ['sendBacon'],
-])
-
+export const sendEmail = createAction('SEND_EMAIL')

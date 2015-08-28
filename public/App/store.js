@@ -1,31 +1,44 @@
 import { createStore } from 'redux'
-import Immutable, { fromJS } from 'immutable'
+import { Map as IMap, List, fromJS } from 'immutable'
+import { compose, applyMiddleware } from 'redux'
+import { handleActions } from 'redux-actions'
+import { devTools, persistState } from 'redux-devtools'
+import promiseMiddleware from 'redux-promise'
+
 import inboxActions from './Inbox/actions'
 
-let defaultState = () => {
-  return fromJS({
-    messages: new Immutable.Set(),
-  })
-}
+const finalCreateStore = compose(
+  // Enables your middleware:
+  applyMiddleware(promiseMiddleware),
 
-export default createStore(
-  (state = defaultState(), action) => {
-    switch (action.creator) {
+  // Provides support for DevTools:
+  devTools(),
 
-    case inboxActions.sendBacon:
-      let message = new Immutable.Map({
-        time: Date.now(),
-        from: 'john@email.com',
-        body: 'BACON!!!',
-      })
+  // Lets you write ?debug_session=<name> in address bar to persist debug sessions
+  persistState(
+    window.location.href.match(/[?&]debug_session=([^&]+)\b/)
+  ),
 
-      let messages = state.get('messages').add(message)
+  createStore,
+)
 
-      return state.set('messages', messages)
-
-    default:
-      return state
-
-    }
-  }
+export default finalCreateStore(
+  handleActions(
+    {
+      SEND_EMAIL: (state, actions) => {
+        return state.set('messages',
+          state
+          .get('messages')
+          .push(new IMap({
+            id: `message_${state.get('messages').size + 1}`,
+            from: 'john@email.com',
+            body: 'BACON!!!',
+          }))
+        )
+      },
+    },
+    fromJS({
+      messages: new List(),
+    })
+  )
 )

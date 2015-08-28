@@ -13,7 +13,7 @@ export default React.createClass({
 
     let messages = this.props.messages.map(message => {
       return (
-        <li>
+        <li key={ message.get('id') }>
           <h3>{ message.get('from') }</h3>
           <p>{ message.get('body') }</p>
         </li>

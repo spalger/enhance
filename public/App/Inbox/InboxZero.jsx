@@ -8,7 +8,7 @@ export default React.createClass({
     return (
       <div>
         <h2>InboxZero</h2>
-        { messages }
+        <p>Lookin good!</p>
       </div>
     )
   },

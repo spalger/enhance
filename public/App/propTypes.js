@@ -1,9 +1,9 @@
 import { PropTypes } from 'react'
-import Immutable from 'immutable'
+import { List } from 'immutable'
 
 export default {
   ...PropTypes,
 
-  messages: PropTypes.instanceOf(Immutable.Set).isRequired,
+  messages: PropTypes.instanceOf(List).isRequired,
   action: PropTypes.func.isRequired,
 }

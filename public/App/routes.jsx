@@ -6,8 +6,8 @@ import About from './About'
 import InboxContainer from './Inbox/InboxContainer'
 
 export default (
-  <Route name='home' handler={ App } path='/app/enhance'>
-    <Route name='about' handler={ About } path='about'/>
-    <Route name='inbox' handler={ InboxContainer } path='inbox'/>
+  <Route handler={ App } name='home' path='/app/enhance'>
+    <Route handler={ About } name='about' path='about'/>
+    <Route handler={ InboxContainer } name='inbox' path='inbox'/>
   </Route>
 )
