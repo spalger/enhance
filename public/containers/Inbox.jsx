@@ -8,7 +8,8 @@ import { getMessages, sendMessage } from '../app/actions'
 import InboxUi from '../ui/InboxUi'
 
 export default connect(
-  state => ({ messages: state.messages })
+  state => ({ messages: state.messages }),
+  { getMessages, sendMessage }
 )(
   React.createClass({
     displayName: 'InboxContainer',
@@ -16,6 +17,9 @@ export default connect(
       dispatch: propTypes.func.isRequired,
       location: propTypes.object.isRequired,
       messages: propTypes.messages,
+
+      getMessages: propTypes.action,
+      sendMessage: propTypes.action,
     },
 
     componentWillMount() {
@@ -28,17 +32,17 @@ export default connect(
     },
 
     refresh() {
-      this.props.dispatch(getMessages({
+      this.props.getMessages({
         page: this.getPage(),
-      }))
+      })
     },
 
     send() {
-      this.props.dispatch(sendMessage({
+      this.props.sendMessage({
         from: 'email@spalger.com',
         to: 'potus@us.gov',
         body: 'Hi sir, it\'s great to meet you',
-      }))
+      })
     },
 
     render() {
