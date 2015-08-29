@@ -4,26 +4,25 @@ import { Provider } from 'react-redux'
 
 import '../ui/style/enhance.less'
 import store from '../app/store'
+import propTypes from '../lib/propTypes'
 
 export default React.createClass({
   displayName: 'App',
 
+  propTypes: {
+    children: propTypes.routeChildren,
+  },
+
   render() {
     return (
-      <div>
-        <Provider store={ store }>
-        { () => (
-          <div className='App'>
-            <h1>Enhance</h1>
-            <ul>
-              <li><Link to='home'>Home</Link></li>
-              <li><Link to='about'>About</Link></li>
-              <li><Link to='inbox'>Inbox</Link></li>
-            </ul>
-            <RouteHandler/>
-          </div>
-        ) }
-        </Provider>
+      <div className='App'>
+        <h1>Enhance</h1>
+        <ul>
+          <li><Link to='/app/enhance'>Home</Link></li>
+          <li><Link to='/app/enhance/about'>About</Link></li>
+          <li><Link to='/app/enhance/inbox'>Inbox</Link></li>
+        </ul>
+        { this.props.children }
       </div>
     )
   },

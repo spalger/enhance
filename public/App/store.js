@@ -2,7 +2,7 @@ import { createStore } from 'redux'
 import { compose, applyMiddleware } from 'redux'
 import { handleActions } from 'redux-actions'
 
-import { SEND_EMAIL } from './actions'
+import { GET_MESSAGES, SEND_MESSAGE } from './actions'
 import promiseMiddleware from 'redux-promise'
 
 const finalCreateStore = compose(
@@ -10,27 +10,24 @@ const finalCreateStore = compose(
   createStore,
 )
 
-export default finalCreateStore(
-  handleActions(
-    {
-      [SEND_EMAIL]: (state, actions) => {
-        return {
-          ...state,
+export default () => (
+  finalCreateStore(
+    handleActions(
+      {
+        [GET_MESSAGES]: (state, { payload }) => {
+          return { ...state, messages: payload.messages }
+        },
 
-          messages: [
-            ...state.messages,
-
-            {
-              id: `message_${state.messages.length + 1}`,
-              from: 'john@email.com',
-              body: 'BACON!!!',
-            },
-          ],
-        }
+        [SEND_MESSAGE]: (state, { payload }) => {
+          return {
+            ...state,
+            messages: [ ...state.messages, payload.message ],
+          }
+        },
       },
-    },
-    {
-      messages: [],
-    }
+      {
+        messages: [],
+      }
+    )
   )
 )

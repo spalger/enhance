@@ -1,4 +1,6 @@
+import { times } from 'lodash'
 import React from 'react'
+import { Link } from 'react-router'
 
 import propTypes from '../lib/propTypes'
 import MessageList from './MessageList'
@@ -8,15 +10,28 @@ export default React.createClass({
 
   propTypes: {
     messages: propTypes.messages,
-    sendEmail: propTypes.action,
+    page: propTypes.number,
+    refresh: propTypes.action,
   },
 
   render() {
     return (
       <div>
-        <h2>Inbox</h2>
-        <button onClick={ this.props.sendEmail }>Give me MORE!</button>
+        <h2>Messages (page { this.props.page })</h2>
+        <button onClick={ this.props.refresh }>Sync</button>
         <MessageList messages={ this.props.messages } />
+        <ul>
+          {
+            times(5, page => {
+              page += 1
+              return (
+                <li key={page}>
+                  <Link to='/app/enhance/inbox' query={{ page }}>{ page }</Link>
+                </li>
+              )
+            })
+          }
+        </ul>
       </div>
     )
   },
