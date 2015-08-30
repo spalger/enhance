@@ -1,3 +1,5 @@
+import { join } from 'path'
+
 module.exports = (kibana) => {
 
   return new kibana.Plugin({
@@ -11,6 +13,10 @@ module.exports = (kibana) => {
         description: 'Issues in Kibana',
         main: 'plugins/enhance/main',
         autoload: kibana.autoload.styles,
+      },
+
+      modules: {
+        rui: join(__dirname, 'public', 'rui'),
       },
     },
   })

@@ -4,8 +4,6 @@ import { Router, Route } from 'react-router'
 import { history } from 'react-router/lib/BrowserHistory'
 import { reduxRouteComponent } from 'redux-react-router'
 
-import { Paper } from 'material-ui-io'
-
 import AppContainer from './App'
 import AboutContainer from './About'
 import InboxContainer from './Inbox'
@@ -13,7 +11,6 @@ import LoginUi from '../ui/LoginUi'
 
 import createStore from '../store/create'
 import propTypes from '../lib/propTypes'
-import theme from '../style/theme'
 
 const store = createStore()
 const RouteComponent = reduxRouteComponent(store)

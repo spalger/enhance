@@ -1,0 +1,123 @@
+@import (reference) "~ui/styles/variables";
+
+.MakeRuiToolbar(
+  @height,
+  @padding-horizontal,
+
+  @bg,
+
+  @brand-bg,
+  @brand-color,
+  @brand-hover-bg,
+  @brand-hover-color,
+
+  @link-color,
+  @link-hover-bg,
+  @link-hover-color,
+  @link-active-bg,
+  @link-active-color,
+  @link-disabled-bg,
+  @link-disabled-color,
+
+  @link-active-arrow-color
+) {
+
+  display: flex;
+  flex: 1 0 100%;
+  flex-direction: row;
+  background: @bg;
+  height: @height;
+
+  &Brand {
+    display: flex;
+    align-items: center;
+    padding: 0 @padding-horizontal;
+
+    font-size: 1.8em;
+    color: @brand-color;
+    background-color: @brand-bg;
+    user-select: none;
+
+    &.hover {
+      color: @brand-hover-color;
+      background-color: @brand-hover-bg;
+    }
+  }
+
+  &Link {
+    display: flex;
+    align-items: center;
+    padding: 0 @padding-horizontal;
+    color: @link-color;
+
+    &:hover {
+      color: @link-hover-color;
+      background-color: @link-hover-bg;
+    }
+
+    &:active,
+    &.active {
+      color: @link-active-color;
+      background-color: @link-active-bg;
+    }
+
+    &:disabled {
+      color: @link-disabled-color;
+      background-color: @link-disabled-bg;
+    }
+
+    &.active {
+      position: relative;
+      border-bottom-color: @link-active-arrow-color;
+
+      // navbar active arrow base styles
+      &:before {
+        content: "";
+        display: inline-block;
+        position: absolute;
+        border: @navbar-arrow-size solid transparent;
+        border-bottom-color: inherit;
+        top: (@height - @navbar-arrow-size*2);
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+        width: 0;
+        height: 0;
+      }
+
+      @media (max-width: @screen-sm-min) {
+        &:before {
+          display: none !important;
+        }
+      }
+    }
+  }
+
+  &Fill {
+    flex-grow: 1;
+  }
+}
+
+.RuiToolbar {
+  .MakeRuiToolbar(
+    @navbar-height,
+    @navbar-padding-horizontal,
+
+    @navbar-default-bg,
+
+    @navbar-inverse-brand-bg,
+    @navbar-default-brand-color,
+    @navbar-default-brand-hover-bg,
+    @navbar-default-brand-hover-color,
+
+    @navbar-default-link-color,
+    @navbar-default-link-hover-bg,
+    @navbar-default-link-hover-color,
+    @navbar-default-link-active-bg,
+    @navbar-default-link-active-color,
+    @navbar-default-link-disabled-bg,
+    @navbar-default-link-disabled-color,
+
+    @body-bg
+  )
+}

@@ -1,6 +1,8 @@
 import React from 'react'
-import { RouteHandler, Route, Link } from 'react-router'
 import { Provider } from 'react-redux'
+import { Link as RRLink } from 'react-router'
+
+import Toolbar, { Brand, Link, Fill } from 'rui/Toolbar'
 
 import '../style/enhance.less'
 import propTypes from '../lib/propTypes'
@@ -15,12 +17,12 @@ export default React.createClass({
   render() {
     return (
       <div className='App'>
-        <h1>Enhance</h1>
-        <ul>
-          <li><Link to='/app/enhance'>Home</Link></li>
-          <li><Link to='/app/enhance/about'>About</Link></li>
-          <li><Link to='/app/enhance/inbox'>Inbox</Link></li>
-        </ul>
+        <Toolbar>
+          <Link of={RRLink} to='/app/enhance/about'>About</Link>
+          <Link of={RRLink} to='/app/enhance/inbox'>Inbox</Link>
+          <Fill />
+          <Link of={RRLink} to='/app/enhance/login'>Login</Link>
+        </Toolbar>
         { this.props.children }
       </div>
     )

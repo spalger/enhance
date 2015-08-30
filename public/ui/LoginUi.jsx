@@ -1,7 +1,5 @@
 import React from 'react'
-import { RaisedButton, FontIcon } from 'material-ui-io'
-
-import propTypes from '../lib/propTypes'
+import Icon from 'rui/Icon'
 
 export default React.createClass({
   displayName: 'LoginUi',
@@ -9,9 +7,9 @@ export default React.createClass({
   render() {
     return (
       <div>
-        <RaisedButton primary label='Login with Github'>
-          <FontIcon className='muidocs-icon-custom-github'/>
-        </RaisedButton>
+        <button className='btn-primary'>
+          <Icon name='github'/> Login with Github
+        </button>
       </div>
     )
   },
