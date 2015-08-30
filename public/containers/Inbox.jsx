@@ -1,23 +1,25 @@
-import { bindAll } from 'lodash'
+import { bindAll, get } from 'lodash'
 import React from 'react'
 import { connect } from 'react-redux'
 
 import propTypes from '../lib/propTypes'
-import { getMessages, sendMessage } from '../app/actions'
+import { getMessages, sendMessage } from '../actions'
 
 import InboxUi from '../ui/InboxUi'
 
 export default connect(
-  state => ({ messages: state.messages }),
+  state => ({
+    messages: state.messages,
+    page: parseInt(get(state, 'router.query.page', 1), 10),
+  }),
   { getMessages, sendMessage }
 )(
   React.createClass({
     displayName: 'InboxContainer',
     propTypes: {
-      dispatch: propTypes.func.isRequired,
-      location: propTypes.object.isRequired,
       messages: propTypes.messages,
 
+      page: propTypes.number.isRequired,
       getMessages: propTypes.action,
       sendMessage: propTypes.action,
     },
@@ -27,8 +29,7 @@ export default connect(
     },
 
     getPage() {
-      let { query } = this.props.location
-      return parseFloat(query.page) || 1
+      return parseFloat(this.props.page) || 1
     },
 
     refresh() {

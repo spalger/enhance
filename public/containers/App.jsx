@@ -3,7 +3,6 @@ import { RouteHandler, Route, Link } from 'react-router'
 import { Provider } from 'react-redux'
 
 import '../ui/style/enhance.less'
-import store from '../app/store'
 import propTypes from '../lib/propTypes'
 
 export default React.createClass({

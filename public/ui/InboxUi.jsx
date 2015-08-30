@@ -26,7 +26,7 @@ export default React.createClass({
               page += 1
               return (
                 <li key={page}>
-                  <Link to='/app/enhance/inbox' query={{ page }}>{ page }</Link>
+                  <Link to={`/app/enhance/inbox?page=${page}`}>{ page }</Link>
                 </li>
               )
             })

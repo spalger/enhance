@@ -1,33 +1,24 @@
 import React, { Component, PropTypes } from 'react'
 import { Provider } from 'react-redux'
 import { Router, Route } from 'react-router'
+import { history } from 'react-router/lib/BrowserHistory'
+import { reduxRouteComponent } from 'redux-react-router'
 
 import AppContainer from './App'
 import AboutContainer from './About'
 import InboxContainer from './Inbox'
 
-import storeProvider from '../app/store'
+import createStore from '../store/create'
+const store = createStore()
+const RouteComponent = reduxRouteComponent(store)
 
-const store = storeProvider()
-
-export default class Root extends Component {
-  render() {
-    return (
-      <div>
-        <Provider store={store}>
-          {() =>
-            <Router history={this.props.history}>
-              <Route path='/app/enhance' component={AppContainer} />
-              <Route path='/app/enhance/about' component={AboutContainer} />
-              <Route path='/app/enhance/inbox' component={InboxContainer} />
-            </Router>
-          }
-        </Provider>
-      </div>
-    )
-  }
-}
-
-Root.propTypes = {
-  history: PropTypes.object.isRequired,
-}
+export default (
+  <Router history={history}>
+    <Route component={RouteComponent}>
+      <Route path='/app/enhance' component={AppContainer}>
+        <Route path='about' component={AboutContainer} />
+        <Route path='inbox' component={InboxContainer} />
+      </Route>
+    </Route>
+  </Router>
+)

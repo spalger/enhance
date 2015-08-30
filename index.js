@@ -2,7 +2,7 @@ module.exports = (kibana) => {
 
   return new kibana.Plugin({
     init: (server, options) => {
-      require('./app/routes')(server, kibana.uiExports);
+      require('./app/routes')(server, kibana.uiExports)
     },
 
     uiExports: {
