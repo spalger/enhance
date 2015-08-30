@@ -5,5 +5,6 @@ export default {
 
   messages: PropTypes.array.isRequired,
   action: PropTypes.func.isRequired,
-  routeChildren: PropTypes.element,
+  children: PropTypes.element.isRequired,
+  routeChildren: PropTypes.element.isRequired,
 }

@@ -9,8 +9,9 @@
   "author": "Spencer Alger <email@spalger.com>",
   "license": "Apache-2.0",
   "dependencies": {
+    "flexboxgrid": "^6.2.0",
     "immutable": "^3.7.4",
-    "react": "^0.14.0-beta1",
+    "react": "^0.14.0-beta3",
     "react-dom": "^0.14.0-beta1",
     "react-redux": "^0.9.0",
     "react-router": "^1.0.0-beta3",
